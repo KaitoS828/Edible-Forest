@@ -74,7 +74,7 @@ export function JapanMap({ value, onChange }: JapanMapProps = {}) {
   }, []);
 
   const projection = useMemo(() =>
-    geoMercator().center([137.0, 38.2]).scale(1200).translate([400, 300]),
+    geoMercator().center([137.0, 38.2]).scale(1600).translate([530, 400]),
   []);
 
   const pathGenerator = useMemo(() => geoPath().projection(projection), [projection]);
@@ -82,7 +82,7 @@ export function JapanMap({ value, onChange }: JapanMapProps = {}) {
   return (
     <div>
       <svg
-        viewBox="0 0 800 600"
+        viewBox="0 0 1060 800"
         className="w-full"
         style={{ filter: "drop-shadow(0 2px 12px rgba(0,0,0,0.06))" }}
       >

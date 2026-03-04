@@ -175,7 +175,7 @@ function SearchSection() {
         </div>
 
         {/* 日本地図 */}
-        <div className="max-w-[580px] mx-auto mb-8">
+        <div className="w-full mb-8">
           <JapanMap value={regionId} onChange={setRegionId} />
         </div>
 

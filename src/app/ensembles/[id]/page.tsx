@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getEnsemble, ENSEMBLES } from "@/data/ensembles";
-import { getEnsembleContent } from "@/lib/microcms";
+import { getEnsembleDoc, getPublishedEnsembles } from "@/lib/firestore";
 import { JoinButton } from "./JoinButton";
 
 interface PageProps {
@@ -12,35 +12,57 @@ interface PageProps {
 export default async function EnsembleDetailPage({ params }: PageProps) {
   const { id } = await params;
 
-  // microCMSが設定済みならAPI経由、なければ静的データにフォールバック
-  const cmsData = await getEnsembleContent(id);
-  const staticData = getEnsemble(id);
+  // Firestoreから取得、なければ静的データにフォールバック
+  let ensemble: {
+    id: string; name: string; sub: string; region: string; regionColor: string;
+    desc: string; img: string; tagline?: string; philosophy?: string;
+    activities?: { icon: string; title: string; desc: string }[];
+    stats?: { label: string; value: string }[];
+    gallery?: string[]; active?: boolean;
+    organizer?: { name: string; role: string; bio: string; avatar?: string };
+  } | null = null;
 
-  const ensemble = cmsData
-    ? {
-        id: cmsData.id,
-        name: cmsData.name,
-        sub: cmsData.sub,
-        region: cmsData.region,
-        regionColor: cmsData.regionColor,
-        desc: cmsData.desc,
-        img: cmsData.img?.url ?? staticData?.img ?? "",
-        tagline: cmsData.tagline,
-        philosophy: cmsData.philosophy,
-        activities: cmsData.activities?.map((a) => ({
-          icon: a.icon,
-          title: a.title,
-          desc: a.desc,
-        })),
-        stats: cmsData.stats?.map((s) => ({ label: s.label, value: s.value })),
-        gallery: cmsData.gallery?.map((g) => g.url),
-        active: cmsData.active,
-      }
-    : staticData ?? null;
+  try {
+    const fsDoc = await getEnsembleDoc(id);
+    if (fsDoc && (fsDoc.status === "published" || fsDoc.active)) {
+      ensemble = {
+        id: fsDoc.id,
+        name: fsDoc.name,
+        sub: fsDoc.sub,
+        region: fsDoc.region,
+        regionColor: fsDoc.regionColor,
+        desc: fsDoc.desc,
+        img: fsDoc.img,
+        tagline: fsDoc.tagline,
+        philosophy: fsDoc.philosophy,
+        activities: fsDoc.activities,
+        stats: fsDoc.stats,
+        gallery: fsDoc.gallery,
+        active: fsDoc.active,
+      };
+    }
+  } catch { /* Firestore未設定時はスキップ */ }
+
+  if (!ensemble) {
+    const staticData = getEnsemble(id);
+    if (staticData) {
+      ensemble = staticData;
+    }
+  }
 
   if (!ensemble) notFound();
 
-  const related = ENSEMBLES.filter((e) => e.active && e.id !== id).slice(0, 3);
+  // 関連アンサンブル：Firestoreから取得、なければ静的データ
+  let related: { id: string; name: string; sub: string; region: string; regionColor: string; img: string }[] = [];
+  try {
+    const fsDocs = await getPublishedEnsembles();
+    related = fsDocs.filter((e) => e.id !== id).slice(0, 3).map((e) => ({
+      id: e.id, name: e.name, sub: e.sub, region: e.region, regionColor: e.regionColor, img: e.img,
+    }));
+  } catch { /* fallback */ }
+  if (related.length === 0) {
+    related = ENSEMBLES.filter((e) => e.active && e.id !== id).slice(0, 3);
+  }
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -142,7 +164,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                   lineHeight: "24px",
                   borderRadius: "12px",
                   backgroundColor: "#005F02",
-                  color: "#005F02",
+                  color: "white",
                 }}
               >
                 アンサンブルの内容
@@ -167,7 +189,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                   lineHeight: "24px",
                   borderRadius: "12px",
                   backgroundColor: "#005F02",
-                  color: "#005F02",
+                  color: "white",
                 }}
               >
                 フォトギャラリー
@@ -183,7 +205,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                   <div
                     key={i}
                     className="overflow-hidden rounded-2xl"
-                    style={{ height: "220px", backgroundColor: "#005F02" }}
+                    style={{ height: "220px", backgroundColor: "rgba(0,95,2,0.06)" }}
                   >
                     <img
                       src={img}
@@ -197,9 +219,34 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
           </section>
         )}
 
-        {/* ── 関連アンサンブル ── */}
+        {/* ── CTA（参加ボタン → 一覧に戻る） ── */}
+        <section className="py-16" style={{ backgroundColor: "#FFFFFF" }}>
+          <div className="max-w-[1200px] mx-auto px-5 lg:px-10 text-center">
+            <h2
+              className="text-xl md:text-2xl font-bold mb-4"
+              style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+            >
+              {ensemble.name}に参加してみませんか？
+            </h2>
+            <p className="text-sm mb-8" style={{ color: "#000000" }}>
+              体験参加・見学のお問い合わせはこちらから。
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <JoinButton ensembleName={ensemble.name} />
+              <a
+                href="/ensembles"
+                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-medium border transition-all hover:opacity-70"
+                style={{ borderColor: "rgba(0,95,2,0.2)", color: "#005F02" }}
+              >
+                ← 一覧に戻る
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 関連アンサンブル（CTAの後） ── */}
         {related.length > 0 && (
-          <section className="py-16 md:py-20 bg-white">
+          <section className="py-16 md:py-20" style={{ backgroundColor: "rgba(0,95,2,0.03)" }}>
             <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
               <h2
                 className="text-xl md:text-2xl font-bold mb-10 text-center"
@@ -256,31 +303,6 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
             </div>
           </section>
         )}
-
-        {/* ── CTA ── */}
-        <section className="py-16" style={{ backgroundColor: "#FFFFFF" }}>
-          <div className="max-w-[1200px] mx-auto px-5 lg:px-10 text-center">
-            <h2
-              className="text-xl md:text-2xl font-bold mb-4"
-              style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
-            >
-              {ensemble.name}に参加してみませんか？
-            </h2>
-            <p className="text-sm mb-8" style={{ color: "#000000" }}>
-              体験参加・見学のお問い合わせはこちらから。
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <JoinButton ensembleName={ensemble.name} />
-              <a
-                href="/ensembles"
-                className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-medium border transition-all hover:opacity-70"
-                style={{ borderColor: "rgba(0,95,2,0.2)", color: "#005F02" }}
-              >
-                ← 一覧に戻る
-              </a>
-            </div>
-          </div>
-        </section>
 
       </main>
       <Footer />

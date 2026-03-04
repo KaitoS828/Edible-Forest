@@ -55,7 +55,7 @@ export function Header() {
                     ログインする
                   </a>
                   <a
-                    href="/signup"
+                    href="/join"
                     className="px-4 py-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
                     style={{ backgroundColor: "#005F02" }}
                   >
@@ -88,7 +88,7 @@ export function Header() {
             ) : (
               <>
                 <a href="/login" onClick={() => setOpen(false)} className="flex-1 text-center px-4 py-2.5 rounded-full font-medium border" style={{ borderColor: "rgba(0,95,2,0.15)", color: "#000000" }}>ログインする</a>
-                <a href="/signup" onClick={() => setOpen(false)} className="flex-1 text-center px-4 py-2.5 rounded-full font-medium text-white" style={{ backgroundColor: "#005F02" }}>会員登録する</a>
+                <a href="/join" onClick={() => setOpen(false)} className="flex-1 text-center px-4 py-2.5 rounded-full font-medium text-white" style={{ backgroundColor: "#005F02" }}>会員登録する</a>
               </>
             )}
           </div>
