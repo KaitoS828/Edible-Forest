@@ -1,33 +1,94 @@
 @import "tailwindcss";
 
 :root {
-  --bg-warm: #F6F2ED;
-  --color-orange: #E58251;
-  --color-yellow: #DBCD52;
-  --color-green: #6BA26D;
-  --color-dark: #595757;
-  --color-darker: #333333;
-  --color-light: #EEEEEE;
+  --bg: #FFFFFF;
+  --green: #005F02;
+  --accent: #005F02;
+  --dark: #005F02;
+  --mid: #000000;
+  --border: rgba(0,95,2,0.2);
 }
 
-@theme inline {
-  --color-background: var(--bg-warm);
-  --color-foreground: var(--color-dark);
-  --font-sans: 'Noto Sans JP', sans-serif;
-  --font-serif: 'Noto Serif JP', serif;
-}
-
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
-  background: var(--bg-warm);
-  color: var(--color-dark);
+  background: var(--bg);
+  color: #000000;
   font-family: 'Noto Sans JP', sans-serif;
   -webkit-font-smoothing: antialiased;
 }
 
-@media print {
-  * { background: white !important; }
+/* リッチテキスト表示スタイル */
+.prose img {
+  border-radius: 12px;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem auto;
+}
+.prose h2 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+  color: #005F02;
+}
+.prose h3 {
+  font-family: 'Noto Serif JP', serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #005F02;
+}
+.prose blockquote {
+  border-left: 3px solid #005F02;
+  padding-left: 1rem;
+  color: #000000;
+  font-style: italic;
+  margin: 1.5rem 0;
+}
+.prose ul { list-style: disc; padding-left: 1.5rem; }
+.prose ol { list-style: decimal; padding-left: 1.5rem; }
+.prose li { margin: 0.25rem 0; }
+.prose p { margin: 0.75rem 0; line-height: 2; }
+.prose hr { border-color: rgba(0,95,2,0.2); margin: 2rem 0; }
+
+/* ─── グローバル ふわっと入場アニメーション ─── */
+@keyframes pageFadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* 全ページに適用 */
+body > * {
+  animation: pageFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.page-enter {
+  animation: pageFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.card-enter {
+  animation: fadeInUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ─── カードホバー共通 ─── */
+.card-lift {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.card-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+}
+
+/* ─── 丸型カード（CMS・一覧共通） ─── */
+.circle-card {
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.circle-card:hover .circle-img {
+  transform: scale(1.05);
 }

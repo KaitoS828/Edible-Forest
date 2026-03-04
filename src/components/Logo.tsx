@@ -1,27 +1,29 @@
-export function StarIcon({ size = 28 }: { size?: number }) {
+// 元デザインの星アイコンと同じ線画スタイルで森/木を表現
+export function TreeIcon({ size = 32 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
-      <path
-        d="M20 4 L22.5 16 L34 10 L26 20 L34 30 L22.5 24 L20 36 L17.5 24 L6 30 L14 20 L6 10 L17.5 16 Z"
-        stroke="#6BA26D"
-        strokeWidth="1.5"
-        fill="none"
-      />
-      <circle cx="20" cy="20" r="3" fill="#6BA26D" />
+      {/* trunk */}
+      <line x1="20" y1="32" x2="20" y2="38" stroke="#005F02" strokeWidth="1.5" strokeLinecap="round" />
+      {/* branches */}
+      <path d="M20 8 L26 18 L22 18 L27 26 L22.5 26 L20 32 L17.5 26 L13 26 L18 18 L14 18 Z"
+        stroke="#005F02" strokeWidth="1.5" fill="none" strokeLinejoin="round" />
+      {/* fruit dots */}
+      <circle cx="16" cy="22" r="1.8" fill="#005F02" />
+      <circle cx="24" cy="21" r="1.8" fill="#005F02" />
+      <circle cx="20" cy="14" r="1.8" fill="#005F02" />
     </svg>
   );
 }
 
 export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
-  const textSize = size === "lg" ? "text-base" : size === "sm" ? "text-xs" : "text-sm";
-  const starSize = size === "lg" ? 36 : size === "sm" ? 22 : 28;
+  const textSize = size === "lg" ? "text-sm" : size === "sm" ? "text-[10px]" : "text-xs";
+  const iconSize = size === "lg" ? 36 : size === "sm" ? 24 : 30;
   return (
     <div className="flex items-center gap-2">
-      <StarIcon size={starSize} />
-      <div className={`${textSize} font-medium leading-tight`} style={{ color: "#595757" }}>
-        <div>五木村</div>
-        <div>過疎未来</div>
-        <div>研究会</div>
+      <TreeIcon size={iconSize} />
+      <div className={`${textSize} font-medium leading-tight`} style={{ color: "#000000" }}>
+        <div>食べられる森</div>
+        <div>アンサンブル倶楽部</div>
       </div>
     </div>
   );

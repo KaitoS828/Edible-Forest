@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { AuthProvider } from "@/contexts/AuthContext";
 
 export const metadata: Metadata = {
-  title: "五木村過疎未来研究会",
-  description: "過疎地域のあかるい未来を、村民の手でかなえていく。自立と協働で動かす「五木村過疎未来研究会」",
+  title: "食べられる森アンサンブル倶楽部",
+  description: "自然界の仕組みを人間社会・テクノロジーに応用し、新しい生き方を実践・発信するコミュニティ。農業以前の自然（食べられる森）と最先端AIを融合した、インターローカルな暮らしの実験場。",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ja">
       <head>
@@ -21,7 +18,9 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body>{children}</body>
+      <body>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   );
 }
