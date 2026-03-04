@@ -10,8 +10,7 @@ function getAdminApp(): App {
   const privateKey  = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
   if (!projectId || !clientEmail || !privateKey) {
-    // Admin 未設定時は projectId だけで初期化（読み取り専用的な用途）
-    return initializeApp({ projectId: projectId ?? "morinooku-e72d0" });
+    throw new Error("Firebase Admin 環境変数が未設定です (FIREBASE_ADMIN_PROJECT_ID / CLIENT_EMAIL / PRIVATE_KEY)");
   }
 
   return initializeApp({
@@ -19,6 +18,20 @@ function getAdminApp(): App {
   });
 }
 
-const adminApp = getAdminApp();
-export const adminAuth = getAuth(adminApp);
-export const adminDb   = getFirestore(adminApp);
+// ── 遅延初期化 Proxy ────────────────────────────────────────────
+// ビルド時はインスタンスを作らず、初回メソッド呼び出し時にのみ初期化する。
+// これにより Vercel ビルド時に環境変数がなくてもエラーが出ない。
+
+function lazyProxy<T extends object>(factory: () => T): T {
+  let instance: T | null = null;
+  return new Proxy({} as T, {
+    get(_, prop, receiver) {
+      if (!instance) instance = factory();
+      const value = Reflect.get(instance as object, prop, receiver);
+      return typeof value === "function" ? (value as Function).bind(instance) : value;
+    },
+  });
+}
+
+export const adminAuth = lazyProxy(() => getAuth(getAdminApp()));
+export const adminDb   = lazyProxy(() => getFirestore(getAdminApp()));

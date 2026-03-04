@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSearchParams } from "next/navigation";
 import {
   signInWithEmailAndPassword,
   signInWithPopup,
@@ -9,6 +10,9 @@ import {
 import { auth } from "@/lib/firebase";
 
 export default function LoginPage() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") ?? "/member/dashboard";
+
   const [email, setEmail]       = useState("");
   const [password, setPassword] = useState("");
   const [error, setError]       = useState("");
@@ -30,7 +34,7 @@ export default function LoginPage() {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const token = await cred.user.getIdToken();
       await postSession(token);
-      window.location.href = "/member";
+      window.location.href = callbackUrl;
     } catch {
       setError("メールアドレスまたはパスワードが正しくありません");
     } finally {
@@ -46,7 +50,7 @@ export default function LoginPage() {
       const cred = await signInWithPopup(auth, provider);
       const token = await cred.user.getIdToken();
       await postSession(token);
-      window.location.href = "/member";
+      window.location.href = callbackUrl;
     } catch {
       setError("Googleログインに失敗しました");
     } finally {

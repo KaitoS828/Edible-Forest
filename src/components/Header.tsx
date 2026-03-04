@@ -31,7 +31,7 @@ export function Header() {
               {user ? (
                 <div className="flex items-center gap-3">
                   <a
-                    href="/member"
+                    href="/member/dashboard"
                     className="px-4 py-2 rounded-full text-sm font-medium border transition-colors hover:bg-[#005F02] hover:text-white hover:border-[#005F02]"
                     style={{ borderColor: "#005F02", color: "#000000" }}
                   >
