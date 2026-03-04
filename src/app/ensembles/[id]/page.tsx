@@ -13,14 +13,15 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
   const { id } = await params;
 
   // Firestoreから取得、なければ静的データにフォールバック
-  let ensemble: {
+  type EnsembleDetail = {
     id: string; name: string; sub: string; region: string; regionColor: string;
     desc: string; img: string; tagline?: string; philosophy?: string;
     activities?: { icon: string; title: string; desc: string }[];
     stats?: { label: string; value: string }[];
     gallery?: string[]; active?: boolean;
     organizer?: { name: string; role: string; bio: string; avatar?: string };
-  } | null = null;
+  };
+  let ensemble: EnsembleDetail | null = null;
 
   try {
     const fsDoc = await getEnsembleDoc(id);
@@ -39,6 +40,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
         stats: fsDoc.stats,
         gallery: fsDoc.gallery,
         active: fsDoc.active,
+        organizer: fsDoc.organizer,
       };
     }
   } catch { /* Firestore未設定時はスキップ */ }
@@ -153,6 +155,27 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
           </div>
         </section>
 
+        {/* ── 実績・統計 ── */}
+        {ensemble.stats && ensemble.stats.length > 0 && (
+          <section className="py-10 md:py-14" style={{ backgroundColor: "rgba(0,95,2,0.03)" }}>
+            <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
+              <div className="flex flex-wrap justify-center gap-10 md:gap-20">
+                {ensemble.stats.map((s) => (
+                  <div key={s.label} className="flex flex-col items-center gap-1">
+                    <span
+                      className="text-4xl font-bold"
+                      style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+                    >
+                      {s.value}
+                    </span>
+                    <span className="text-xs" style={{ color: "#000000", opacity: 0.55 }}>{s.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* ── アンサンブルの内容 ── */}
         {ensemble.philosophy && (
           <section className="py-16 md:py-20" style={{ backgroundColor: "#FFFFFF" }}>
@@ -174,6 +197,103 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                 style={{ color: "#000000" }}
                 dangerouslySetInnerHTML={{ __html: ensemble.philosophy }}
               />
+            </div>
+          </section>
+        )}
+
+        {/* ── アクティビティ ── */}
+        {ensemble.activities && ensemble.activities.length > 0 && (
+          <section className="py-16 md:py-20" style={{ backgroundColor: "#FFFFFF" }}>
+            <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
+              <span
+                className="inline-block text-xs font-medium px-4 mb-6"
+                style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#005F02", color: "white" }}
+              >
+                アクティビティ
+              </span>
+              <h2
+                className="text-xl md:text-2xl font-bold mb-10"
+                style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+              >
+                体験できること
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                {ensemble.activities.map((a, i) => (
+                  <div
+                    key={i}
+                    className="rounded-3xl p-6"
+                    style={{ backgroundColor: "rgba(0,95,2,0.04)", border: "1px solid rgba(0,95,2,0.1)" }}
+                  >
+                    <div className="text-4xl mb-4">{a.icon}</div>
+                    <h3
+                      className="text-sm font-bold mb-2"
+                      style={{ color: "#005F02" }}
+                    >
+                      {a.title}
+                    </h3>
+                    <p className="text-xs leading-relaxed" style={{ color: "#000000", opacity: 0.75 }}>
+                      {a.desc}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* ── オーガナイザー ── */}
+        {ensemble.organizer && (
+          <section className="py-16 md:py-20" style={{ backgroundColor: "rgba(0,95,2,0.03)" }}>
+            <div className="max-w-[800px] mx-auto px-5 lg:px-10">
+              <span
+                className="inline-block text-xs font-medium px-4 mb-6"
+                style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#005F02", color: "white" }}
+              >
+                オーガナイザー
+              </span>
+              <div className="flex flex-col sm:flex-row gap-8 items-start">
+                {/* アバター */}
+                <div className="flex-shrink-0">
+                  <div
+                    className="rounded-full overflow-hidden"
+                    style={{
+                      width: "120px",
+                      height: "120px",
+                      boxShadow: `0 0 0 4px white, 0 0 0 6px ${ensemble.regionColor}50`,
+                    }}
+                  >
+                    {ensemble.organizer.avatar ? (
+                      <img
+                        src={ensemble.organizer.avatar}
+                        alt={ensemble.organizer.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div
+                        className="w-full h-full flex items-center justify-center text-3xl font-bold text-white"
+                        style={{ backgroundColor: ensemble.regionColor }}
+                      >
+                        {ensemble.organizer.name.slice(0, 1)}
+                      </div>
+                    )}
+                  </div>
+                </div>
+                {/* テキスト */}
+                <div className="flex-1">
+                  <p className="text-xs font-medium mb-1" style={{ color: "#005F02", opacity: 0.7 }}>
+                    {ensemble.organizer.role}
+                  </p>
+                  <h3
+                    className="text-xl font-bold mb-3"
+                    style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+                  >
+                    {ensemble.organizer.name}
+                  </h3>
+                  <p className="text-sm leading-[1.9]" style={{ color: "#000000" }}>
+                    {ensemble.organizer.bio}
+                  </p>
+                </div>
+              </div>
             </div>
           </section>
         )}

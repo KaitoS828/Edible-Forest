@@ -174,6 +174,22 @@ function SearchSection() {
           <p className="text-sm mt-2" style={{ color: "#000000", opacity: 0.45 }}>地図の地域をクリックすると、その地域のアンサンブルと宿泊拠点が下に表示されます</p>
         </div>
 
+        {/* 統計バッジ */}
+        <div className="flex flex-wrap justify-center gap-6 mb-8">
+          {[
+            { label: "LC（ローカルコミュニティ）", value: ENSEMBLES.filter((e) => e.active).length },
+            { label: "LS（ローカルステイ）", value: spots.length },
+            { label: "活動地域", value: [...new Set(ENSEMBLES.filter((e) => e.active).map((e) => e.region))].length },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex flex-col items-center gap-1">
+              <span className="text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+                {value}
+              </span>
+              <span className="text-xs" style={{ color: "#000000", opacity: 0.55 }}>{label}</span>
+            </div>
+          ))}
+        </div>
+
         {/* 日本地図 */}
         <div className="w-full mb-8">
           <JapanMap value={regionId} onChange={setRegionId} />
@@ -277,8 +293,8 @@ function EnsembleListSection() {
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
           <div>
-            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#005F02", color: "#005F02" }}>
-              イベント
+            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#005F02", color: "white" }}>
+              LC（ローカルコミュニティ）
             </span>
             <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
               {sectionLabel}

@@ -13,6 +13,7 @@ export interface Ensemble {
   activities?: { icon: string; title: string; desc: string }[];
   gallery?: string[];
   stats?: { label: string; value: string }[];
+  organizer?: { name: string; role: string; bio: string; avatar?: string };
 }
 
 export const ENSEMBLES: Ensemble[] = [
@@ -60,6 +61,12 @@ export const ENSEMBLES: Ensemble[] = [
       { label: "面積", value: "約2ha" },
       { label: "在来種記録数", value: "25種" },
     ],
+    organizer: {
+      name: "田村 拓海",
+      role: "アンサンブルオーガナイザー",
+      bio: "北海道出身。農業と生態学を学んだのち、十勝の地で「食べられる森」づくりを始める。昆布漁師との連携をきっかけに、地域の生業と食文化を次世代に伝える活動を展開中。",
+      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
+    },
   },
   {
     id: "urahoro",
@@ -105,6 +112,12 @@ export const ENSEMBLES: Ensemble[] = [
       { label: "記録種数", value: "32種" },
       { label: "協力農家数", value: "8軒" },
     ],
+    organizer: {
+      name: "中村 里奈",
+      role: "アンサンブルオーガナイザー",
+      bio: "生態学者。浦幌川流域の在来食用植物を10年以上調査し続けてきた研究者。「食べられる地図」プロジェクトを立ち上げ、地域住民とともにオープンデータ化を進める。",
+      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80",
+    },
   },
   {
     id: "musashino",
@@ -150,6 +163,12 @@ export const ENSEMBLES: Ensemble[] = [
       { label: "都市農園数", value: "12箇所" },
       { label: "連携店舗", value: "5店" },
     ],
+    organizer: {
+      name: "森田 亮",
+      role: "アンサンブルオーガナイザー",
+      bio: "都市計画の専門家から転身。「都市の中に生活生産を取り戻す」をテーマに、武蔵野市内の空き地・屋上・路地を食べられる農園へと変えていくプロジェクトを牽引している。",
+      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80",
+    },
   },
   {
     id: "bunji",
@@ -195,6 +214,12 @@ export const ENSEMBLES: Ensemble[] = [
       { label: "月間来店者", value: "約200人" },
       { label: "連携LC数", value: "5拠点" },
     ],
+    organizer: {
+      name: "石田 和恵",
+      role: "アンサンブルオーガナイザー",
+      bio: "料理家・コミュニティデザイナー。全国各地のアンサンブル拠点から届く食材を「ぶんじ食堂」で受け取り、食を介して都市のコミュニティをつなぐ役割を担う。",
+      avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200&q=80",
+    },
   },
   {
     id: "omaezaki",
@@ -240,6 +265,12 @@ export const ENSEMBLES: Ensemble[] = [
       { label: "連携漁師数", value: "4名" },
       { label: "連携農家数", value: "6軒" },
     ],
+    organizer: {
+      name: "浜田 誠一",
+      role: "アンサンブルオーガナイザー",
+      bio: "御前崎生まれの漁師の息子。都市のシェフとしてのキャリアを経て地元に戻り、海と山の両方を知る生産者として「農漁一体型」の体験プログラムを企画・運営している。",
+      avatar: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&q=80",
+    },
   },
   {
     id: "takeno",
@@ -285,6 +316,12 @@ export const ENSEMBLES: Ensemble[] = [
       { label: "空き家活用数", value: "2棟" },
       { label: "伝統知恵記録数", value: "180件" },
     ],
+    organizer: {
+      name: "木村 美沙",
+      role: "アンサンブルオーガナイザー",
+      bio: "竹野出身の民俗学者。地域の伝統工芸・食文化・海の知恵をデジタルアーカイブ化する活動を主導。「竹野に帰ってくる理由をつくる」ことを使命に、漁村の可能性を発信し続けている。",
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80",
+    },
   },
   {
     id: "shimanto",
@@ -330,6 +367,12 @@ export const ENSEMBLES: Ensemble[] = [
       { label: "川辺整備区域", value: "約1.2km" },
       { label: "食文化記録数", value: "45品" },
     ],
+    organizer: {
+      name: "岡本 健太",
+      role: "アンサンブルオーガナイザー",
+      bio: "四万十生まれの川漁師の三代目。川の恵みで育った自分の原点を共有したいと、フィールドワーク体験プログラムを立ち上げた。「四万十川は、最高の先生だ」が口癖。",
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
+    },
   },
 ];
 

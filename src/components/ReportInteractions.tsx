@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback } from "react";
 import {
-  collection, doc, getDoc, getDocs,
+  collection, doc,
   setDoc, deleteDoc, addDoc,
-  onSnapshot, query, orderBy, serverTimestamp,
+  onSnapshot, query, orderBy, where, serverTimestamp,
   Timestamp,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
@@ -36,42 +36,40 @@ export function ReportInteractions({ reportId }: Props) {
   const [posting, setPosting] = useState(false);
   const [commentError, setCommentError] = useState("");
 
-  // いいね数・自分のいいね状態を取得
+  // いいね数・自分のいいね状態を取得（auth解決後のみ購読）
   useEffect(() => {
-    // いいね数をリアルタイム購読
+    if (loading || !user) return;
     const likeCol = collection(db, "reportLikes", reportId, "users");
     const unsub = onSnapshot(likeCol, (snap) => {
       setLikeCount(snap.size);
-      if (user) {
-        setLiked(snap.docs.some((d) => d.id === user.uid));
-      }
+      setLiked(snap.docs.some((d) => d.id === user.uid));
     });
     return () => unsub();
-  }, [reportId, user]);
+  }, [reportId, user, loading]);
 
-  // コメント一覧をリアルタイム購読
+  // コメント一覧をリアルタイム購読（auth解決後のみ購読）
   useEffect(() => {
+    if (loading || !user) return;
     const q = query(
       collection(db, "reportComments"),
+      where("reportId", "==", reportId),
       orderBy("createdAt", "asc")
     );
     const unsub = onSnapshot(q, (snap) => {
-      const all = snap.docs
-        .filter((d) => d.data().reportId === reportId)
-        .map((d) => {
-          const data = d.data();
-          return {
-            id: d.id,
-            userId: data.userId,
-            userName: data.userName,
-            content: data.content,
-            createdAt: (data.createdAt as Timestamp)?.toDate?.() ?? new Date(),
-          } as Comment;
-        });
+      const all = snap.docs.map((d) => {
+        const data = d.data();
+        return {
+          id: d.id,
+          userId: data.userId,
+          userName: data.userName,
+          content: data.content,
+          createdAt: (data.createdAt as Timestamp)?.toDate?.() ?? new Date(),
+        } as Comment;
+      });
       setComments(all);
     });
     return () => unsub();
-  }, [reportId]);
+  }, [reportId, user, loading]);
 
   const handleLike = useCallback(async () => {
     if (!user || likeLoading) return;

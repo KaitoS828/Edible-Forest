@@ -53,6 +53,7 @@ export type EnsembleDoc = {
   img: string;
   activities: { icon: string; title: string; desc: string }[];
   stats:      { label: string; value: string }[];
+  organizer?: { name: string; role: string; bio: string; avatar?: string };
   gallery:    string[];
   active: boolean;
   status: EnsembleStatus;
