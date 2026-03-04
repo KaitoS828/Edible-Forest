@@ -15,6 +15,10 @@ export type UserDoc = {
   photoURL: string;
   role: UserRole;
   createdAt: FirebaseFirestore.Timestamp;
+  // プロフィール
+  bio?: string;
+  avatarUrl?: string;
+  profileCompleted?: boolean;
   // Stripe
   stripeCustomerId?: string;
   subscriptionId?: string;

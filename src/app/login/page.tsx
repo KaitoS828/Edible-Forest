@@ -18,12 +18,15 @@ export default function LoginPage() {
   const [error, setError]       = useState("");
   const [loading, setLoading]   = useState(false);
 
-  async function postSession(idToken: string) {
-    await fetch("/api/session", {
+  async function postSession(idToken: string): Promise<string> {
+    const res = await fetch("/api/session", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ idToken }),
     });
+    const data = await res.json();
+    // 初回ログイン（プロフィール未設定）ならセットアップ画面へ
+    return data.profileCompleted === false ? "/member/setup" : callbackUrl;
   }
 
   async function handleEmail(e: React.FormEvent) {
@@ -33,8 +36,8 @@ export default function LoginPage() {
     try {
       const cred = await signInWithEmailAndPassword(auth, email, password);
       const token = await cred.user.getIdToken();
-      await postSession(token);
-      window.location.href = callbackUrl;
+      const dest = await postSession(token);
+      window.location.href = dest;
     } catch {
       setError("メールアドレスまたはパスワードが正しくありません");
     } finally {
@@ -49,8 +52,8 @@ export default function LoginPage() {
       const provider = new GoogleAuthProvider();
       const cred = await signInWithPopup(auth, provider);
       const token = await cred.user.getIdToken();
-      await postSession(token);
-      window.location.href = callbackUrl;
+      const dest = await postSession(token);
+      window.location.href = dest;
     } catch {
       setError("Googleログインに失敗しました");
     } finally {
