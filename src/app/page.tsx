@@ -56,7 +56,7 @@ function HeroSection() {
           <a href="/#events" className="px-6 py-3 rounded-full text-sm font-medium transition-opacity hover:opacity-90" style={{ backgroundColor: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(4px)" }}>
             イベントに参加する
           </a>
-          <a href="/spots" className="px-6 py-3 rounded-full text-sm font-medium transition-opacity hover:opacity-90" style={{ backgroundColor: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(4px)" }}>
+          <a href="/#stays" className="px-6 py-3 rounded-full text-sm font-medium transition-opacity hover:opacity-90" style={{ backgroundColor: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(4px)" }}>
             宿泊する
           </a>
         </div>
@@ -379,7 +379,7 @@ function SpotsListSection() {
         )}
 
         <div className="mt-12 flex justify-center">
-          <a href="/spots" className="flex items-center gap-2 text-sm font-medium px-8 py-3 rounded-full border-2 transition-colors hover:bg-[#005F02] hover:text-white hover:border-[#005F02]" style={{ borderColor: "#005F02", color: "#000000" }}>
+          <a href="/#stays" className="flex items-center gap-2 text-sm font-medium px-8 py-3 rounded-full border-2 transition-colors hover:bg-[#005F02] hover:text-white hover:border-[#005F02]" style={{ borderColor: "#005F02", color: "#000000" }}>
             もっと見る →
           </a>
         </div>
