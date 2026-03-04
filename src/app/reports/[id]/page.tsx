@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { REPORTS } from "@/data/reports";
+import { ReportInteractions } from "@/components/ReportInteractions";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -91,22 +92,29 @@ export default async function ReportDetailPage({ params }: PageProps) {
 
         {/* ── 本文 or ログインゲート ── */}
         {loggedIn ? (
-          /* ログイン済み：全文表示 */
-          <section className="pb-20" style={{ backgroundColor: "#FFFFFF" }}>
-            <div className="max-w-[800px] mx-auto px-5 lg:px-10">
-              {report.body ? (
-                <div
-                  className="prose prose-sm md:prose-base max-w-none"
-                  style={{ color: "#000000" }}
-                  dangerouslySetInnerHTML={{ __html: report.body }}
-                />
-              ) : (
-                <p className="text-sm leading-relaxed" style={{ color: "#000000" }}>
-                  {report.title}
-                </p>
-              )}
-            </div>
-          </section>
+          /* ログイン済み：全文表示 + いいね・コメント */
+          <>
+            <section className="pb-10" style={{ backgroundColor: "#FFFFFF" }}>
+              <div className="max-w-[800px] mx-auto px-5 lg:px-10">
+                {report.body ? (
+                  <div
+                    className="prose prose-sm md:prose-base max-w-none"
+                    style={{ color: "#000000" }}
+                    dangerouslySetInnerHTML={{ __html: report.body }}
+                  />
+                ) : (
+                  <p className="text-sm leading-relaxed" style={{ color: "#000000" }}>
+                    {report.title}
+                  </p>
+                )}
+              </div>
+            </section>
+
+            {/* いいね・コメント */}
+            <section className="pb-4" style={{ backgroundColor: "#FFFFFF" }}>
+              <ReportInteractions reportId={report.id} />
+            </section>
+          </>
         ) : (
           /* 未ログイン：冒頭ティーザー + ゲート */
           <section className="pb-20" style={{ backgroundColor: "#FFFFFF" }}>
