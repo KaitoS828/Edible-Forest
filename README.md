@@ -168,7 +168,7 @@
 ## ディレクトリ構成
 
 ```
-itsuki-village/
+exergy-forest/
 ├─ public/                               静的ファイル（OGP画像・favicon など）
 ├─ carousel/                             Hero スライド画像
 ├─ scripts/                              シードスクリプトなど
