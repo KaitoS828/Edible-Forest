@@ -31,34 +31,85 @@ body {
 .prose p { margin: 0.75rem 0; line-height: 2; }
 .prose hr { border-color: var(--border); margin: 2rem 0; }
 
-/* ── アニメーション：穏やかでゆるやか ── */
-@keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+/* ── イージング変数 ── */
+:root {
+  --ease-out: cubic-bezier(.83, 0, .17, 1);
+  --ease-in-out: cubic-bezier(.76, 0, .24, 1);
+  --duration-fast: 0.45s;
+  --duration-base: 0.65s;
+  --duration-slow: 0.9s;
 }
-@keyframes fadeInUp {
+
+/* ── アニメーション ── */
+@keyframes pageFadeIn {
   from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes gentleFloat {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(-4px); }
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroTextIn {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 body > * {
-  animation: pageFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: pageFadeIn var(--duration-base) var(--ease-out) both;
 }
 
 .page-enter {
-  animation: pageFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: pageFadeIn var(--duration-base) var(--ease-out) both;
 }
 .card-enter {
-  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: fadeInUp var(--duration-fast) var(--ease-out) both;
+}
+
+/* ── ヒーローテキスト入場アニメーション ── */
+.hero-label {
+  animation: heroTextIn var(--duration-base) var(--ease-out) 0.2s both;
+}
+.hero-title {
+  animation: heroTextIn var(--duration-slow) var(--ease-out) 0.35s both;
+}
+.hero-caption {
+  animation: heroTextIn var(--duration-base) var(--ease-out) 0.5s both;
+}
+.hero-divider {
+  animation: heroTextIn var(--duration-base) var(--ease-out) 0.6s both;
+}
+.hero-cta {
+  animation: heroTextIn var(--duration-base) var(--ease-out) 0.75s both;
+}
+
+/* ── スクロール連動 Reveal ── */
+.reveal-bottom {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-28px);
+  transition: opacity var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+.reveal-right {
+  opacity: 0;
+  transform: translateX(28px);
+  transition: opacity var(--duration-base) var(--ease-out),
+              transform var(--duration-base) var(--ease-out);
+}
+.reveal-visible {
+  opacity: 1 !important;
+  transform: none !important;
 }
 
 /* ── カードホバー ── */
 .card-lift {
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  transition: transform var(--duration-fast) var(--ease-out),
+              box-shadow var(--duration-fast) var(--ease-out);
 }
 .card-lift:hover {
   transform: translateY(-5px);
@@ -67,13 +118,17 @@ body > * {
 
 /* ── 丸型カード ── */
 .circle-card {
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform var(--duration-fast) var(--ease-out);
 }
 .circle-card:hover .circle-img {
   transform: scale(1.06);
 }
 
-/* ── ボタン共通（穏やかなトランジション） ── */
+/* ── ボタン・リンク共通 ── */
 button, a {
-  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+  transition: opacity var(--duration-fast) var(--ease-out),
+              transform var(--duration-fast) var(--ease-out),
+              background-color var(--duration-fast) var(--ease-out),
+              border-color var(--duration-fast) var(--ease-out),
+              color var(--duration-fast) var(--ease-out);
 }

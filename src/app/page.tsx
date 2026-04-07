@@ -6,6 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { ENSEMBLES } from "@/data/ensembles";
 import { JapanMap } from "@/components/JapanMap/JapanMap";
 import type { RegionId } from "@/components/JapanMap/mapData";
+import { RevealOnScroll } from "@/components/RevealOnScroll";
 
 // ─────────────────────────────────────────
 // Hero
@@ -72,40 +73,40 @@ function HeroSection() {
         className="flex flex-col justify-center px-8 md:px-12 py-10 md:py-0 md:w-[40%]"
         style={{ backgroundColor: "#F7FAF7" }}
       >
-        <p className="text-[11px] font-medium mb-5 uppercase" style={{ color: "#3C6B4F", letterSpacing: "0.18em" }}>
+        <p className="hero-label text-[11px] font-medium mb-5 uppercase" style={{ color: "#3C6B4F", letterSpacing: "0.18em" }}>
           Edible Forest Ensemble Club
         </p>
 
         <h1
-          className="font-bold mb-4"
+          className="hero-title font-bold mb-2"
           style={{ fontFamily: "'Noto Serif JP', serif", color: "#1A2B1E", fontSize: "clamp(1.5rem, 2.8vw, 2.4rem)", lineHeight: 1.5 }}
         >
           自然界の仕組みで、<br />新しい生き方を。
         </h1>
 
         <p
-          className="text-sm mb-8"
-          style={{ color: "#1A2B1E", opacity: fading ? 0 : 0.6, transition: "opacity 0.5s ease", lineHeight: 1.9 }}
+          className="hero-caption text-sm mb-8"
+          style={{ color: "#1A2B1E", opacity: fading ? 0 : 0.55, transition: `opacity 0.5s var(--ease-out)`, lineHeight: 1.9 }}
         >
           {SLIDES[current].caption}
         </p>
 
-        <div className="mb-8" style={{ width: "40px", height: "1px", backgroundColor: "#3C6B4F", opacity: 0.4 }} />
+        <div className="hero-divider mb-8" style={{ width: "40px", height: "1px", backgroundColor: "#3C6B4F", opacity: 0.4 }} />
 
-        <div className="flex flex-col gap-3 max-w-[240px]">
-          <a href="/join" className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium text-white" style={{ backgroundColor: "#3C6B4F", transition: "opacity 0.3s ease" }}
+        <div className="hero-cta flex flex-col gap-3 max-w-[240px]">
+          <a href="/join" className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium text-white" style={{ backgroundColor: "#3C6B4F" }}
             onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
             onMouseLeave={e => (e.currentTarget.style.opacity = "1")}>
             倶楽部に参加する
           </a>
           <a href="/#events" className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium"
-            style={{ border: "1.5px solid rgba(60,107,79,0.4)", color: "#3C6B4F", backgroundColor: "transparent", transition: "all 0.3s ease" }}
+            style={{ border: "1.5px solid rgba(60,107,79,0.4)", color: "#3C6B4F", backgroundColor: "transparent" }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#3C6B4F"; e.currentTarget.style.color = "white"; e.currentTarget.style.borderColor = "#3C6B4F"; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#3C6B4F"; e.currentTarget.style.borderColor = "rgba(60,107,79,0.4)"; }}>
             イベントを見る
           </a>
           <a href="/#stays" className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium"
-            style={{ border: "1.5px solid rgba(60,107,79,0.4)", color: "#3C6B4F", backgroundColor: "transparent", transition: "all 0.3s ease" }}
+            style={{ border: "1.5px solid rgba(60,107,79,0.4)", color: "#3C6B4F", backgroundColor: "transparent" }}
             onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#3C6B4F"; e.currentTarget.style.color = "white"; e.currentTarget.style.borderColor = "#3C6B4F"; }}
             onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#3C6B4F"; e.currentTarget.style.borderColor = "rgba(60,107,79,0.4)"; }}>
             宿泊する
@@ -125,36 +126,40 @@ function AboutSection() {
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
         <div className="grid md:grid-cols-2 gap-14 items-start">
           <div>
-            <div className="text-6xl leading-none mb-3 select-none" style={{ color: "#1A2B1E", fontFamily: "serif" }}>"</div>
-            <h2 className="text-2xl md:text-[28px] font-bold leading-snug mb-6" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-              産業社会の「自分のため」から、<br />
-              自然界の「隣に役立つ」へ。<br />
-              食べられる森アンサンブル倶楽部
-            </h2>
-            <p className="text-sm leading-[1.9] mb-4" style={{ color: "#1A2B1E" }}>
-              「自然界からの学び」を、人の経済活動やコミュニティのありかたに還元していこうとするメンバー達が、各拠点やイベントを運営しています。
-            </p>
-            <p className="text-sm leading-[1.9] mb-4" style={{ color: "#1A2B1E" }}>
-              地方と都市の両方で「ローカルコミュニティ（LC）」を展開し、インターローカルな暮らしの実験場として、各地をつなぎます。
-            </p>
-            <p className="text-sm leading-[1.9] mb-6 px-4 py-3 rounded-xl" style={{ color: "#1A2B1E", backgroundColor: "#f8f8f8", border: "1px solid #e5e5e5", borderRadius: "12px" }}>
-              一部、会員限定の施設やイベントがあります。まずは、楽しむことから始めてください。どんな拠点やイベントがあるかは、このサイトをご覧ください。
-            </p>
-            <a
-              href="/join"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#3C6B4F" }}
-            >
-              倶楽部の会員になる →
-            </a>
+            <RevealOnScroll>
+              <div className="text-6xl leading-none mb-3 select-none" style={{ color: "#1A2B1E", fontFamily: "serif" }}>"</div>
+              <h2 className="text-2xl md:text-[28px] font-bold leading-snug mb-6" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+                産業社会の「自分のため」から、<br />
+                自然界の「隣に役立つ」へ。<br />
+                食べられる森アンサンブル倶楽部
+              </h2>
+            </RevealOnScroll>
+            <RevealOnScroll delay={120}>
+              <p className="text-sm leading-[1.9] mb-4" style={{ color: "#1A2B1E" }}>
+                「自然界からの学び」を、人の経済活動やコミュニティのありかたに還元していこうとするメンバー達が、各拠点やイベントを運営しています。
+              </p>
+              <p className="text-sm leading-[1.9] mb-4" style={{ color: "#1A2B1E" }}>
+                地方と都市の両方で「ローカルコミュニティ（LC）」を展開し、インターローカルな暮らしの実験場として、各地をつなぎます。
+              </p>
+              <p className="text-sm leading-[1.9] mb-6 px-4 py-3 rounded-xl" style={{ color: "#1A2B1E", backgroundColor: "#f8f8f8", border: "1px solid #e5e5e5", borderRadius: "12px" }}>
+                一部、会員限定の施設やイベントがあります。まずは、楽しむことから始めてください。どんな拠点やイベントがあるかは、このサイトをご覧ください。
+              </p>
+              <a href="/join" className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: "#3C6B4F" }}>
+                倶楽部の会員になる →
+              </a>
+            </RevealOnScroll>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="rounded-2xl overflow-hidden" style={{ height: "220px", backgroundColor: "#3C6B4F" }}>
-              <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80" alt="食べられる森" className="w-full h-full object-cover" />
-            </div>
-            <div className="rounded-2xl overflow-hidden ml-8" style={{ height: "180px", backgroundColor: "#3C6B4F" }}>
-              <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=500&q=80" alt="自然の恵み" className="w-full h-full object-cover" />
-            </div>
+            <RevealOnScroll from="right">
+              <div className="rounded-2xl overflow-hidden" style={{ height: "220px", backgroundColor: "#3C6B4F" }}>
+                <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80" alt="食べられる森" className="w-full h-full object-cover" />
+              </div>
+            </RevealOnScroll>
+            <RevealOnScroll from="right" delay={150}>
+              <div className="rounded-2xl overflow-hidden ml-8" style={{ height: "180px", backgroundColor: "#3C6B4F" }}>
+                <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=500&q=80" alt="自然の恵み" className="w-full h-full object-cover" />
+              </div>
+            </RevealOnScroll>
           </div>
         </div>
       </div>
@@ -202,15 +207,17 @@ function SearchSection() {
   return (
     <section id="search" className="py-16 md:py-20 bg-white">
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
-        <div className="mb-10">
-          <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
-            地域から探す
-          </span>
-          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-            拠点・アンサンブルを検索する
-          </h2>
-          <p className="text-sm mt-2" style={{ color: "#1A2B1E", opacity: 0.45 }}>地図の地域をクリックすると、その地域のアンサンブルと宿泊拠点が下に表示されます</p>
-        </div>
+        <RevealOnScroll>
+          <div className="mb-10">
+            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
+              地域から探す
+            </span>
+            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+              拠点・アンサンブルを検索する
+            </h2>
+            <p className="text-sm mt-2" style={{ color: "#1A2B1E", opacity: 0.45 }}>地図の地域をクリックすると、その地域のアンサンブルと宿泊拠点が下に表示されます</p>
+          </div>
+        </RevealOnScroll>
 
         {/* 統計バッジ */}
         <div className="flex flex-wrap justify-center gap-6 mb-8">
@@ -329,24 +336,26 @@ function EnsembleListSection() {
   return (
     <section id="events" className="py-16 md:py-24 bg-white">
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
-          <div>
-            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
-              LC（ローカルコミュニティ）
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-              {sectionLabel}
-            </h2>
-            {!isLoggedIn && (
-              <p className="text-xs mt-2" style={{ color: "#1A2B1E" }}>
-                ※ ログインすると全てのアンサンブルをご覧いただけます
-              </p>
-            )}
+        <RevealOnScroll>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
+            <div>
+              <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
+                LC（ローカルコミュニティ）
+              </span>
+              <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+                {sectionLabel}
+              </h2>
+              {!isLoggedIn && (
+                <p className="text-xs mt-2" style={{ color: "#1A2B1E" }}>
+                  ※ ログインすると全てのアンサンブルをご覧いただけます
+                </p>
+              )}
+            </div>
+            <p className="text-sm max-w-[280px] md:text-right leading-[1.9]" style={{ color: "#1A2B1E" }}>
+              全国各地のローカルコミュニティ（LC）をご紹介します。
+            </p>
           </div>
-          <p className="text-sm max-w-[280px] md:text-right leading-[1.9]" style={{ color: "#1A2B1E" }}>
-            全国各地のローカルコミュニティ（LC）をご紹介します。
-          </p>
-        </div>
+        </RevealOnScroll>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
           {displayed.map((e) => (
@@ -388,24 +397,26 @@ function SpotsListSection() {
   return (
     <section id="stays" className="py-16 md:py-24" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
-        <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
-          <div>
-            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
-              LS（ローカルステイ）
-            </span>
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-              全国各地の宿泊拠点
-            </h2>
-            {!isLoggedIn && spots.length > 3 && (
-              <p className="text-xs mt-2" style={{ color: "#1A2B1E" }}>
-                ※ ログインすると全ての拠点をご覧いただけます
-              </p>
-            )}
+        <RevealOnScroll>
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
+            <div>
+              <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
+                LS（ローカルステイ）
+              </span>
+              <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+                全国各地の宿泊拠点
+              </h2>
+              {!isLoggedIn && spots.length > 3 && (
+                <p className="text-xs mt-2" style={{ color: "#1A2B1E" }}>
+                  ※ ログインすると全ての拠点をご覧いただけます
+                </p>
+              )}
+            </div>
+            <p className="text-sm max-w-[280px] md:text-right leading-[1.9]" style={{ color: "#1A2B1E" }}>
+              全国各地のローカルステイ（LS）をご紹介します。
+            </p>
           </div>
-          <p className="text-sm max-w-[280px] md:text-right leading-[1.9]" style={{ color: "#1A2B1E" }}>
-            全国各地のローカルステイ（LS）をご紹介します。
-          </p>
-        </div>
+        </RevealOnScroll>
 
         {displayed.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-3xl">
@@ -479,16 +490,18 @@ function ReportsSection() {
   return (
     <section className="py-14" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="max-w-[900px] mx-auto px-5 lg:px-10">
-        <div className="flex items-center justify-between mb-8">
-          <div>
-            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
-              活動レポート
-            </span>
-            <h2 className="text-xl md:text-2xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-              各地の活動記録
-            </h2>
+        <RevealOnScroll>
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
+                活動レポート
+              </span>
+              <h2 className="text-xl md:text-2xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+                各地の活動記録
+              </h2>
+            </div>
           </div>
-        </div>
+        </RevealOnScroll>
 
         {/* タブ */}
         <div className="flex border-b mb-8" style={{ borderColor: "#e5e5e5" }}>
