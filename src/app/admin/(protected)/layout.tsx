@@ -39,6 +39,13 @@ export default async function AdminLayout({
               {session.user?.email}
             </span>
             <a
+              href="/admin/members"
+              className="text-xs transition-colors hover:text-[#3C6B4F]"
+              style={{ color: "#1A2B1E" }}
+            >
+              会員管理
+            </a>
+            <a
               href="/"
               className="text-xs transition-colors hover:text-[#3C6B4F]"
               style={{ color: "#1A2B1E" }}

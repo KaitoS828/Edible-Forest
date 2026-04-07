@@ -21,6 +21,7 @@ export default function LoginPage() {
       body: JSON.stringify({ idToken }),
     });
     const data = await res.json();
+    if (!res.ok) throw new Error(data.error ?? "ログインに失敗しました");
     // 初回ログイン（プロフィール未設定）ならセットアップ画面へ
     return data.profileCompleted === false ? "/member/setup" : callbackUrl;
   }
@@ -34,8 +35,9 @@ export default function LoginPage() {
       const token = await cred.user.getIdToken();
       const dest = await postSession(token);
       window.location.href = dest;
-    } catch {
-      setError("メールアドレスまたはパスワードが正しくありません");
+    } catch (e: unknown) {
+      const msg = e instanceof Error ? e.message : "";
+      setError(msg || "メールアドレスまたはパスワードが正しくありません");
     } finally {
       setLoading(false);
     }

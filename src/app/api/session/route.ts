@@ -13,6 +13,14 @@ export async function POST(req: NextRequest) {
   try {
     const decoded = await adminAuth.verifyIdToken(idToken);
 
+    // 管理者アカウントは会員ログイン不可
+    if (decoded.admin) {
+      return NextResponse.json(
+        { error: "管理者アカウントは管理画面からログインしてください" },
+        { status: 403 }
+      );
+    }
+
     // 既存ユーザー情報を取得（プロフィール設定済みか確認）
     const existing = await getUser(decoded.uid);
     const profileCompleted = existing?.profileCompleted ?? false;

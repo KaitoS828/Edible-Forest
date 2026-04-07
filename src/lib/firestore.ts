@@ -8,12 +8,17 @@ export type UserRole = "member" | "admin";
 
 export type SubscriptionStatus = "active" | "past_due" | "canceled" | "trialing" | "none";
 
+export type MemberType = "free" | "member" | "supporter" | "organizer" | "staff";
+
 export type UserDoc = {
   uid: string;
   email: string;
   displayName: string;
   photoURL: string;
   role: UserRole;
+  memberType?: MemberType;
+  memberNote?: string;
+  approvedAt?: FirebaseFirestore.Timestamp;
   createdAt: FirebaseFirestore.Timestamp;
   // プロフィール
   bio?: string;
@@ -81,6 +86,21 @@ export async function upsertUser(uid: string, data: Partial<UserDoc>) {
 export async function getAllUsers(): Promise<UserDoc[]> {
   const snap = await adminDb.collection("users").orderBy("createdAt", "desc").get();
   return snap.docs.map((d) => ({ uid: d.id, ...d.data() }) as UserDoc);
+}
+
+export async function updateUserMemberType(
+  uid: string,
+  memberType: MemberType,
+  note?: string
+): Promise<void> {
+  await adminDb.collection("users").doc(uid).set(
+    {
+      memberType,
+      ...(note !== undefined ? { memberNote: note } : {}),
+      updatedAt: FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
 }
 
 export async function getUserByEmail(email: string): Promise<UserDoc | null> {
