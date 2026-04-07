@@ -117,9 +117,9 @@ export function ReportInteractions({ reportId }: Props) {
           disabled={!user || likeLoading}
           className="flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-medium transition-all disabled:opacity-40"
           style={{
-            backgroundColor: liked ? "#005F02" : "transparent",
-            color: liked ? "white" : "#005F02",
-            border: `1.5px solid #005F02`,
+            backgroundColor: liked ? "#3C6B4F" : "transparent",
+            color: liked ? "white" : "#3C6B4F",
+            border: `1.5px solid #3C6B4F`,
           }}
         >
           <HeartIcon filled={liked} />
@@ -135,9 +135,9 @@ export function ReportInteractions({ reportId }: Props) {
         </button>
 
         {!user && !loading && (
-          <p className="text-xs" style={{ color: "#000000", opacity: 0.5 }}>
+          <p className="text-xs" style={{ color: "#1A2B1E", opacity: 0.5 }}>
             いいねするには
-            <a href="/login" className="underline ml-1" style={{ color: "#005F02" }}>ログイン</a>
+            <a href="/login" className="underline ml-1" style={{ color: "#3C6B4F" }}>ログイン</a>
             が必要です
           </p>
         )}
@@ -147,7 +147,7 @@ export function ReportInteractions({ reportId }: Props) {
       <div className="pt-10 pb-16">
         <h3
           className="text-base font-bold mb-6"
-          style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+          style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
         >
           コメント {comments.length > 0 && <span className="text-sm font-normal opacity-60">({comments.length})</span>}
         </h3>
@@ -160,20 +160,20 @@ export function ReportInteractions({ reportId }: Props) {
                 {/* アバター */}
                 <div
                   className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white"
-                  style={{ backgroundColor: "#005F02" }}
+                  style={{ backgroundColor: "#3C6B4F" }}
                 >
                   {c.userName.slice(0, 1)}
                 </div>
                 <div className="flex-1">
                   <div className="flex items-baseline gap-2 mb-1">
-                    <span className="text-sm font-medium" style={{ color: "#005F02" }}>{c.userName}</span>
-                    <span className="text-[11px]" style={{ color: "#000000", opacity: 0.4 }}>
+                    <span className="text-sm font-medium" style={{ color: "#3C6B4F" }}>{c.userName}</span>
+                    <span className="text-[11px]" style={{ color: "#1A2B1E", opacity: 0.4 }}>
                       {formatDate(c.createdAt)}
                     </span>
                   </div>
                   <p
                     className="text-sm leading-relaxed whitespace-pre-wrap rounded-2xl px-4 py-3"
-                    style={{ backgroundColor: "rgba(0,95,2,0.04)", color: "#000000" }}
+                    style={{ backgroundColor: "rgba(0,95,2,0.04)", color: "#1A2B1E" }}
                   >
                     {c.content}
                   </p>
@@ -182,7 +182,7 @@ export function ReportInteractions({ reportId }: Props) {
             ))}
           </div>
         ) : (
-          <p className="text-sm mb-8" style={{ color: "#000000", opacity: 0.4 }}>
+          <p className="text-sm mb-8" style={{ color: "#1A2B1E", opacity: 0.4 }}>
             まだコメントはありません。最初のコメントを投稿しましょう。
           </p>
         )}
@@ -192,7 +192,7 @@ export function ReportInteractions({ reportId }: Props) {
           <form onSubmit={handleComment} className="flex gap-3 items-start">
             <div
               className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white"
-              style={{ backgroundColor: "#005F02" }}
+              style={{ backgroundColor: "#3C6B4F" }}
             >
               {(user.displayName ?? user.email ?? "M").slice(0, 1).toUpperCase()}
             </div>
@@ -206,9 +206,9 @@ export function ReportInteractions({ reportId }: Props) {
                 style={{
                   border: "1.5px solid rgba(0,95,2,0.2)",
                   backgroundColor: "#FFFFFF",
-                  color: "#000000",
+                  color: "#1A2B1E",
                 }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#005F02")}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "#3C6B4F")}
                 onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(0,95,2,0.2)")}
               />
               {commentError && (
@@ -219,7 +219,7 @@ export function ReportInteractions({ reportId }: Props) {
                   type="submit"
                   disabled={posting || !commentText.trim()}
                   className="px-5 py-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-40"
-                  style={{ backgroundColor: "#005F02" }}
+                  style={{ backgroundColor: "#3C6B4F" }}
                 >
                   {posting ? "投稿中..." : "投稿する"}
                 </button>
@@ -231,9 +231,9 @@ export function ReportInteractions({ reportId }: Props) {
             className="rounded-2xl px-5 py-4 text-sm text-center"
             style={{ backgroundColor: "rgba(0,95,2,0.04)", border: "1px dashed rgba(0,95,2,0.2)" }}
           >
-            <span style={{ color: "#000000" }}>コメントするには </span>
-            <a href="/login" className="font-medium underline" style={{ color: "#005F02" }}>ログイン</a>
-            <span style={{ color: "#000000" }}> が必要です</span>
+            <span style={{ color: "#1A2B1E" }}>コメントするには </span>
+            <a href="/login" className="font-medium underline" style={{ color: "#3C6B4F" }}>ログイン</a>
+            <span style={{ color: "#1A2B1E" }}> が必要です</span>
           </div>
         )}
       </div>

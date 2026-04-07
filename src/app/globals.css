@@ -1,94 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --bg: #FFFFFF;
-  --green: #005F02;
-  --accent: #005F02;
-  --dark: #005F02;
-  --mid: #000000;
-  --border: rgba(0,95,2,0.2);
+  --green: #3C6B4F;
+  --green-mid: #5A8D73;
+  --green-pale: #F0F6F2;
+  --bg: #F7FAF7;
+  --text: #1A2B1E;
+  --border: rgba(60,107,79,0.15);
 }
 
 * { box-sizing: border-box; }
 
 body {
   background: var(--bg);
-  color: #000000;
-  font-family: 'Noto Sans JP', sans-serif;
+  color: var(--text);
+  font-family: 'Noto Serif JP', serif;
   -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.02em;
+  line-height: 1.8;
 }
 
-/* リッチテキスト表示スタイル */
-.prose img {
-  border-radius: 12px;
-  max-width: 100%;
-  height: auto;
-  margin: 1.5rem auto;
-}
-.prose h2 {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  margin-top: 2rem;
-  margin-bottom: 0.75rem;
-  color: #005F02;
-}
-.prose h3 {
-  font-family: 'Noto Serif JP', serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
-  color: #005F02;
-}
-.prose blockquote {
-  border-left: 3px solid #005F02;
-  padding-left: 1rem;
-  color: #000000;
-  font-style: italic;
-  margin: 1.5rem 0;
-}
+/* リッチテキスト */
+.prose img { border-radius: 12px; max-width: 100%; height: auto; margin: 1.5rem auto; }
+.prose h2 { font-family: 'Noto Serif JP', serif; font-size: 1.25rem; font-weight: 700; margin-top: 2rem; margin-bottom: 0.75rem; color: var(--green); }
+.prose h3 { font-family: 'Noto Serif JP', serif; font-size: 1.05rem; font-weight: 700; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--green); }
+.prose blockquote { border-left: 3px solid var(--green); padding-left: 1rem; color: var(--text); font-style: italic; margin: 1.5rem 0; }
 .prose ul { list-style: disc; padding-left: 1.5rem; }
 .prose ol { list-style: decimal; padding-left: 1.5rem; }
 .prose li { margin: 0.25rem 0; }
 .prose p { margin: 0.75rem 0; line-height: 2; }
-.prose hr { border-color: rgba(0,95,2,0.2); margin: 2rem 0; }
+.prose hr { border-color: var(--border); margin: 2rem 0; }
 
-/* ─── グローバル ふわっと入場アニメーション ─── */
+/* ── アニメーション：穏やかでゆるやか ── */
 @keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(16px); }
   to   { opacity: 1; transform: translateY(0); }
 }
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-4px); }
+}
 
-/* 全ページに適用 */
 body > * {
-  animation: pageFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: pageFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 .page-enter {
-  animation: pageFadeIn 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: pageFadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 .card-enter {
-  animation: fadeInUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* ─── カードホバー共通 ─── */
+/* ── カードホバー ── */
 .card-lift {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
 }
 .card-lift:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 28px rgba(0,0,0,0.10);
+  transform: translateY(-5px);
+  box-shadow: 0 12px 36px rgba(60,107,79,0.12);
 }
 
-/* ─── 丸型カード（CMS・一覧共通） ─── */
+/* ── 丸型カード ── */
 .circle-card {
-  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .circle-card:hover .circle-img {
-  transform: scale(1.05);
+  transform: scale(1.06);
+}
+
+/* ── ボタン共通（穏やかなトランジション） ── */
+button, a {
+  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
 }

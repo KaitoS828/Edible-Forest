@@ -10,7 +10,7 @@ export interface Ensemble {
   // 詳細ページ用
   tagline?: string;
   philosophy?: string;
-  activities?: { icon: string; title: string; desc: string }[];
+  activities?: { icon: string; title: string; desc: string; img?: string }[];
   gallery?: string[];
   stats?: { label: string; value: string }[];
   organizer?: { name: string; role: string; bio: string; avatar?: string };
@@ -47,9 +47,9 @@ export const ENSEMBLES: Ensemble[] = [
 <strong>定員：</strong> 各回10名限定（先着順）</p>
 <p>ただの「観光」ではなく、この町の「生業」の一部になる。広尾の海と、漁師と、そしてあなたと。今、この場所でしか生まれないアンサンブルを、心に刻みに来てください。</p>`,
     activities: [
-      { icon: "🌱", title: "庭づくりワークショップ", desc: "食べられる植物の苗植えや土づくりを体験。専門家と一緒に自分の食べられる庭をデザインします。" },
-      { icon: "🏡", title: "森の宿泊体験", desc: "食べられる森の中で一夜を過ごす体験プログラム。朝食には自分で摘んだハーブティーを。" },
-      { icon: "📍", title: "在来種マッピング", desc: "十勝の在来食用植物を記録・データ化するプロジェクト。地域の食の記憶を次世代に伝えます。" },
+      { icon: "🌱", title: "庭づくりワークショップ", desc: "食べられる植物の苗植えや土づくりを体験。専門家と一緒に自分の食べられる庭をデザインします。", img: "/images/activities/hiroo_garden.png" },
+      { icon: "🏡", title: "森の宿泊体験", desc: "食べられる森の中で一夜を過ごす体験プログラム。朝食には自分で摘んだハーブティーを。", img: "/images/activities/hiroo_stay.png" },
+      { icon: "📍", title: "在来種マッピング", desc: "十勝の在来食用植物を記録・データ化するプロジェクト。地域の食の記憶を次世代に伝えます。", img: "/images/activities/hiroo_mapping.png" },
     ],
     gallery: [
       "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=70",
@@ -65,7 +65,7 @@ export const ENSEMBLES: Ensemble[] = [
       name: "田村 拓海",
       role: "アンサンブルオーガナイザー",
       bio: "北海道出身。農業と生態学を学んだのち、十勝の地で「食べられる森」づくりを始める。昆布漁師との連携をきっかけに、地域の生業と食文化を次世代に伝える活動を展開中。",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=200&q=80",
+      avatar: "/images/organizers/hiroo.png",
     },
   },
   {
@@ -98,9 +98,9 @@ export const ENSEMBLES: Ensemble[] = [
 <strong>定員：</strong> 各回8名限定</p>
 <p>自然の中を歩くことが、こんなにも豊かであることを、浦幌が教えてくれます。</p>`,
     activities: [
-      { icon: "🗺️", title: "食べられる森マッピング", desc: "GPS・AIを活用して在来食用植物の分布を記録。誰でも使えるオープンマップとして公開予定。" },
-      { icon: "🌊", title: "川と共にある暮らし体験", desc: "浦幌川の生態系を観察しながら、川がもたらす恵みを学ぶフィールドワーク。" },
-      { icon: "🤝", title: "地域住民との共創", desc: "地元の農家・漁師・高齢者と協力して、地域の食の知恵をデジタルアーカイブ化します。" },
+      { icon: "🗺️", title: "食べられる森マッピング", desc: "GPS・AIを活用して在来食用植物の分布を記録。誰でも使えるオープンマップとして公開予定。", img: "/images/activities/urahoro_mapping.png" },
+      { icon: "🌊", title: "川と共にある暮らし体験", desc: "浦幌川の生態系を観察しながら、川がもたらす恵みを学ぶフィールドワーク。", img: "/images/activities/urahoro_river.png" },
+      { icon: "🤝", title: "地域住民との共創", desc: "地元の農家・漁師・高齢者と協力して、地域の食の知恵をデジタルアーカイブ化します。", img: "/images/activities/urahoro_collab.png" },
     ],
     gallery: [
       "https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=70",
@@ -116,7 +116,7 @@ export const ENSEMBLES: Ensemble[] = [
       name: "中村 里奈",
       role: "アンサンブルオーガナイザー",
       bio: "生態学者。浦幌川流域の在来食用植物を10年以上調査し続けてきた研究者。「食べられる地図」プロジェクトを立ち上げ、地域住民とともにオープンデータ化を進める。",
-      avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=200&q=80",
+      avatar: "/images/organizers/urahoro.png",
     },
   },
   {
@@ -149,9 +149,9 @@ export const ENSEMBLES: Ensemble[] = [
 <strong>定員：</strong> 各回12名</p>
 <p>東京の真ん中で土を触る。それだけで、世界の見え方が変わります。</p>`,
     activities: [
-      { icon: "🏪", title: "商店街再構築プロジェクト", desc: "空き店舗を食の生産・交換・体験の場にリデザイン。地域経済の新しい形を実験します。" },
-      { icon: "🌿", title: "都市農園ネットワーク", desc: "屋上・路地・公園を活用した小さな農園をつなぎ、都市の緑と食のインフラを構築。" },
-      { icon: "💡", title: "AI × 生活生産ラボ", desc: "AIを使った栽培管理・地域情報共有のツールを開発。テクノロジーで生活生産を豊かに。" },
+      { icon: "🏪", title: "商店街再構築プロジェクト", desc: "空き店舗を食の生産・交換・体験の場にリデザイン。地域経済の新しい形を実験します。", img: "/images/activities/musashino_shop.png" },
+      { icon: "🌿", title: "都市農園ネットワーク", desc: "屋上・路地・公園を活用した小さな農園をつなぎ、都市の緑と食のインフラを構築。", img: "/images/activities/musashino_farm.png" },
+      { icon: "💡", title: "AI × 生活生産ラボ", desc: "AIを使った栽培管理・地域情報共有のツールを開発。テクノロジーで生活生産を豊かに。", img: "/images/activities/musashino_ai.png" },
     ],
     gallery: [
       "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=70",
@@ -167,7 +167,7 @@ export const ENSEMBLES: Ensemble[] = [
       name: "森田 亮",
       role: "アンサンブルオーガナイザー",
       bio: "都市計画の専門家から転身。「都市の中に生活生産を取り戻す」をテーマに、武蔵野市内の空き地・屋上・路地を食べられる農園へと変えていくプロジェクトを牽引している。",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&q=80",
+      avatar: "/images/organizers/musashino.png",
     },
   },
   {
@@ -200,7 +200,7 @@ export const ENSEMBLES: Ensemble[] = [
 <strong>定員：</strong> 各回15名</p>
 <p>見知らぬ人と料理を作り、同じ食卓を囲む。それだけで、この街がもう少し好きになります。</p>`,
     activities: [
-      { icon: "🍽️", title: "地域食材を使った食堂", desc: "各地のアンサンブルから届く食材を使ったメニューを提供。食べることで全国のLCとつながれます。" },
+      { icon: "🍽️", title: "地域食材を使った食堂", desc: "各地のアンサンブルから届く食材を使ったメニューを提供。食べることで全国のLCとつながれます。", img: "/images/activities/bunji_food.png" },
       { icon: "📚", title: "生活生産ワークショップ", desc: "料理・発酵・クラフトなど、都市で実践できる生活生産を体験するプログラムを定期開催。" },
       { icon: "🔗", title: "アンサンブル交流イベント", desc: "各地からメンバーが集まる交流の場。インターローカルなつながりを体感できます。" },
     ],
@@ -218,7 +218,7 @@ export const ENSEMBLES: Ensemble[] = [
       name: "石田 和恵",
       role: "アンサンブルオーガナイザー",
       bio: "料理家・コミュニティデザイナー。全国各地のアンサンブル拠点から届く食材を「ぶんじ食堂」で受け取り、食を介して都市のコミュニティをつなぐ役割を担う。",
-      avatar: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=200&q=80",
+      avatar: "/images/organizers/bunji.png",
     },
   },
   {
@@ -269,7 +269,7 @@ export const ENSEMBLES: Ensemble[] = [
       name: "浜田 誠一",
       role: "アンサンブルオーガナイザー",
       bio: "御前崎生まれの漁師の息子。都市のシェフとしてのキャリアを経て地元に戻り、海と山の両方を知る生産者として「農漁一体型」の体験プログラムを企画・運営している。",
-      avatar: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=200&q=80",
+      avatar: "/images/organizers/omaezaki.png",
     },
   },
   {
@@ -320,7 +320,7 @@ export const ENSEMBLES: Ensemble[] = [
       name: "木村 美沙",
       role: "アンサンブルオーガナイザー",
       bio: "竹野出身の民俗学者。地域の伝統工芸・食文化・海の知恵をデジタルアーカイブ化する活動を主導。「竹野に帰ってくる理由をつくる」ことを使命に、漁村の可能性を発信し続けている。",
-      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&q=80",
+      avatar: "/images/organizers/takeno.png",
     },
   },
   {
@@ -371,7 +371,7 @@ export const ENSEMBLES: Ensemble[] = [
       name: "岡本 健太",
       role: "アンサンブルオーガナイザー",
       bio: "四万十生まれの川漁師の三代目。川の恵みで育った自分の原点を共有したいと、フィールドワーク体験プログラムを立ち上げた。「四万十川は、最高の先生だ」が口癖。",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&q=80",
+      avatar: "/images/organizers/shimanto.png",
     },
   },
 ];

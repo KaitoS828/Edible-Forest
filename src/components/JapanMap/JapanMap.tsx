@@ -22,7 +22,7 @@ function PrefPath({
   prefName: string;
 }) {
   const fill = isSelected
-    ? "#005F02"
+    ? "#3C6B4F"
     : isHovered
     ? regionInfo.hoverColor
     : regionInfo.color;
@@ -113,11 +113,11 @@ export function JapanMap({ value, onChange }: JapanMapProps = {}) {
 
       {/* 凡例 */}
       <div className="flex flex-wrap gap-4 mt-3 px-1">
-        <div className="flex items-center gap-1.5 text-xs" style={{ color: "#005F02" }}>
-          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#005F02" }} />
+        <div className="flex items-center gap-1.5 text-xs" style={{ color: "#3C6B4F" }}>
+          <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "#3C6B4F" }} />
           活動中のLC
         </div>
-        <div className="flex items-center gap-1.5 text-xs" style={{ color: "#000000", opacity: 0.4 }}>
+        <div className="flex items-center gap-1.5 text-xs" style={{ color: "#1A2B1E", opacity: 0.4 }}>
           <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: "rgba(0,95,2,0.18)" }} />
           準備中
         </div>
@@ -125,7 +125,7 @@ export function JapanMap({ value, onChange }: JapanMapProps = {}) {
           <button
             onClick={() => toggle(selected)}
             className="ml-auto text-xs flex items-center gap-1 transition-all hover:opacity-70"
-            style={{ color: "#000000" }}
+            style={{ color: "#1A2B1E" }}
           >
             <span>選択を解除</span>
             <span>✕</span>

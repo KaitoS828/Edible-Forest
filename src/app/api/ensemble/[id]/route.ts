@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { updateEnsembleContent } from "@/lib/microcms";
+import { updateEnsemble } from "@/lib/firestore";
 
 export async function PATCH(
   req: NextRequest,
@@ -14,8 +14,9 @@ export async function PATCH(
   const { id } = await params;
   const body = await req.json();
 
-  const ok = await updateEnsembleContent(id, body);
-  if (!ok) {
+  try {
+    await updateEnsemble(id, body);
+  } catch {
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }
 

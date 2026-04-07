@@ -65,7 +65,7 @@ export default function JoinPage() {
             {canceled && (
               <div
                 className="mb-6 p-4 rounded-2xl text-sm"
-                style={{ backgroundColor: "rgba(0,95,2,0.05)", border: "1px solid rgba(0,95,2,0.2)", color: "#005F02" }}
+                style={{ backgroundColor: "rgba(0,95,2,0.05)", border: "1px solid rgba(0,95,2,0.2)", color: "#3C6B4F" }}
               >
                 お支払いがキャンセルされました。もう一度お試しください。
               </div>
@@ -73,27 +73,27 @@ export default function JoinPage() {
 
             {/* ページヘッダー */}
             <div className="text-center mb-10">
-              <span className="inline-block text-xs font-medium px-4 mb-4" style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#005F02", color: "white" }}>
+              <span className="inline-block text-xs font-medium px-4 mb-4" style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}>
                 会員登録
               </span>
-              <h1 className="text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+              <h1 className="text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
                 食べられる森アンサンブル倶楽部<br />会員登録フォーム
               </h1>
-              <p className="text-sm" style={{ color: "#000000" }}>
+              <p className="text-sm" style={{ color: "#1A2B1E" }}>
                 月会費 ¥1,000（税込）/ 月
               </p>
             </div>
 
             {/* 会費説明 */}
             <div className="bg-white rounded-2xl p-5 mb-6 text-sm" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-              <p className="font-medium mb-2" style={{ color: "#005F02" }}>会員特典</p>
-              <ul className="space-y-1.5" style={{ color: "#000000" }}>
+              <p className="font-medium mb-2" style={{ color: "#3C6B4F" }}>会員特典</p>
+              <ul className="space-y-1.5" style={{ color: "#1A2B1E" }}>
                 <li>✓ 全国の会員限定拠点・イベントへのアクセス</li>
                 <li>✓ 会員コミュニティへの参加</li>
                 <li>✓ 活動レポートの閲覧</li>
                 <li>✓ 会員限定の宿泊料金</li>
               </ul>
-              <p className="text-xs mt-3 pt-3 border-t" style={{ color: "#000000", borderColor: "rgba(0,95,2,0.15)" }}>
+              <p className="text-xs mt-3 pt-3 border-t" style={{ color: "#1A2B1E", borderColor: "rgba(0,95,2,0.15)" }}>
                 ※ お支払いはクレジットカード決済（Stripe）にて行います。いつでも解約できます。
               </p>
             </div>
@@ -146,12 +146,12 @@ export default function JoinPage() {
 
               {/* プライバシーポリシー */}
               <div className="bg-white rounded-2xl p-5 text-sm" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-                <p className="font-medium mb-2" style={{ color: "#005F02" }}>注意事項・プライバシーポリシー</p>
-                <ul className="space-y-1 text-xs mb-4" style={{ color: "#000000" }}>
+                <p className="font-medium mb-2" style={{ color: "#3C6B4F" }}>注意事項・プライバシーポリシー</p>
+                <ul className="space-y-1 text-xs mb-4" style={{ color: "#1A2B1E" }}>
                   <li>・月会費 ¥1,000（税込）が毎月ご登録のお支払い方法より引き落とされます</li>
                   <li>・解約はいつでもマイページよりお手続きいただけます</li>
                   <li>・ご入力いただいた個人情報は、サービス提供・ご連絡のみに使用します</li>
-                  <li>・<a href="/contact" className="underline" style={{ color: "#000000" }}>プライバシーポリシー</a>をお読みの上、同意してください</li>
+                  <li>・<a href="/contact" className="underline" style={{ color: "#1A2B1E" }}>プライバシーポリシー</a>をお読みの上、同意してください</li>
                 </ul>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
@@ -161,7 +161,7 @@ export default function JoinPage() {
                     className="mt-0.5 accent-green-700"
                     required
                   />
-                  <span className="text-sm" style={{ color: "#005F02" }}>
+                  <span className="text-sm" style={{ color: "#3C6B4F" }}>
                     注意事項およびプライバシーポリシーに同意します
                   </span>
                 </label>
@@ -171,12 +171,12 @@ export default function JoinPage() {
                 type="submit"
                 disabled={loading || !form.privacy}
                 className="w-full py-4 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                style={{ backgroundColor: "#005F02" }}
+                style={{ backgroundColor: "#3C6B4F" }}
               >
                 {loading ? "送信中..." : "お支払いへ進む（月 ¥1,000）"}
               </button>
 
-              <p className="text-center text-xs" style={{ color: "#000000" }}>
+              <p className="text-center text-xs" style={{ color: "#1A2B1E" }}>
                 ※ 次の画面でクレジットカード情報を入力します（Stripe 決済）
               </p>
             </form>
@@ -191,7 +191,7 @@ export default function JoinPage() {
 function FormSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-2xl p-5 space-y-3" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-      <p className="text-sm font-bold" style={{ color: "#005F02" }}>{title}</p>
+      <p className="text-sm font-bold" style={{ color: "#3C6B4F" }}>{title}</p>
       {children}
     </div>
   );

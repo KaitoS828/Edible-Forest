@@ -16,17 +16,17 @@ export default async function SpotsPage() {
           <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
             <span
               className="inline-block text-xs font-medium px-4 mb-5"
-              style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#005F02", color: "white" }}
+              style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}
             >
               拠点
             </span>
             <h1
               className="text-3xl md:text-4xl font-bold mb-4"
-              style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+              style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
             >
               全国の宿泊施設・拠点
             </h1>
-            <p className="text-sm max-w-xl" style={{ color: "#000000", lineHeight: "1.9" }}>
+            <p className="text-sm max-w-xl" style={{ color: "#1A2B1E", lineHeight: "1.9" }}>
               食べられる森アンサンブル倶楽部の会員が運営する、全国各地の宿泊施設・拠点を紹介します。
             </p>
           </div>
@@ -37,7 +37,7 @@ export default async function SpotsPage() {
           <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
             {spots.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-base" style={{ color: "#000000" }}>
+                <p className="text-base" style={{ color: "#1A2B1E" }}>
                   現在、公開中の拠点はありません
                 </p>
               </div>
@@ -59,7 +59,7 @@ export default async function SpotsPage() {
                         )}
                         <span
                           className="absolute top-3 left-3 text-[11px] font-medium px-3"
-                          style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: spot.regionColor || "#005F02", color: "white" }}
+                          style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: spot.regionColor || "#3C6B4F", color: "white" }}
                         >
                           {spot.region}
                         </span>
@@ -70,35 +70,35 @@ export default async function SpotsPage() {
                     <div className="p-5">
                       <a href={`/spots/${spot.id}`} className="block mb-1">
                         <h2
-                          className="text-base font-bold group-hover:text-[#005F02] transition-colors"
-                          style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+                          className="text-base font-bold group-hover:text-[#3C6B4F] transition-colors"
+                          style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
                         >
                           {spot.name}
                         </h2>
                       </a>
-                      <p className="text-xs mb-3" style={{ color: "#000000" }}>{spot.sub}</p>
-                      <p className="text-sm leading-relaxed line-clamp-2" style={{ color: "#000000" }}>{spot.desc}</p>
+                      <p className="text-xs mb-3" style={{ color: "#1A2B1E" }}>{spot.sub}</p>
+                      <p className="text-sm leading-relaxed line-clamp-2" style={{ color: "#1A2B1E" }}>{spot.desc}</p>
 
                       {/* インフォ + 予約ボタン */}
                       <div className="mt-4 pt-4 border-t" style={{ borderColor: "rgba(0,95,2,0.15)" }}>
                         <div className="flex gap-4 mb-4">
                           {spot.capacity && (
                             <div>
-                              <p className="text-[10px]" style={{ color: "#000000" }}>定員</p>
-                              <p className="text-xs font-medium" style={{ color: "#005F02" }}>{spot.capacity}</p>
+                              <p className="text-[10px]" style={{ color: "#1A2B1E" }}>定員</p>
+                              <p className="text-xs font-medium" style={{ color: "#3C6B4F" }}>{spot.capacity}</p>
                             </div>
                           )}
                           {spot.price && (
                             <div>
-                              <p className="text-[10px]" style={{ color: "#000000" }}>料金</p>
-                              <p className="text-xs font-medium" style={{ color: "#005F02" }}>{spot.price}</p>
+                              <p className="text-[10px]" style={{ color: "#1A2B1E" }}>料金</p>
+                              <p className="text-xs font-medium" style={{ color: "#3C6B4F" }}>{spot.price}</p>
                             </div>
                           )}
                         </div>
                         <a
                           href={`/contact?spot=${encodeURIComponent(spot.name)}`}
                           className="block w-full text-center py-2.5 rounded-full text-xs font-medium text-white transition-opacity hover:opacity-90"
-                          style={{ backgroundColor: "#005F02" }}
+                          style={{ backgroundColor: "#3C6B4F" }}
                         >
                           予約する
                         </a>

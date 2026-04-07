@@ -28,20 +28,20 @@ export default async function AdminLayout({
             </a>
             <span
               className="text-xs font-medium px-3 py-1 rounded-full"
-              style={{ backgroundColor: "#005F02", color: "white" }}
+              style={{ backgroundColor: "#3C6B4F", color: "white" }}
             >
               管理画面
             </span>
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="hidden md:block text-xs" style={{ color: "#000000" }}>
+            <span className="hidden md:block text-xs" style={{ color: "#1A2B1E" }}>
               {session.user?.email}
             </span>
             <a
               href="/"
-              className="text-xs transition-colors hover:text-[#005F02]"
-              style={{ color: "#000000" }}
+              className="text-xs transition-colors hover:text-[#3C6B4F]"
+              style={{ color: "#1A2B1E" }}
             >
               サイトを見る
             </a>
@@ -53,8 +53,8 @@ export default async function AdminLayout({
             >
               <button
                 type="submit"
-                className="text-xs px-4 py-1.5 rounded-full border transition-all hover:bg-[#005F02] hover:text-white"
-                style={{ borderColor: "rgba(0,95,2,0.15)", color: "#000000" }}
+                className="text-xs px-4 py-1.5 rounded-full border transition-all hover:bg-[#3C6B4F] hover:text-white"
+                style={{ borderColor: "rgba(0,95,2,0.15)", color: "#1A2B1E" }}
               >
                 ログアウト
               </button>

@@ -25,14 +25,14 @@ export default async function NewEnsemblePage() {
         <a
           href="/member/dashboard"
           className="text-sm hover:opacity-70 transition-opacity"
-          style={{ color: "#000000" }}
+          style={{ color: "#1A2B1E" }}
         >
           ← マイページに戻る
         </a>
       </div>
       <h1
         className="text-2xl font-bold mb-6"
-        style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+        style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
       >
         新しいアンサンブルを登録
       </h1>

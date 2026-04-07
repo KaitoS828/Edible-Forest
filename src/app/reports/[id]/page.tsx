@@ -53,7 +53,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
             <a
               href="/reports"
               className="inline-flex items-center gap-1.5 text-xs mb-8 transition-opacity hover:opacity-70"
-              style={{ color: "#000000" }}
+              style={{ color: "#1A2B1E" }}
             >
               ← 活動レポート一覧
             </a>
@@ -71,12 +71,12 @@ export default async function ReportDetailPage({ params }: PageProps) {
             </div>
 
             {/* 日付 */}
-            <p className="text-sm mb-4" style={{ color: "#000000", opacity: 0.5 }}>{report.date}</p>
+            <p className="text-sm mb-4" style={{ color: "#1A2B1E", opacity: 0.5 }}>{report.date}</p>
 
             {/* タイトル */}
             <h1
               className="text-2xl md:text-3xl font-bold leading-snug mb-8"
-              style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+              style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
             >
               {report.title}
             </h1>
@@ -99,11 +99,11 @@ export default async function ReportDetailPage({ params }: PageProps) {
                 {report.body ? (
                   <div
                     className="prose prose-sm md:prose-base max-w-none"
-                    style={{ color: "#000000" }}
+                    style={{ color: "#1A2B1E" }}
                     dangerouslySetInnerHTML={{ __html: report.body }}
                   />
                 ) : (
-                  <p className="text-sm leading-relaxed" style={{ color: "#000000" }}>
+                  <p className="text-sm leading-relaxed" style={{ color: "#1A2B1E" }}>
                     {report.title}
                   </p>
                 )}
@@ -125,7 +125,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
                 <div className="relative">
                   <div
                     className="prose prose-sm md:prose-base max-w-none"
-                    style={{ color: "#000000", maxHeight: "200px", overflow: "hidden" }}
+                    style={{ color: "#1A2B1E", maxHeight: "200px", overflow: "hidden" }}
                     dangerouslySetInnerHTML={{ __html: report.body }}
                   />
                   {/* フェードアウト */}
@@ -143,7 +143,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
               >
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4"
-                  style={{ backgroundColor: "#005F02" }}
+                  style={{ backgroundColor: "#3C6B4F" }}
                 >
                   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
                     <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -152,25 +152,25 @@ export default async function ReportDetailPage({ params }: PageProps) {
                 </div>
                 <h2
                   className="text-lg font-bold mb-2"
-                  style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+                  style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
                 >
                   全文を読むにはログインが必要です
                 </h2>
-                <p className="text-sm mb-6" style={{ color: "#000000" }}>
+                <p className="text-sm mb-6" style={{ color: "#1A2B1E" }}>
                   活動レポートの全文は、食べられる森アンサンブル倶楽部の会員のみご覧いただけます。
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <a
                     href={`/login?callbackUrl=/reports/${report.id}`}
                     className="px-8 py-3 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
-                    style={{ backgroundColor: "#005F02" }}
+                    style={{ backgroundColor: "#3C6B4F" }}
                   >
                     ログインして読む
                   </a>
                   <a
                     href="/join"
                     className="px-8 py-3 rounded-full text-sm font-medium border transition-opacity hover:opacity-70"
-                    style={{ borderColor: "rgba(0,95,2,0.2)", color: "#005F02" }}
+                    style={{ borderColor: "rgba(0,95,2,0.2)", color: "#3C6B4F" }}
                   >
                     会員登録する
                   </a>
@@ -186,7 +186,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
             <a
               href="/reports"
               className="inline-flex items-center gap-2 text-sm font-medium transition-opacity hover:opacity-70"
-              style={{ color: "#005F02" }}
+              style={{ color: "#3C6B4F" }}
             >
               ← 活動レポート一覧に戻る
             </a>

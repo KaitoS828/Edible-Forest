@@ -1,11 +1,9 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
+import { adminAuth } from "@/lib/firebase-admin";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
-    Google,
     Credentials({
       credentials: {
         email:    { label: "メールアドレス", type: "email" },
@@ -16,16 +14,25 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         const password = credentials?.password as string | undefined;
         if (!email || !password) return null;
 
-        const adminEmail        = process.env.ADMIN_EMAIL;
-        const adminPasswordHash = process.env.ADMIN_PASSWORD_HASH;
-        if (!adminEmail || !adminPasswordHash) return null;
+        // Firebase Auth REST API でメアド＋パスワード検証
+        const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+        const res = await fetch(
+          `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password, returnSecureToken: true }),
+          }
+        );
+        if (!res.ok) return null;
 
-        if (email !== adminEmail) return null;
+        const { idToken, localId } = await res.json();
 
-        const isValid = await bcrypt.compare(password, adminPasswordHash);
-        if (!isValid) return null;
+        // Custom Claim { admin: true } を確認
+        const decoded = await adminAuth.verifyIdToken(idToken);
+        if (!decoded.admin) return null;
 
-        return { id: "admin", email: adminEmail, name: "管理者" };
+        return { id: localId, email, name: decoded.name ?? "管理者" };
       },
     }),
   ],

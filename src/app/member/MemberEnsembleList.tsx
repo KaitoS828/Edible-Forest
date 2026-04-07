@@ -42,7 +42,7 @@ function EnsembleCard({ ensemble: e }: { ensemble: SerializedEnsemble }) {
         style={{
           width: "140px",
           height: "140px",
-          boxShadow: `0 0 0 3px white, 0 0 0 5px ${e.regionColor || "#005F02"}40`,
+          boxShadow: `0 0 0 3px white, 0 0 0 5px ${e.regionColor || "#3C6B4F"}40`,
           backgroundColor: "#FFFFFF",
           flexShrink: 0,
         }}
@@ -60,7 +60,7 @@ function EnsembleCard({ ensemble: e }: { ensemble: SerializedEnsemble }) {
         <span
           className="absolute top-2 right-2 text-[9px] font-medium px-1.5 py-0.5 rounded-full"
           style={{
-            backgroundColor: e.status === "published" ? "#005F02" : "#999999",
+            backgroundColor: e.status === "published" ? "#3C6B4F" : "#999999",
             color: "white",
           }}
         >
@@ -75,7 +75,7 @@ function EnsembleCard({ ensemble: e }: { ensemble: SerializedEnsemble }) {
           height: "20px",
           lineHeight: "20px",
           borderRadius: "10px",
-          backgroundColor: e.regionColor || "#005F02",
+          backgroundColor: e.regionColor || "#3C6B4F",
           color: "white",
         }}
       >
@@ -83,10 +83,10 @@ function EnsembleCard({ ensemble: e }: { ensemble: SerializedEnsemble }) {
       </span>
 
       {/* 名前 */}
-      <p className="text-xs font-bold mb-0.5 leading-tight" style={{ color: "#005F02" }}>
+      <p className="text-xs font-bold mb-0.5 leading-tight" style={{ color: "#3C6B4F" }}>
         {e.name}
       </p>
-      <p className="text-[11px] mb-3" style={{ color: "#000000" }}>{e.sub}</p>
+      <p className="text-[11px] mb-3" style={{ color: "#1A2B1E" }}>{e.sub}</p>
 
       {/* アクション */}
       <div className="flex gap-1.5 flex-wrap justify-center">
@@ -104,7 +104,7 @@ function EnsembleCard({ ensemble: e }: { ensemble: SerializedEnsemble }) {
         <a
           href={`/member/edit/${e.id}`}
           className="text-[11px] px-3 py-1 rounded-full text-white hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: "#005F02" }}
+          style={{ backgroundColor: "#3C6B4F" }}
         >
           編集
         </a>

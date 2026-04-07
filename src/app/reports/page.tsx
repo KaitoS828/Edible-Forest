@@ -35,7 +35,7 @@ function ReportCard({ report }: { report: typeof REPORTS[0] }) {
         </div>
       )}
       <div className="p-4">
-        <p className="text-[10px] mb-2" style={{ color: "#000000" }}>{report.date}</p>
+        <p className="text-[10px] mb-2" style={{ color: "#1A2B1E" }}>{report.date}</p>
         <div className="flex flex-wrap gap-1.5 mb-3">
           {report.tags.map((tag) => {
             const c = colorMap[tag] ?? "#4A7C59";
@@ -65,7 +65,7 @@ export default function ReportsPage() {
         {/* ページヘッダー */}
         <div className="bg-white border-b" style={{ borderColor: "#E4DDD0" }}>
           <div className="max-w-[1200px] mx-auto px-5 lg:px-10 py-10 md:py-14">
-            <p className="text-xs mb-2" style={{ color: "#000000" }}>
+            <p className="text-xs mb-2" style={{ color: "#1A2B1E" }}>
               <a href="/" className="hover:underline">トップ</a>
               <span className="mx-1.5">›</span>活動レポート
             </p>
@@ -126,7 +126,7 @@ export default function ReportsPage() {
           </div>
 
           {/* 件数 */}
-          <p className="text-sm mb-6" style={{ color: "#000000" }}>
+          <p className="text-sm mb-6" style={{ color: "#1A2B1E" }}>
             {activeFilter ? `「${activeFilter}」` : "すべて"} — {filtered.length}件
           </p>
 
@@ -136,7 +136,7 @@ export default function ReportsPage() {
               {filtered.map((r) => <ReportCard key={r.id} report={r} />)}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-24" style={{ color: "#000000" }}>
+            <div className="flex flex-col items-center justify-center py-24" style={{ color: "#1A2B1E" }}>
               <TreeIcon size={48} />
               <p className="mt-4 text-sm">該当する記事がありません</p>
             </div>

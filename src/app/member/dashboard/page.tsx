@@ -47,26 +47,26 @@ export default async function DashboardPage() {
           ) : (
             <div
               className="w-20 h-20 rounded-full flex items-center justify-center text-2xl font-bold text-white"
-              style={{ backgroundColor: "#005F02", boxShadow: "0 0 0 3px white, 0 0 0 5px rgba(0,95,2,0.3)" }}
+              style={{ backgroundColor: "#3C6B4F", boxShadow: "0 0 0 3px white, 0 0 0 5px rgba(0,95,2,0.3)" }}
             >
               {initials}
             </div>
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-bold mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+          <h1 className="text-xl font-bold mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
             {displayName}
           </h1>
           {bio ? (
-            <p className="text-sm leading-relaxed" style={{ color: "#000000", opacity: 0.7 }}>{bio}</p>
+            <p className="text-sm leading-relaxed" style={{ color: "#1A2B1E", opacity: 0.7 }}>{bio}</p>
           ) : (
-            <p className="text-sm italic" style={{ color: "#000000", opacity: 0.35 }}>自己紹介が未設定です</p>
+            <p className="text-sm italic" style={{ color: "#1A2B1E", opacity: 0.35 }}>自己紹介が未設定です</p>
           )}
         </div>
         <a
           href="/member/setup"
           className="flex-shrink-0 flex items-center gap-1.5 text-sm px-4 py-2 rounded-full border transition-all hover:opacity-70"
-          style={{ borderColor: "rgba(0,95,2,0.2)", color: "#005F02" }}
+          style={{ borderColor: "rgba(0,95,2,0.2)", color: "#3C6B4F" }}
         >
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ display: "inline" }}>
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
@@ -87,10 +87,10 @@ export default async function DashboardPage() {
       {/* アンサンブル */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+          <h2 className="text-lg font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
             投稿したアンサンブル
           </h2>
-          <a href="/member/new" className="text-sm font-medium px-5 py-2 rounded-full text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "#005F02" }}>
+          <a href="/member/new" className="text-sm font-medium px-5 py-2 rounded-full text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "#3C6B4F" }}>
             + 新規投稿
           </a>
         </div>
@@ -100,10 +100,10 @@ export default async function DashboardPage() {
       {/* 宿泊拠点 */}
       <section>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-lg font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+          <h2 className="text-lg font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
             投稿した宿泊拠点
           </h2>
-          <a href="/member/new-spot" className="text-sm font-medium px-5 py-2 rounded-full text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "#005F02" }}>
+          <a href="/member/new-spot" className="text-sm font-medium px-5 py-2 rounded-full text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "#3C6B4F" }}>
             + 新規投稿
           </a>
         </div>
@@ -116,8 +116,8 @@ export default async function DashboardPage() {
 function StatCard({ label, value }: { label: string; value: number }) {
   return (
     <div className="bg-white rounded-2xl p-5" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-      <p className="text-3xl font-bold mb-1" style={{ color: "#005F02" }}>{value}</p>
-      <p className="text-xs" style={{ color: "#000000" }}>{label}</p>
+      <p className="text-3xl font-bold mb-1" style={{ color: "#3C6B4F" }}>{value}</p>
+      <p className="text-xs" style={{ color: "#1A2B1E" }}>{label}</p>
     </div>
   );
 }
@@ -125,8 +125,8 @@ function StatCard({ label, value }: { label: string; value: number }) {
 function EmptyState({ label, href }: { label: string; href: string }) {
   return (
     <div className="bg-white rounded-2xl p-10 text-center" style={{ border: "1px dashed rgba(0,95,2,0.15)" }}>
-      <p className="text-sm mb-4" style={{ color: "#000000" }}>まだ{label}の投稿がありません</p>
-      <a href={href} className="inline-block text-sm font-medium px-5 py-2 rounded-full text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "#005F02" }}>
+      <p className="text-sm mb-4" style={{ color: "#1A2B1E" }}>まだ{label}の投稿がありません</p>
+      <a href={href} className="inline-block text-sm font-medium px-5 py-2 rounded-full text-white hover:opacity-90 transition-opacity" style={{ backgroundColor: "#3C6B4F" }}>
         最初の{label}を投稿する
       </a>
     </div>

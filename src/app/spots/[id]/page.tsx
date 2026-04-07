@@ -32,7 +32,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
             <a
               href="/spots"
               className="inline-flex items-center gap-1.5 text-xs mb-10 transition-opacity hover:opacity-70"
-              style={{ color: "#000000" }}
+              style={{ color: "#1A2B1E" }}
             >
               ← 拠点一覧に戻る
             </a>
@@ -42,18 +42,18 @@ export default async function SpotDetailPage({ params }: PageProps) {
               <div className="flex-1 order-2 md:order-1">
                 <span
                   className="inline-block text-xs font-medium px-4 mb-5"
-                  style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: spot.regionColor || "#005F02", color: "white" }}
+                  style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: spot.regionColor || "#3C6B4F", color: "white" }}
                 >
                   {spot.region}
                 </span>
                 <h1
                   className="text-3xl md:text-4xl font-bold leading-tight mb-4"
-                  style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+                  style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
                 >
                   {spot.name}
                 </h1>
-                <p className="text-sm mb-5" style={{ color: "#000000" }}>{spot.sub}</p>
-                <p className="text-sm leading-[1.9]" style={{ color: "#000000" }}>{spot.desc}</p>
+                <p className="text-sm mb-5" style={{ color: "#1A2B1E" }}>{spot.sub}</p>
+                <p className="text-sm leading-[1.9]" style={{ color: "#1A2B1E" }}>{spot.desc}</p>
 
                 {/* インフォグリッド */}
                 {(spot.address || spot.capacity || spot.price || spot.access) && (
@@ -89,13 +89,13 @@ export default async function SpotDetailPage({ params }: PageProps) {
             <div className="max-w-[800px] mx-auto px-5 lg:px-10">
               <span
                 className="inline-block text-xs font-medium px-4 mb-6"
-                style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#005F02", color: "white" }}
+                style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}
               >
                 拠点の内容
               </span>
               <div
                 className="prose prose-sm md:prose-base max-w-none"
-                style={{ color: "#000000" }}
+                style={{ color: "#1A2B1E" }}
                 dangerouslySetInnerHTML={{ __html: spot.content }}
               />
             </div>
@@ -108,13 +108,13 @@ export default async function SpotDetailPage({ params }: PageProps) {
             <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
               <span
                 className="inline-block text-xs font-medium px-4 mb-5"
-                style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#005F02", color: "white" }}
+                style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}
               >
                 フォトギャラリー
               </span>
               <h2
                 className="text-xl md:text-2xl font-bold mb-10"
-                style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+                style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
               >
                 施設の様子
               </h2>
@@ -138,24 +138,24 @@ export default async function SpotDetailPage({ params }: PageProps) {
         {/* ── CTA（予約・お問い合わせ → 一覧に戻る） ── */}
         <section className="py-16" style={{ backgroundColor: "#FFFFFF" }}>
           <div className="max-w-[1200px] mx-auto px-5 lg:px-10 text-center">
-            <h2 className="text-xl font-bold mb-2" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+            <h2 className="text-xl font-bold mb-2" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               {spot.name}を予約する
             </h2>
-            <p className="text-sm mb-8" style={{ color: "#000000" }}>
+            <p className="text-sm mb-8" style={{ color: "#1A2B1E" }}>
               宿泊・見学のご予約・お問い合わせはこちらから。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
                 href={`/contact?spot=${encodeURIComponent(spot.name)}`}
                 className="inline-flex items-center justify-center px-10 py-3.5 rounded-full text-white text-sm font-medium hover:opacity-90 transition-opacity"
-                style={{ backgroundColor: "#005F02" }}
+                style={{ backgroundColor: "#3C6B4F" }}
               >
                 予約・お問い合わせ
               </a>
               <a
                 href="/spots"
                 className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-medium border-2 hover:opacity-70 transition-opacity"
-                style={{ borderColor: "rgba(0,95,2,0.2)", color: "#005F02" }}
+                style={{ borderColor: "rgba(0,95,2,0.2)", color: "#3C6B4F" }}
               >
                 ← 一覧に戻る
               </a>
@@ -169,7 +169,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
             <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
               <h2
                 className="text-xl font-bold mb-10 text-center"
-                style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+                style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
               >
                 他の拠点を見る
               </h2>
@@ -188,8 +188,8 @@ export default async function SpotDetailPage({ params }: PageProps) {
                       }
                     </div>
                     <div className="p-4">
-                      <p className="text-[11px] mb-1" style={{ color: "#000000" }}>{s.region}</p>
-                      <p className="text-sm font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>{s.name}</p>
+                      <p className="text-[11px] mb-1" style={{ color: "#1A2B1E" }}>{s.region}</p>
+                      <p className="text-sm font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>{s.name}</p>
                     </div>
                   </a>
                 ))}
@@ -207,8 +207,8 @@ export default async function SpotDetailPage({ params }: PageProps) {
 function InfoItem({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-[10px] mb-0.5" style={{ color: "#000000" }}>{label}</p>
-      <p className="text-sm" style={{ color: "#005F02" }}>{value}</p>
+      <p className="text-[10px] mb-0.5" style={{ color: "#1A2B1E" }}>{label}</p>
+      <p className="text-sm" style={{ color: "#3C6B4F" }}>{value}</p>
     </div>
   );
 }

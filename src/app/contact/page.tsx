@@ -28,13 +28,13 @@ export default function ContactPage() {
         <Header />
         <main className="pt-16 min-h-screen flex items-center justify-center">
           <div className="text-center px-6">
-            <h1 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+            <h1 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               お問い合わせを受け付けました
             </h1>
-            <p className="text-sm mb-8" style={{ color: "#000000" }}>
+            <p className="text-sm mb-8" style={{ color: "#1A2B1E" }}>
               内容を確認し、3営業日以内にご連絡いたします。
             </p>
-            <a href="/" className="text-sm" style={{ color: "#000000" }}>← トップへ戻る</a>
+            <a href="/" className="text-sm" style={{ color: "#1A2B1E" }}>← トップへ戻る</a>
           </div>
         </main>
         <Footer />
@@ -49,13 +49,13 @@ export default function ContactPage() {
         <section className="py-14 md:py-20">
           <div className="max-w-[600px] mx-auto px-5">
             <div className="text-center mb-10">
-              <span className="inline-block text-xs font-medium px-4 mb-4" style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#005F02", color: "white" }}>
+              <span className="inline-block text-xs font-medium px-4 mb-4" style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}>
                 お問い合わせ
               </span>
-              <h1 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+              <h1 className="text-2xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
                 お問い合わせ・ご連絡
               </h1>
-              <p className="text-sm" style={{ color: "#000000" }}>
+              <p className="text-sm" style={{ color: "#1A2B1E" }}>
                 食べられる森アンサンブル倶楽部に関するお問い合わせはこちらから。<br />
                 3営業日以内にご返信いたします。
               </p>
@@ -84,17 +84,17 @@ export default function ContactPage() {
 
               {/* プライバシーポリシー */}
               <div className="pt-2 pb-1">
-                <div className="text-xs p-4 rounded-xl mb-3" style={{ backgroundColor: "#FFFFFF", color: "#000000" }}>
-                  <p className="font-medium mb-1" style={{ color: "#005F02" }}>プライバシーポリシー</p>
+                <div className="text-xs p-4 rounded-xl mb-3" style={{ backgroundColor: "#FFFFFF", color: "#1A2B1E" }}>
+                  <p className="font-medium mb-1" style={{ color: "#3C6B4F" }}>プライバシーポリシー</p>
                   <p>ご入力いただいた個人情報は、お問い合わせへの返答のみに使用し、第三者への提供は行いません。</p>
                 </div>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input type="checkbox" checked={form.privacy} onChange={(e) => update("privacy", e.target.checked)} required className="mt-0.5 accent-green-700" />
-                  <span className="text-sm" style={{ color: "#005F02" }}>プライバシーポリシーに同意します</span>
+                  <span className="text-sm" style={{ color: "#3C6B4F" }}>プライバシーポリシーに同意します</span>
                 </label>
               </div>
 
-              <button type="submit" disabled={loading || !form.privacy} className="w-full py-3.5 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50" style={{ backgroundColor: "#005F02" }}>
+              <button type="submit" disabled={loading || !form.privacy} className="w-full py-3.5 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50" style={{ backgroundColor: "#3C6B4F" }}>
                 {loading ? "送信中..." : "送信する"}
               </button>
             </form>

@@ -34,46 +34,84 @@ function HeroSection() {
   }, [next]);
 
   return (
-    <section className="relative w-full h-[80vh] md:h-[92vh] min-h-[500px] overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center transition-opacity duration-700"
-        style={{ backgroundImage: `url('${SLIDES[current].img}')`, filter: "saturate(0.65)", opacity: fading ? 0 : 1 }}
-      />
-      <div className="absolute inset-0" style={{ backgroundColor: "rgba(0,0,0,0.25)" }} />
+    <section className="relative w-full flex flex-col md:flex-row" style={{ height: "100svh", minHeight: "600px" }}>
 
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
-        <h1 className="text-3xl md:text-5xl font-bold leading-tight mb-4" style={{ fontFamily: "'Noto Serif JP', serif", color: "rgba(255,255,255,0.92)" }}>
+      {/* 左：画像エリア */}
+      <div className="relative flex-1 md:w-[60%] h-[50%] md:h-full overflow-hidden">
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('${SLIDES[current].img}')`,
+            opacity: fading ? 0 : 1,
+            transition: "opacity 0.8s cubic-bezier(0.16,1,0.3,1)",
+          }}
+        />
+        <div className="absolute bottom-5 left-5 flex items-center gap-2 z-10">
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              aria-label={`スライド ${i + 1}`}
+              style={{
+                width: i === current ? "24px" : "7px",
+                height: "7px",
+                borderRadius: "4px",
+                backgroundColor: i === current ? "white" : "rgba(255,255,255,0.45)",
+                transition: "all 0.4s cubic-bezier(0.16,1,0.3,1)",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* 右：コンテンツパネル */}
+      <div
+        className="flex flex-col justify-center px-8 md:px-12 py-10 md:py-0 md:w-[40%]"
+        style={{ backgroundColor: "#F7FAF7" }}
+      >
+        <p className="text-[11px] font-medium mb-5 uppercase" style={{ color: "#3C6B4F", letterSpacing: "0.18em" }}>
+          Edible Forest Ensemble Club
+        </p>
+
+        <h1
+          className="font-bold mb-4"
+          style={{ fontFamily: "'Noto Serif JP', serif", color: "#1A2B1E", fontSize: "clamp(1.5rem, 2.8vw, 2.4rem)", lineHeight: 1.5 }}
+        >
           自然界の仕組みで、<br />新しい生き方を。
         </h1>
-        <p className="text-sm md:text-base mb-10 transition-opacity duration-500" style={{ color: "rgba(255,255,255,0.72)", opacity: fading ? 0 : 1 }}>
+
+        <p
+          className="text-sm mb-8"
+          style={{ color: "#1A2B1E", opacity: fading ? 0 : 0.6, transition: "opacity 0.5s ease", lineHeight: 1.9 }}
+        >
           {SLIDES[current].caption}
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3">
-          <a href="/join" className="px-6 py-3 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: "#005F02" }}>
+        <div className="mb-8" style={{ width: "40px", height: "1px", backgroundColor: "#3C6B4F", opacity: 0.4 }} />
+
+        <div className="flex flex-col gap-3 max-w-[240px]">
+          <a href="/join" className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium text-white" style={{ backgroundColor: "#3C6B4F", transition: "opacity 0.3s ease" }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = "0.85")}
+            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}>
             倶楽部に参加する
           </a>
-          <a href="/#events" className="px-6 py-3 rounded-full text-sm font-medium transition-opacity hover:opacity-90" style={{ backgroundColor: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(4px)" }}>
-            イベントに参加する
+          <a href="/#events" className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium"
+            style={{ border: "1.5px solid rgba(60,107,79,0.4)", color: "#3C6B4F", backgroundColor: "transparent", transition: "all 0.3s ease" }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#3C6B4F"; e.currentTarget.style.color = "white"; e.currentTarget.style.borderColor = "#3C6B4F"; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#3C6B4F"; e.currentTarget.style.borderColor = "rgba(60,107,79,0.4)"; }}>
+            イベントを見る
           </a>
-          <a href="/#stays" className="px-6 py-3 rounded-full text-sm font-medium transition-opacity hover:opacity-90" style={{ backgroundColor: "rgba(255,255,255,0.15)", color: "white", border: "1px solid rgba(255,255,255,0.4)", backdropFilter: "blur(4px)" }}>
+          <a href="/#stays" className="inline-flex items-center justify-center px-6 py-3 rounded-full text-sm font-medium"
+            style={{ border: "1.5px solid rgba(60,107,79,0.4)", color: "#3C6B4F", backgroundColor: "transparent", transition: "all 0.3s ease" }}
+            onMouseEnter={e => { e.currentTarget.style.backgroundColor = "#3C6B4F"; e.currentTarget.style.color = "white"; e.currentTarget.style.borderColor = "#3C6B4F"; }}
+            onMouseLeave={e => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "#3C6B4F"; e.currentTarget.style.borderColor = "rgba(60,107,79,0.4)"; }}>
             宿泊する
           </a>
         </div>
       </div>
-
-      <div className="absolute bottom-6 left-6 md:left-16 flex items-center gap-2">
-        {SLIDES.map((_, i) => (
-          <button key={i} onClick={() => goTo(i)} aria-label={`スライド ${i + 1}`} className="transition-all duration-300" style={{ width: i === current ? "24px" : "8px", height: "8px", borderRadius: "4px", backgroundColor: i === current ? "#005F02" : "rgba(255,255,255,0.35)" }} />
-        ))}
-      </div>
-
-      <button onClick={() => goTo((current - 1 + SLIDES.length) % SLIDES.length)} className="hidden md:flex absolute left-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.7)" }} aria-label="前">
-        <span style={{ color: "#000000", fontSize: "18px" }}>‹</span>
-      </button>
-      <button onClick={next} className="hidden md:flex absolute right-5 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full items-center justify-center" style={{ backgroundColor: "rgba(255,255,255,0.7)" }} aria-label="次">
-        <span style={{ color: "#000000", fontSize: "18px" }}>›</span>
-      </button>
     </section>
   );
 }
@@ -87,34 +125,34 @@ function AboutSection() {
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
         <div className="grid md:grid-cols-2 gap-14 items-start">
           <div>
-            <div className="text-6xl leading-none mb-3 select-none" style={{ color: "#000000", fontFamily: "serif" }}>"</div>
-            <h2 className="text-2xl md:text-[28px] font-bold leading-snug mb-6" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+            <div className="text-6xl leading-none mb-3 select-none" style={{ color: "#1A2B1E", fontFamily: "serif" }}>"</div>
+            <h2 className="text-2xl md:text-[28px] font-bold leading-snug mb-6" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               産業社会の「自分のため」から、<br />
               自然界の「隣に役立つ」へ。<br />
               食べられる森アンサンブル倶楽部
             </h2>
-            <p className="text-sm leading-[1.9] mb-4" style={{ color: "#000000" }}>
+            <p className="text-sm leading-[1.9] mb-4" style={{ color: "#1A2B1E" }}>
               「自然界からの学び」を、人の経済活動やコミュニティのありかたに還元していこうとするメンバー達が、各拠点やイベントを運営しています。
             </p>
-            <p className="text-sm leading-[1.9] mb-4" style={{ color: "#000000" }}>
+            <p className="text-sm leading-[1.9] mb-4" style={{ color: "#1A2B1E" }}>
               地方と都市の両方で「ローカルコミュニティ（LC）」を展開し、インターローカルな暮らしの実験場として、各地をつなぎます。
             </p>
-            <p className="text-sm leading-[1.9] mb-6 px-4 py-3 rounded-xl" style={{ color: "#000000", backgroundColor: "#f8f8f8", border: "1px solid #e5e5e5", borderRadius: "12px" }}>
+            <p className="text-sm leading-[1.9] mb-6 px-4 py-3 rounded-xl" style={{ color: "#1A2B1E", backgroundColor: "#f8f8f8", border: "1px solid #e5e5e5", borderRadius: "12px" }}>
               一部、会員限定の施設やイベントがあります。まずは、楽しむことから始めてください。どんな拠点やイベントがあるかは、このサイトをご覧ください。
             </p>
             <a
               href="/join"
               className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
-              style={{ backgroundColor: "#005F02" }}
+              style={{ backgroundColor: "#3C6B4F" }}
             >
               倶楽部の会員になる →
             </a>
           </div>
           <div className="flex flex-col gap-4">
-            <div className="rounded-2xl overflow-hidden" style={{ height: "220px", backgroundColor: "#005F02" }}>
+            <div className="rounded-2xl overflow-hidden" style={{ height: "220px", backgroundColor: "#3C6B4F" }}>
               <img src="https://images.unsplash.com/photo-1501854140801-50d01698950b?w=700&q=80" alt="食べられる森" className="w-full h-full object-cover" />
             </div>
-            <div className="rounded-2xl overflow-hidden ml-8" style={{ height: "180px", backgroundColor: "#005F02" }}>
+            <div className="rounded-2xl overflow-hidden ml-8" style={{ height: "180px", backgroundColor: "#3C6B4F" }}>
               <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=500&q=80" alt="自然の恵み" className="w-full h-full object-cover" />
             </div>
           </div>
@@ -165,13 +203,13 @@ function SearchSection() {
     <section id="search" className="py-16 md:py-20 bg-white">
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
         <div className="mb-10">
-          <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#005F02", color: "white" }}>
+          <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
             地域から探す
           </span>
-          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+          <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
             拠点・アンサンブルを検索する
           </h2>
-          <p className="text-sm mt-2" style={{ color: "#000000", opacity: 0.45 }}>地図の地域をクリックすると、その地域のアンサンブルと宿泊拠点が下に表示されます</p>
+          <p className="text-sm mt-2" style={{ color: "#1A2B1E", opacity: 0.45 }}>地図の地域をクリックすると、その地域のアンサンブルと宿泊拠点が下に表示されます</p>
         </div>
 
         {/* 統計バッジ */}
@@ -182,10 +220,10 @@ function SearchSection() {
             { label: "活動地域", value: [...new Set(ENSEMBLES.filter((e) => e.active).map((e) => e.region))].length },
           ].map(({ label, value }) => (
             <div key={label} className="flex flex-col items-center gap-1">
-              <span className="text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+              <span className="text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
                 {value}
               </span>
-              <span className="text-xs" style={{ color: "#000000", opacity: 0.55 }}>{label}</span>
+              <span className="text-xs" style={{ color: "#1A2B1E", opacity: 0.55 }}>{label}</span>
             </div>
           ))}
         </div>
@@ -203,9 +241,9 @@ function SearchSection() {
               onClick={() => setActiveType(v)}
               className="text-xs px-5 py-2 rounded-full border transition-all duration-200"
               style={{
-                backgroundColor: activeType === v ? "#005F02" : "white",
-                color:           activeType === v ? "white"   : "#000000",
-                borderColor:     activeType === v ? "#005F02" : "#005F02",
+                backgroundColor: activeType === v ? "#3C6B4F" : "white",
+                color:           activeType === v ? "white"   : "#1A2B1E",
+                borderColor:     activeType === v ? "#3C6B4F" : "#3C6B4F",
               }}
             >
               {lbl}
@@ -217,13 +255,13 @@ function SearchSection() {
         {selected ? (
           <div style={{ animation: "fadeInUp 0.35s ease both" }}>
             <div className="flex items-center gap-3 mb-8">
-              <span style={{ backgroundColor: "#005F02", color: "white", borderRadius: "20px", padding: "2px 14px", fontSize: "11px", fontWeight: 600 }}>{selected}</span>
-              <p className="text-sm" style={{ color: "#005F02" }}>の検索結果</p>
+              <span style={{ backgroundColor: "#3C6B4F", color: "white", borderRadius: "20px", padding: "2px 14px", fontSize: "11px", fontWeight: 600 }}>{selected}</span>
+              <p className="text-sm" style={{ color: "#3C6B4F" }}>の検索結果</p>
             </div>
 
             {showEnsembles && matchEnsembles.length > 0 && (
               <div className="mb-10">
-                <p className="text-xs font-semibold mb-4 tracking-wider" style={{ color: "#000000" }}>ENSEMBLE</p>
+                <p className="text-xs font-semibold mb-4 tracking-wider" style={{ color: "#1A2B1E" }}>ENSEMBLE</p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8">
                   {matchEnsembles.map((e) => (
                     <a key={e.id} href={`/ensembles/${e.id}`} className="group flex flex-col items-center text-center card-enter">
@@ -235,8 +273,8 @@ function SearchSection() {
                         style={{ height: "20px", lineHeight: "20px", borderRadius: "10px", backgroundColor: e.regionColor, color: "white" }}>
                         {e.region}
                       </span>
-                      <p className="text-xs font-bold group-hover:text-[#005F02] transition-colors" style={{ color: "#005F02" }}>{e.name}</p>
-                      <p className="text-[11px] mt-0.5" style={{ color: "#000000" }}>{e.sub}</p>
+                      <p className="text-xs font-bold group-hover:text-[#3C6B4F] transition-colors" style={{ color: "#3C6B4F" }}>{e.name}</p>
+                      <p className="text-[11px] mt-0.5" style={{ color: "#1A2B1E" }}>{e.sub}</p>
                     </a>
                   ))}
                 </div>
@@ -245,7 +283,7 @@ function SearchSection() {
 
             {showSpots && matchSpots.length > 0 && (
               <div>
-                <p className="text-xs font-semibold mb-4 tracking-wider" style={{ color: "#000000" }}>LOCAL STAY</p>
+                <p className="text-xs font-semibold mb-4 tracking-wider" style={{ color: "#1A2B1E" }}>LOCAL STAY</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
                   {matchSpots.map((s) => (
                     <a key={s.id} href={`/spots/${s.id}`}
@@ -255,9 +293,9 @@ function SearchSection() {
                         {s.img && <img src={s.img} alt={s.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />}
                       </div>
                       <div className="p-4">
-                        <p className="text-[11px] mb-1" style={{ color: "#000000" }}>{s.region}</p>
-                        <p className="text-sm font-bold mb-1 group-hover:text-[#005F02] transition-colors" style={{ color: "#005F02" }}>{s.name}</p>
-                        {s.price && <p className="text-xs" style={{ color: "#000000" }}>{s.price}</p>}
+                        <p className="text-[11px] mb-1" style={{ color: "#1A2B1E" }}>{s.region}</p>
+                        <p className="text-sm font-bold mb-1 group-hover:text-[#3C6B4F] transition-colors" style={{ color: "#3C6B4F" }}>{s.name}</p>
+                        {s.price && <p className="text-xs" style={{ color: "#1A2B1E" }}>{s.price}</p>}
                       </div>
                     </a>
                   ))}
@@ -266,13 +304,13 @@ function SearchSection() {
             )}
 
             {showEnsembles && matchEnsembles.length === 0 && showSpots && matchSpots.length === 0 && (
-              <p className="text-sm text-center py-8" style={{ color: "#000000" }}>
+              <p className="text-sm text-center py-8" style={{ color: "#1A2B1E" }}>
                 {selected} に該当する拠点・アンサンブルはまだ登録されていません
               </p>
             )}
           </div>
         ) : (
-          <p className="text-center text-sm py-4" style={{ color: "#000000", opacity: 0.35 }}>地図の地域をクリックしてください</p>
+          <p className="text-center text-sm py-4" style={{ color: "#1A2B1E", opacity: 0.35 }}>地図の地域をクリックしてください</p>
         )}
       </div>
     </section>
@@ -293,19 +331,19 @@ function EnsembleListSection() {
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
           <div>
-            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#005F02", color: "white" }}>
+            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
               LC（ローカルコミュニティ）
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               {sectionLabel}
             </h2>
             {!isLoggedIn && (
-              <p className="text-xs mt-2" style={{ color: "#000000" }}>
+              <p className="text-xs mt-2" style={{ color: "#1A2B1E" }}>
                 ※ ログインすると全てのアンサンブルをご覧いただけます
               </p>
             )}
           </div>
-          <p className="text-sm max-w-[280px] md:text-right leading-[1.9]" style={{ color: "#000000" }}>
+          <p className="text-sm max-w-[280px] md:text-right leading-[1.9]" style={{ color: "#1A2B1E" }}>
             全国各地のローカルコミュニティ（LC）をご紹介します。
           </p>
         </div>
@@ -317,14 +355,14 @@ function EnsembleListSection() {
                 <img src={e.img} alt={e.name} className="w-full h-full object-cover" />
               </div>
               <span className="inline-block text-[11px] font-medium px-3 mb-2" style={{ height: "20px", lineHeight: "20px", borderRadius: "10px", backgroundColor: e.regionColor, color: "white" }}>{e.region}</span>
-              <h3 className="text-sm font-bold mb-1 group-hover:text-[#005F02] transition-colors" style={{ color: "#005F02" }}>{e.name}</h3>
-              <p className="text-xs" style={{ color: "#000000" }}>{e.sub}</p>
+              <h3 className="text-sm font-bold mb-1 group-hover:text-[#3C6B4F] transition-colors" style={{ color: "#3C6B4F" }}>{e.name}</h3>
+              <p className="text-xs" style={{ color: "#1A2B1E" }}>{e.sub}</p>
             </a>
           ))}
         </div>
 
         <div className="mt-12 flex justify-center">
-          <a href="/ensembles" className="flex items-center gap-2 text-sm font-medium px-8 py-3 rounded-full border-2 transition-colors hover:bg-[#005F02] hover:text-white hover:border-[#005F02]" style={{ borderColor: "#005F02", color: "#005F02" }}>
+          <a href="/ensembles" className="flex items-center gap-2 text-sm font-medium px-8 py-3 rounded-full border-2 transition-colors hover:bg-[#3C6B4F] hover:text-white hover:border-[#3C6B4F]" style={{ borderColor: "#3C6B4F", color: "#3C6B4F" }}>
             もっと見る →
           </a>
         </div>
@@ -352,26 +390,26 @@ function SpotsListSection() {
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
         <div className="flex flex-col md:flex-row md:items-end md:justify-between mb-14 gap-4">
           <div>
-            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#005F02", color: "white" }}>
+            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
               LS（ローカルステイ）
             </span>
-            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+            <h2 className="text-2xl md:text-3xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               全国各地の宿泊拠点
             </h2>
             {!isLoggedIn && spots.length > 3 && (
-              <p className="text-xs mt-2" style={{ color: "#000000" }}>
+              <p className="text-xs mt-2" style={{ color: "#1A2B1E" }}>
                 ※ ログインすると全ての拠点をご覧いただけます
               </p>
             )}
           </div>
-          <p className="text-sm max-w-[280px] md:text-right leading-[1.9]" style={{ color: "#000000" }}>
+          <p className="text-sm max-w-[280px] md:text-right leading-[1.9]" style={{ color: "#1A2B1E" }}>
             全国各地のローカルステイ（LS）をご紹介します。
           </p>
         </div>
 
         {displayed.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-3xl">
-            <p className="text-sm" style={{ color: "#000000" }}>現在、公開中の拠点はありません</p>
+            <p className="text-sm" style={{ color: "#1A2B1E" }}>現在、公開中の拠点はありません</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
@@ -382,12 +420,12 @@ function SpotsListSection() {
                     ? <img src={s.img} alt={s.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
                     : <div className="w-full h-full" style={{ backgroundColor: "#FFFFFF" }} />
                   }
-                  <span className="absolute top-3 left-3 text-[11px] font-medium px-3" style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: s.regionColor || "#005F02", color: "white" }}>{s.region}</span>
+                  <span className="absolute top-3 left-3 text-[11px] font-medium px-3" style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: s.regionColor || "#3C6B4F", color: "white" }}>{s.region}</span>
                 </div>
                 <div className="p-5">
-                  <h3 className="text-base font-bold mb-1 group-hover:text-[#005F02] transition-colors" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>{s.name}</h3>
-                  <p className="text-xs mb-2" style={{ color: "#000000" }}>{s.sub}</p>
-                  <p className="text-sm leading-relaxed line-clamp-2" style={{ color: "#000000" }}>{s.desc}</p>
+                  <h3 className="text-base font-bold mb-1 group-hover:text-[#3C6B4F] transition-colors" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>{s.name}</h3>
+                  <p className="text-xs mb-2" style={{ color: "#1A2B1E" }}>{s.sub}</p>
+                  <p className="text-sm leading-relaxed line-clamp-2" style={{ color: "#1A2B1E" }}>{s.desc}</p>
                 </div>
               </a>
             ))}
@@ -395,7 +433,7 @@ function SpotsListSection() {
         )}
 
         <div className="mt-12 flex justify-center">
-          <a href="/#stays" className="flex items-center gap-2 text-sm font-medium px-8 py-3 rounded-full border-2 transition-colors hover:bg-[#005F02] hover:text-white hover:border-[#005F02]" style={{ borderColor: "#005F02", color: "#000000" }}>
+          <a href="/#stays" className="flex items-center gap-2 text-sm font-medium px-8 py-3 rounded-full border-2 transition-colors hover:bg-[#3C6B4F] hover:text-white hover:border-[#3C6B4F]" style={{ borderColor: "#3C6B4F", color: "#1A2B1E" }}>
             もっと見る →
           </a>
         </div>
@@ -443,10 +481,10 @@ function ReportsSection() {
       <div className="max-w-[900px] mx-auto px-5 lg:px-10">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#005F02", color: "white" }}>
+            <span className="inline-block text-xs font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
               活動レポート
             </span>
-            <h2 className="text-xl md:text-2xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+            <h2 className="text-xl md:text-2xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               各地の活動記録
             </h2>
           </div>
@@ -460,9 +498,9 @@ function ReportsSection() {
               onClick={() => setActive(i)}
               className="px-5 py-3 text-sm transition-all duration-200 whitespace-nowrap"
               style={{
-                color:        active === i ? "#005F02" : "#000000",
+                color:        active === i ? "#3C6B4F" : "#1A2B1E",
                 fontWeight:   active === i ? 700 : 400,
-                borderBottom: active === i ? "2px solid #005F02" : "2px solid transparent",
+                borderBottom: active === i ? "2px solid #3C6B4F" : "2px solid transparent",
                 marginBottom: "-1px",
                 opacity:      active === i ? 1 : 0.5,
               }}
@@ -475,16 +513,16 @@ function ReportsSection() {
         {/* コンテンツ */}
         <div key={r.id} style={{ animation: "fadeInUp 0.3s ease both" }}>
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-[11px] font-medium px-3 py-1 rounded-full" style={{ backgroundColor: "#005F02", color: "white" }}>{r.region}</span>
-            <span className="text-xs" style={{ color: "#000000", opacity: 0.45 }}>{r.date}</span>
+            <span className="text-[11px] font-medium px-3 py-1 rounded-full" style={{ backgroundColor: "#3C6B4F", color: "white" }}>{r.region}</span>
+            <span className="text-xs" style={{ color: "#1A2B1E", opacity: 0.45 }}>{r.date}</span>
           </div>
-          <h3 className="text-lg md:text-xl font-bold mb-4 leading-snug" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+          <h3 className="text-lg md:text-xl font-bold mb-4 leading-snug" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
             {r.title}
           </h3>
-          <p className="text-sm leading-[1.9]" style={{ color: "#000000" }}>{r.summary}</p>
+          <p className="text-sm leading-[1.9]" style={{ color: "#1A2B1E" }}>{r.summary}</p>
           <div className="mt-8 pt-6 border-t flex items-center justify-between" style={{ borderColor: "#e5e5e5" }}>
-            <span className="text-xs font-medium" style={{ color: "#000000" }}>{r.ensemble}</span>
-            <a href={`/reports/${r.id}`} className="text-xs font-medium transition-opacity hover:opacity-70" style={{ color: "#005F02" }}>
+            <span className="text-xs font-medium" style={{ color: "#1A2B1E" }}>{r.ensemble}</span>
+            <a href={`/reports/${r.id}`} className="text-xs font-medium transition-opacity hover:opacity-70" style={{ color: "#3C6B4F" }}>
               全文を読む →
             </a>
           </div>
@@ -501,16 +539,16 @@ function ContactSection() {
   return (
     <section className="py-16" style={{ backgroundColor: "#FFFFFF" }}>
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10 text-center">
-        <h2 className="text-xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+        <h2 className="text-xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
           お問い合わせ
         </h2>
-        <p className="text-sm mb-6" style={{ color: "#000000" }}>
+        <p className="text-sm mb-6" style={{ color: "#1A2B1E" }}>
           アンサンブル倶楽部へのお問い合わせ・ご連絡は、こちらをご覧ください。
         </p>
         <a
           href="/contact"
-          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium border-2 transition-colors hover:bg-[#005F02] hover:text-white"
-          style={{ borderColor: "#005F02", color: "#005F02" }}
+          className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium border-2 transition-colors hover:bg-[#3C6B4F] hover:text-white"
+          style={{ borderColor: "#3C6B4F", color: "#3C6B4F" }}
         >
           お問い合わせフォームへ →
         </a>

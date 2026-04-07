@@ -27,11 +27,9 @@ type FormData = {
 export default function EnsembleEditForm({
   id,
   initialData,
-  hasCMS,
 }: {
   id: string;
   initialData: FormData;
-  hasCMS: boolean;
 }) {
   const [form, setForm] = useState<FormData>(initialData);
   const [saving, setSaving] = useState(false);
@@ -89,8 +87,8 @@ export default function EnsembleEditForm({
 
   const labelClass = "block text-xs font-medium mb-1.5";
   const inputClass =
-    "w-full px-4 py-2.5 rounded-xl text-sm border outline-none focus:border-[#005F02] transition-colors";
-  const inputStyle = { borderColor: "rgba(0,95,2,0.15)", backgroundColor: "white", color: "#005F02" };
+    "w-full px-4 py-2.5 rounded-xl text-sm border outline-none focus:border-[#3C6B4F] transition-colors";
+  const inputStyle = { borderColor: "rgba(0,95,2,0.15)", backgroundColor: "white", color: "#3C6B4F" };
 
   return (
     <div className="max-w-[860px]">
@@ -99,26 +97,21 @@ export default function EnsembleEditForm({
         <div>
           <h1
             className="text-2xl font-bold"
-            style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+            style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
           >
             {form.name}
           </h1>
-          <p className="text-xs mt-1" style={{ color: "#000000" }}>
+          <p className="text-xs mt-1" style={{ color: "#1A2B1E" }}>
             コンテンツID: {id}
           </p>
         </div>
 
         <div className="flex flex-col items-end gap-2">
-          {!hasCMS && (
-            <p className="text-[11px] text-right max-w-[200px]" style={{ color: "#000000" }}>
-              microCMS未設定のため保存は無効です
-            </p>
-          )}
           <button
             onClick={handleSave}
-            disabled={saving || !hasCMS}
+            disabled={saving}
             className="px-6 py-2.5 rounded-full text-sm font-medium text-white transition-all disabled:opacity-50"
-            style={{ backgroundColor: "#005F02" }}
+            style={{ backgroundColor: "#3C6B4F" }}
           >
             {saving ? "保存中…" : saved ? "✓ 保存済み" : "保存する"}
           </button>
@@ -129,12 +122,12 @@ export default function EnsembleEditForm({
       <div className="flex flex-col gap-8">
         {/* ── 基本情報 ── */}
         <section className="bg-white rounded-2xl p-6" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-          <h2 className="text-base font-bold mb-5" style={{ color: "#005F02" }}>
+          <h2 className="text-base font-bold mb-5" style={{ color: "#3C6B4F" }}>
             基本情報
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className={labelClass} style={{ color: "#000000" }}>アンサンブル名</label>
+              <label className={labelClass} style={{ color: "#1A2B1E" }}>アンサンブル名</label>
               <input
                 className={inputClass}
                 style={inputStyle}
@@ -143,7 +136,7 @@ export default function EnsembleEditForm({
               />
             </div>
             <div>
-              <label className={labelClass} style={{ color: "#000000" }}>サブタイトル（地名）</label>
+              <label className={labelClass} style={{ color: "#1A2B1E" }}>サブタイトル（地名）</label>
               <input
                 className={inputClass}
                 style={inputStyle}
@@ -152,7 +145,7 @@ export default function EnsembleEditForm({
               />
             </div>
             <div>
-              <label className={labelClass} style={{ color: "#000000" }}>地域</label>
+              <label className={labelClass} style={{ color: "#1A2B1E" }}>地域</label>
               <input
                 className={inputClass}
                 style={inputStyle}
@@ -161,7 +154,7 @@ export default function EnsembleEditForm({
               />
             </div>
             <div>
-              <label className={labelClass} style={{ color: "#000000" }}>地域カラー（HEX）</label>
+              <label className={labelClass} style={{ color: "#1A2B1E" }}>地域カラー（HEX）</label>
               <div className="flex gap-2 items-center">
                 <input
                   type="color"
@@ -181,7 +174,7 @@ export default function EnsembleEditForm({
           </div>
 
           <div className="mt-4">
-            <label className={labelClass} style={{ color: "#000000" }}>タグライン</label>
+            <label className={labelClass} style={{ color: "#1A2B1E" }}>タグライン</label>
             <input
               className={inputClass}
               style={inputStyle}
@@ -192,7 +185,7 @@ export default function EnsembleEditForm({
           </div>
 
           <div className="mt-4">
-            <label className={labelClass} style={{ color: "#000000" }}>概要説明文</label>
+            <label className={labelClass} style={{ color: "#1A2B1E" }}>概要説明文</label>
             <textarea
               className={`${inputClass} resize-none`}
               style={{ ...inputStyle, minHeight: "80px" }}
@@ -203,7 +196,7 @@ export default function EnsembleEditForm({
           </div>
 
           <div className="mt-4">
-            <label className={labelClass} style={{ color: "#000000" }}>メイン画像URL</label>
+            <label className={labelClass} style={{ color: "#1A2B1E" }}>メイン画像URL</label>
             <div className="flex gap-3 items-start">
               <input
                 className={`${inputClass} flex-1`}
@@ -226,10 +219,10 @@ export default function EnsembleEditForm({
 
         {/* ── フィロソフィー ── */}
         <section className="bg-white rounded-2xl p-6" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-          <h2 className="text-base font-bold mb-2" style={{ color: "#005F02" }}>
+          <h2 className="text-base font-bold mb-2" style={{ color: "#3C6B4F" }}>
             フィロソフィー
           </h2>
-          <p className="text-xs mb-4" style={{ color: "#000000" }}>
+          <p className="text-xs mb-4" style={{ color: "#1A2B1E" }}>
             この拠点が大切にしていること・活動の背景（リッチテキスト）
           </p>
           <RichTextEditor
@@ -242,14 +235,14 @@ export default function EnsembleEditForm({
         {/* ── 活動・体験 ── */}
         <section className="bg-white rounded-2xl p-6" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-bold" style={{ color: "#005F02" }}>
+            <h2 className="text-base font-bold" style={{ color: "#3C6B4F" }}>
               活動・体験
             </h2>
             <button
               type="button"
               onClick={addActivity}
-              className="text-xs px-4 py-1.5 rounded-full border transition-all hover:bg-[#005F02] hover:text-white hover:border-[#005F02]"
-              style={{ borderColor: "#005F02", color: "#000000" }}
+              className="text-xs px-4 py-1.5 rounded-full border transition-all hover:bg-[#3C6B4F] hover:text-white hover:border-[#3C6B4F]"
+              style={{ borderColor: "#3C6B4F", color: "#1A2B1E" }}
             >
               ＋ 追加
             </button>
@@ -290,14 +283,14 @@ export default function EnsembleEditForm({
                   type="button"
                   onClick={() => removeActivity(i)}
                   className="text-xs px-2 py-1.5 rounded-lg transition-colors hover:bg-red-50 hover:text-red-400"
-                  style={{ color: "#000000" }}
+                  style={{ color: "#1A2B1E" }}
                 >
                   ✕
                 </button>
               </div>
             ))}
             {form.activities.length === 0 && (
-              <p className="text-xs text-center py-4" style={{ color: "#000000" }}>
+              <p className="text-xs text-center py-4" style={{ color: "#1A2B1E" }}>
                 活動を追加してください
               </p>
             )}
@@ -307,14 +300,14 @@ export default function EnsembleEditForm({
         {/* ── 統計 ── */}
         <section className="bg-white rounded-2xl p-6" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
           <div className="flex items-center justify-between mb-5">
-            <h2 className="text-base font-bold" style={{ color: "#005F02" }}>
+            <h2 className="text-base font-bold" style={{ color: "#3C6B4F" }}>
               統計データ
             </h2>
             <button
               type="button"
               onClick={addStat}
-              className="text-xs px-4 py-1.5 rounded-full border transition-all hover:bg-[#005F02] hover:text-white hover:border-[#005F02]"
-              style={{ borderColor: "#005F02", color: "#000000" }}
+              className="text-xs px-4 py-1.5 rounded-full border transition-all hover:bg-[#3C6B4F] hover:text-white hover:border-[#3C6B4F]"
+              style={{ borderColor: "#3C6B4F", color: "#1A2B1E" }}
             >
               ＋ 追加
             </button>
@@ -341,14 +334,14 @@ export default function EnsembleEditForm({
                   type="button"
                   onClick={() => removeStat(i)}
                   className="text-xs px-2 py-1.5 rounded-lg transition-colors hover:bg-red-50 hover:text-red-400"
-                  style={{ color: "#000000" }}
+                  style={{ color: "#1A2B1E" }}
                 >
                   ✕
                 </button>
               </div>
             ))}
             {form.stats.length === 0 && (
-              <p className="text-xs text-center py-4" style={{ color: "#000000" }}>
+              <p className="text-xs text-center py-4" style={{ color: "#1A2B1E" }}>
                 統計を追加してください
               </p>
             )}
@@ -361,15 +354,15 @@ export default function EnsembleEditForm({
             href={`/ensembles/${id}`}
             target="_blank"
             className="text-xs hover:underline"
-            style={{ color: "#000000" }}
+            style={{ color: "#1A2B1E" }}
           >
             公開ページを見る →
           </a>
           <button
             onClick={handleSave}
-            disabled={saving || !hasCMS}
+            disabled={saving}
             className="px-8 py-3 rounded-full text-sm font-medium text-white transition-all disabled:opacity-50"
-            style={{ backgroundColor: "#005F02" }}
+            style={{ backgroundColor: "#3C6B4F" }}
           >
             {saving ? "保存中…" : "保存する"}
           </button>

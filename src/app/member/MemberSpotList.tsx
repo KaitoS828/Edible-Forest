@@ -36,7 +36,7 @@ function SpotCard({ spot: s }: { spot: SerializedSpot }) {
         style={{
           width: "140px",
           height: "140px",
-          boxShadow: `0 0 0 3px white, 0 0 0 5px ${s.regionColor || "#005F02"}40`,
+          boxShadow: `0 0 0 3px white, 0 0 0 5px ${s.regionColor || "#3C6B4F"}40`,
           backgroundColor: "#FFFFFF",
           flexShrink: 0,
         }}
@@ -54,7 +54,7 @@ function SpotCard({ spot: s }: { spot: SerializedSpot }) {
         <span
           className="absolute top-2 right-2 text-[9px] font-medium px-1.5 py-0.5 rounded-full"
           style={{
-            backgroundColor: s.status === "published" ? "#005F02" : "#999999",
+            backgroundColor: s.status === "published" ? "#3C6B4F" : "#999999",
             color: "white",
           }}
         >
@@ -69,7 +69,7 @@ function SpotCard({ spot: s }: { spot: SerializedSpot }) {
           height: "20px",
           lineHeight: "20px",
           borderRadius: "10px",
-          backgroundColor: s.regionColor || "#005F02",
+          backgroundColor: s.regionColor || "#3C6B4F",
           color: "white",
         }}
       >
@@ -77,10 +77,10 @@ function SpotCard({ spot: s }: { spot: SerializedSpot }) {
       </span>
 
       {/* 名前 */}
-      <p className="text-xs font-bold mb-0.5 leading-tight" style={{ color: "#005F02" }}>
+      <p className="text-xs font-bold mb-0.5 leading-tight" style={{ color: "#3C6B4F" }}>
         {s.name}
       </p>
-      <p className="text-[11px] mb-3" style={{ color: "#000000" }}>{s.sub}</p>
+      <p className="text-[11px] mb-3" style={{ color: "#1A2B1E" }}>{s.sub}</p>
 
       {/* アクション */}
       <div className="flex gap-1.5 flex-wrap justify-center">
@@ -98,7 +98,7 @@ function SpotCard({ spot: s }: { spot: SerializedSpot }) {
         <a
           href={`/member/edit-spot/${s.id}`}
           className="text-[11px] px-3 py-1 rounded-full text-white hover:opacity-90 transition-opacity"
-          style={{ backgroundColor: "#005F02" }}
+          style={{ backgroundColor: "#3C6B4F" }}
         >
           編集
         </a>

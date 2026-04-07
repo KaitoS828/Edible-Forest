@@ -23,7 +23,7 @@ export function JoinButton({ ensembleName }: Props) {
       <a
         href={`/contact?ensemble=${encodeURIComponent(ensembleName)}`}
         className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-white text-sm font-medium transition-opacity hover:opacity-90"
-        style={{ backgroundColor: "#005F02" }}
+        style={{ backgroundColor: "#3C6B4F" }}
       >
         このアンサンブルに参加する →
       </a>
@@ -43,12 +43,12 @@ export function JoinButton({ ensembleName }: Props) {
       >
         このアンサンブルに参加する
       </button>
-      <p className="text-xs" style={{ color: "#000000" }}>
+      <p className="text-xs" style={{ color: "#1A2B1E" }}>
         参加するには{" "}
         <a
           href="/login"
           className="underline font-medium transition-opacity hover:opacity-70"
-          style={{ color: "#005F02" }}
+          style={{ color: "#3C6B4F" }}
         >
           ログイン
         </a>
@@ -56,7 +56,7 @@ export function JoinButton({ ensembleName }: Props) {
         <a
           href="/join"
           className="underline font-medium transition-opacity hover:opacity-70"
-          style={{ color: "#005F02" }}
+          style={{ color: "#3C6B4F" }}
         >
           会員登録
         </a>

@@ -23,7 +23,7 @@ function Toolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
 
   const btn = (active: boolean) =>
     `px-2.5 py-1.5 rounded text-xs font-medium transition-colors ${
-      active ? "bg-[#005F02] text-white" : "text-[#005F02] hover:bg-[#005F02]"
+      active ? "bg-[#3C6B4F] text-white" : "text-[#3C6B4F] hover:bg-[#3C6B4F]"
     }`;
 
   async function handleImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -49,7 +49,7 @@ function Toolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
       <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={btn(editor.isActive("heading", { level: 2 }))}>H2</button>
       <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={btn(editor.isActive("heading", { level: 3 }))}>H3</button>
 
-      <div className="w-px self-stretch mx-1" style={{ backgroundColor: "#005F02" }} />
+      <div className="w-px self-stretch mx-1" style={{ backgroundColor: "#3C6B4F" }} />
 
       {/* テキスト装飾 */}
       <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={btn(editor.isActive("bold"))}>
@@ -57,13 +57,13 @@ function Toolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
       </button>
       <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={`${btn(editor.isActive("italic"))} italic`}>I</button>
 
-      <div className="w-px self-stretch mx-1" style={{ backgroundColor: "#005F02" }} />
+      <div className="w-px self-stretch mx-1" style={{ backgroundColor: "#3C6B4F" }} />
 
       {/* リスト */}
       <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} className={btn(editor.isActive("bulletList"))}>• リスト</button>
       <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} className={btn(editor.isActive("orderedList"))}>1. リスト</button>
 
-      <div className="w-px self-stretch mx-1" style={{ backgroundColor: "#005F02" }} />
+      <div className="w-px self-stretch mx-1" style={{ backgroundColor: "#3C6B4F" }} />
 
       {/* 引用 */}
       <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()} className={btn(editor.isActive("blockquote"))}>
@@ -82,7 +82,7 @@ function Toolbar({ editor }: { editor: ReturnType<typeof useEditor> }) {
         🔗 リンク
       </button>
 
-      <div className="w-px self-stretch mx-1" style={{ backgroundColor: "#005F02" }} />
+      <div className="w-px self-stretch mx-1" style={{ backgroundColor: "#3C6B4F" }} />
 
       {/* 画像挿入 */}
       <button
@@ -147,7 +147,7 @@ export default function RichTextEditor({
       <EditorContent editor={editor} />
       <div
         className="px-4 py-2 text-[11px] border-t"
-        style={{ borderColor: "#F0F0F0", color: "#000000", backgroundColor: "#FAFAF8" }}
+        style={{ borderColor: "#F0F0F0", color: "#1A2B1E", backgroundColor: "#FAFAF8" }}
       >
         Markdownショートカット対応：**太字** *斜体* # 見出し &gt; 引用 - リスト
       </div>

@@ -83,11 +83,11 @@ export default function SignupPage() {
           <a href="/" className="inline-block">
             <div
               className="text-lg font-bold"
-              style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+              style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
             >
               食べられる森
             </div>
-            <div className="text-xs" style={{ color: "#000000" }}>
+            <div className="text-xs" style={{ color: "#1A2B1E" }}>
               アンサンブル倶楽部
             </div>
           </a>
@@ -99,11 +99,11 @@ export default function SignupPage() {
         >
           <h1
             className="text-xl font-bold text-center mb-1"
-            style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+            style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
           >
             新規メンバー登録
           </h1>
-          <p className="text-xs text-center mb-8" style={{ color: "#000000" }}>
+          <p className="text-xs text-center mb-8" style={{ color: "#1A2B1E" }}>
             アンサンブル倶楽部に参加する
           </p>
 
@@ -121,8 +121,8 @@ export default function SignupPage() {
               onChange={(e) => setDisplayName(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-2xl text-sm outline-none"
-              style={{ backgroundColor: "#FFFFFF", border: "1.5px solid transparent", color: "#005F02" }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#005F02")}
+              style={{ backgroundColor: "#FFFFFF", border: "1.5px solid transparent", color: "#3C6B4F" }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "#3C6B4F")}
               onBlur={(e) => (e.currentTarget.style.borderColor = "transparent")}
             />
             <input
@@ -132,8 +132,8 @@ export default function SignupPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-2xl text-sm outline-none"
-              style={{ backgroundColor: "#FFFFFF", border: "1.5px solid transparent", color: "#005F02" }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#005F02")}
+              style={{ backgroundColor: "#FFFFFF", border: "1.5px solid transparent", color: "#3C6B4F" }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "#3C6B4F")}
               onBlur={(e) => (e.currentTarget.style.borderColor = "transparent")}
             />
             <input
@@ -143,8 +143,8 @@ export default function SignupPage() {
               onChange={(e) => setPassword(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-2xl text-sm outline-none"
-              style={{ backgroundColor: "#FFFFFF", border: "1.5px solid transparent", color: "#005F02" }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#005F02")}
+              style={{ backgroundColor: "#FFFFFF", border: "1.5px solid transparent", color: "#3C6B4F" }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "#3C6B4F")}
               onBlur={(e) => (e.currentTarget.style.borderColor = "transparent")}
             />
             <input
@@ -154,24 +154,24 @@ export default function SignupPage() {
               onChange={(e) => setPassword2(e.target.value)}
               required
               className="w-full px-4 py-3 rounded-2xl text-sm outline-none"
-              style={{ backgroundColor: "#FFFFFF", border: "1.5px solid transparent", color: "#005F02" }}
-              onFocus={(e) => (e.currentTarget.style.borderColor = "#005F02")}
+              style={{ backgroundColor: "#FFFFFF", border: "1.5px solid transparent", color: "#3C6B4F" }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "#3C6B4F")}
               onBlur={(e) => (e.currentTarget.style.borderColor = "transparent")}
             />
             <button
               type="submit"
               disabled={loading}
               className="w-full py-3 rounded-full text-sm font-medium text-white transition-all hover:opacity-90 disabled:opacity-60"
-              style={{ backgroundColor: "#005F02" }}
+              style={{ backgroundColor: "#3C6B4F" }}
             >
               {loading ? "登録中..." : "メンバー登録"}
             </button>
           </form>
 
           <div className="flex items-center gap-3 my-5">
-            <div className="flex-1 h-px" style={{ backgroundColor: "#005F02" }} />
-            <span className="text-xs" style={{ color: "#000000" }}>または</span>
-            <div className="flex-1 h-px" style={{ backgroundColor: "#005F02" }} />
+            <div className="flex-1 h-px" style={{ backgroundColor: "#3C6B4F" }} />
+            <span className="text-xs" style={{ color: "#1A2B1E" }}>または</span>
+            <div className="flex-1 h-px" style={{ backgroundColor: "#3C6B4F" }} />
           </div>
 
           <button
@@ -181,7 +181,7 @@ export default function SignupPage() {
             className="w-full flex items-center justify-center gap-3 py-3 rounded-full text-sm font-medium transition-all hover:opacity-80 disabled:opacity-60 border"
             style={{
               backgroundColor: "white",
-              color: "#005F02",
+              color: "#3C6B4F",
               borderColor: "rgba(0,95,2,0.15)",
               boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
             }}
@@ -195,15 +195,15 @@ export default function SignupPage() {
             Googleアカウントで登録
           </button>
 
-          <p className="text-center text-[11px] mt-6" style={{ color: "#000000" }}>
+          <p className="text-center text-[11px] mt-6" style={{ color: "#1A2B1E" }}>
             すでにアカウントをお持ちの方は{" "}
-            <a href="/login" className="underline" style={{ color: "#000000" }}>
+            <a href="/login" className="underline" style={{ color: "#1A2B1E" }}>
               ログイン
             </a>
           </p>
         </div>
 
-        <p className="text-center text-xs mt-6" style={{ color: "#000000" }}>
+        <p className="text-center text-xs mt-6" style={{ color: "#1A2B1E" }}>
           <a href="/" className="hover:underline">← サイトトップへ戻る</a>
         </p>
       </div>

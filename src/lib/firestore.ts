@@ -51,7 +51,7 @@ export type EnsembleDoc = {
   tagline: string;
   philosophy: string;
   img: string;
-  activities: { icon: string; title: string; desc: string }[];
+  activities: { icon: string; title: string; desc: string; img?: string }[];
   stats:      { label: string; value: string }[];
   organizer?: { name: string; role: string; bio: string; avatar?: string };
   gallery:    string[];
@@ -159,9 +159,13 @@ export async function getPublishedEnsembles(): Promise<EnsembleDoc[]> {
     .collection("ensembles")
     .where("status", "==", "published")
     .where("active", "==", true)
-    .orderBy("createdAt", "desc")
     .get();
-  return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as EnsembleDoc);
+  const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as EnsembleDoc);
+  return docs.sort((a, b) => {
+    const at = a.createdAt?.toMillis?.() ?? 0;
+    const bt = b.createdAt?.toMillis?.() ?? 0;
+    return bt - at;
+  });
 }
 
 export async function getMemberEnsembles(authorId: string): Promise<EnsembleDoc[]> {

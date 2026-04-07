@@ -21,9 +21,9 @@ export default async function NewSpotPage() {
   return (
     <div>
       <div className="mb-6">
-        <a href="/member/dashboard" className="text-sm hover:opacity-70 transition-opacity" style={{ color: "#000000" }}>← マイページに戻る</a>
+        <a href="/member/dashboard" className="text-sm hover:opacity-70 transition-opacity" style={{ color: "#1A2B1E" }}>← マイページに戻る</a>
       </div>
-      <h1 className="text-2xl font-bold mb-6" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+      <h1 className="text-2xl font-bold mb-6" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
         新しい拠点を登録
       </h1>
       <SpotForm mode="new" authorId={uid} authorName={authorName} />

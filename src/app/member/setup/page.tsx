@@ -62,10 +62,10 @@ export default function ProfileSetupPage() {
 
         {/* ロゴ */}
         <div className="text-center mb-8">
-          <div className="text-lg font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+          <div className="text-lg font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
             食べられる森
           </div>
-          <div className="text-xs" style={{ color: "#000000" }}>アンサンブル倶楽部</div>
+          <div className="text-xs" style={{ color: "#1A2B1E" }}>アンサンブル倶楽部</div>
         </div>
 
         <div
@@ -76,14 +76,14 @@ export default function ProfileSetupPage() {
           <div className="text-center mb-8">
             <span
               className="inline-block text-xs font-medium px-3 mb-3"
-              style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#005F02", color: "white" }}
+              style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}
             >
               STEP 1 / 1
             </span>
-            <h1 className="text-xl font-bold mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>
+            <h1 className="text-xl font-bold mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               プロフィールを設定する
             </h1>
-            <p className="text-xs" style={{ color: "#000000", opacity: 0.6 }}>
+            <p className="text-xs" style={{ color: "#1A2B1E", opacity: 0.6 }}>
               他のメンバーに表示されます。後からいつでも変更できます。
             </p>
           </div>
@@ -107,12 +107,12 @@ export default function ProfileSetupPage() {
                     src={avatarUrl}
                     alt="アバター"
                     className="w-24 h-24 rounded-full object-cover"
-                    style={{ boxShadow: "0 0 0 3px white, 0 0 0 5px #005F02" }}
+                    style={{ boxShadow: "0 0 0 3px white, 0 0 0 5px #3C6B4F" }}
                   />
                 ) : (
                   <div
                     className="w-24 h-24 rounded-full flex items-center justify-center text-3xl font-bold text-white"
-                    style={{ backgroundColor: "#005F02", boxShadow: "0 0 0 3px white, 0 0 0 5px #005F02" }}
+                    style={{ backgroundColor: "#3C6B4F", boxShadow: "0 0 0 3px white, 0 0 0 5px #3C6B4F" }}
                   >
                     {initials}
                   </div>
@@ -123,7 +123,7 @@ export default function ProfileSetupPage() {
                 </div>
                 {uploading && (
                   <div className="absolute inset-0 rounded-full flex items-center justify-center bg-white/70">
-                    <span className="text-xs" style={{ color: "#005F02" }}>アップロード中…</span>
+                    <span className="text-xs" style={{ color: "#3C6B4F" }}>アップロード中…</span>
                   </div>
                 )}
               </button>
@@ -131,7 +131,7 @@ export default function ProfileSetupPage() {
                 type="button"
                 onClick={() => fileRef.current?.click()}
                 className="text-xs underline transition-opacity hover:opacity-70"
-                style={{ color: "#005F02" }}
+                style={{ color: "#3C6B4F" }}
               >
                 {avatarUrl ? "画像を変更する" : "アイコン画像を追加する"}
               </button>
@@ -146,7 +146,7 @@ export default function ProfileSetupPage() {
 
             {/* 名前 */}
             <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: "#005F02" }}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: "#3C6B4F" }}>
                 名前 <span className="text-red-500">*</span>
               </label>
               <input
@@ -157,15 +157,15 @@ export default function ProfileSetupPage() {
                 required
                 maxLength={40}
                 className="w-full px-4 py-3 rounded-2xl text-sm outline-none transition-all"
-                style={{ border: "1.5px solid rgba(0,95,2,0.2)", color: "#000000", backgroundColor: "#FFFFFF" }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#005F02")}
+                style={{ border: "1.5px solid rgba(0,95,2,0.2)", color: "#1A2B1E", backgroundColor: "#FFFFFF" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "#3C6B4F")}
                 onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(0,95,2,0.2)")}
               />
             </div>
 
             {/* 自己紹介 */}
             <div>
-              <label className="block text-xs font-medium mb-1.5" style={{ color: "#005F02" }}>
+              <label className="block text-xs font-medium mb-1.5" style={{ color: "#3C6B4F" }}>
                 自己紹介
               </label>
               <textarea
@@ -175,11 +175,11 @@ export default function ProfileSetupPage() {
                 rows={4}
                 maxLength={300}
                 className="w-full px-4 py-3 rounded-2xl text-sm outline-none transition-all resize-none"
-                style={{ border: "1.5px solid rgba(0,95,2,0.2)", color: "#000000", backgroundColor: "#FFFFFF" }}
-                onFocus={(e) => (e.currentTarget.style.borderColor = "#005F02")}
+                style={{ border: "1.5px solid rgba(0,95,2,0.2)", color: "#1A2B1E", backgroundColor: "#FFFFFF" }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "#3C6B4F")}
                 onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(0,95,2,0.2)")}
               />
-              <p className="text-right text-[10px] mt-1" style={{ color: "#000000", opacity: 0.4 }}>
+              <p className="text-right text-[10px] mt-1" style={{ color: "#1A2B1E", opacity: 0.4 }}>
                 {bio.length} / 300
               </p>
             </div>
@@ -189,17 +189,17 @@ export default function ProfileSetupPage() {
               type="submit"
               disabled={saving || uploading}
               className="w-full py-3.5 rounded-full text-sm font-medium text-white transition-all hover:opacity-90 disabled:opacity-60"
-              style={{ backgroundColor: "#005F02" }}
+              style={{ backgroundColor: "#3C6B4F" }}
             >
               {saving ? "保存中..." : "プロフィールを保存してはじめる"}
             </button>
 
             {/* スキップ */}
-            <p className="text-center text-xs" style={{ color: "#000000", opacity: 0.5 }}>
+            <p className="text-center text-xs" style={{ color: "#1A2B1E", opacity: 0.5 }}>
               <a
                 href="/member/dashboard"
                 className="underline hover:opacity-70"
-                style={{ color: "#000000" }}
+                style={{ color: "#1A2B1E" }}
               >
                 今はスキップする
               </a>

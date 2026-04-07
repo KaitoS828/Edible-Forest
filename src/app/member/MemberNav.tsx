@@ -21,7 +21,7 @@ export default function MemberNav({ displayName, email }: Props) {
         <a href="/" className="flex items-center gap-2">
           <span
             className="text-sm font-bold"
-            style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}
+            style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
           >
             食べられる森 アンサンブル倶楽部
           </span>
@@ -39,7 +39,7 @@ export default function MemberNav({ displayName, email }: Props) {
           <a
             href="/member/new"
             className="text-xs font-medium px-4 py-1.5 rounded-full text-white hover:opacity-90 transition-opacity"
-            style={{ backgroundColor: "#005F02" }}
+            style={{ backgroundColor: "#3C6B4F" }}
           >
             + 新規投稿
           </a>
@@ -48,22 +48,22 @@ export default function MemberNav({ displayName, email }: Props) {
           <div className="flex items-center gap-2">
             <div
               className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold"
-              style={{ backgroundColor: "#005F02" }}
+              style={{ backgroundColor: "#3C6B4F" }}
             >
               {displayName.charAt(0).toUpperCase()}
             </div>
             <div className="hidden sm:block">
-              <p className="text-xs font-medium" style={{ color: "#005F02" }}>
+              <p className="text-xs font-medium" style={{ color: "#3C6B4F" }}>
                 {displayName}
               </p>
-              <p className="text-[10px]" style={{ color: "#000000" }}>
+              <p className="text-[10px]" style={{ color: "#1A2B1E" }}>
                 {email}
               </p>
             </div>
             <button
               onClick={signOut}
               className="ml-2 text-xs hover:opacity-70 transition-opacity"
-              style={{ color: "#000000" }}
+              style={{ color: "#1A2B1E" }}
             >
               ログアウト
             </button>

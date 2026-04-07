@@ -21,9 +21,9 @@ interface Props {
 
 const REGIONS = ["北海道", "東北", "関東", "中部", "近畿", "中国", "四国", "九州・沖縄"];
 const REGION_COLORS: Record<string, string> = {
-  "北海道": "#005F02", "東北": "#005F02", "関東": "#005F02",
-  "中部": "#005F02", "近畿": "#005F02", "中国": "#005F02",
-  "四国": "#005F02", "九州・沖縄": "#005F02",
+  "北海道": "#3C6B4F", "東北": "#3C6B4F", "関東": "#3C6B4F",
+  "中部": "#3C6B4F", "近畿": "#3C6B4F", "中国": "#3C6B4F",
+  "四国": "#3C6B4F", "九州・沖縄": "#3C6B4F",
 };
 
 export default function SpotForm({ mode, spotId, authorId, authorName, initialData }: Props) {
@@ -70,7 +70,7 @@ export default function SpotForm({ mode, spotId, authorId, authorName, initialDa
     setSaving(true);
     const body = {
       authorId, authorName, name, sub, region,
-      regionColor: REGION_COLORS[region] ?? "#005F02",
+      regionColor: REGION_COLORS[region] ?? "#3C6B4F",
       desc, content, img, address, capacity, price, access,
       active: status === "published", status, isOfficial: false,
     };
@@ -184,7 +184,7 @@ export default function SpotForm({ mode, spotId, authorId, authorName, initialDa
           type="submit"
           disabled={saving || imgUploading}
           className="flex-1 py-3 rounded-full text-sm font-medium text-white hover:opacity-90 disabled:opacity-60 transition-opacity"
-          style={{ backgroundColor: "#005F02" }}
+          style={{ backgroundColor: "#3C6B4F" }}
         >
           {saving ? "保存中..." : mode === "new" ? "作成する" : "更新する"}
         </button>
@@ -199,7 +199,7 @@ export default function SpotForm({ mode, spotId, authorId, authorName, initialDa
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="bg-white rounded-3xl p-6" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-      <h2 className="text-base font-bold mb-4" style={{ fontFamily: "'Noto Serif JP', serif", color: "#005F02" }}>{title}</h2>
+      <h2 className="text-base font-bold mb-4" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>{title}</h2>
       <div className="space-y-3">{children}</div>
     </div>
   );
