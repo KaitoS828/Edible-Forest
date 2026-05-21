@@ -39,7 +39,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
       <Header />
-      <main className="pt-16">
+      <main className="pt-[72px]">
 
         {/* ── Hero Image Grid ── */}
         <div className="w-full overflow-hidden" style={{ height: "520px", backgroundColor: "rgba(0,95,2,0.06)" }}>
@@ -63,7 +63,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
 
         {/* ── Breadcrumb + Title ── */}
         <div className="max-w-[1200px] mx-auto px-5 lg:px-10 pt-8 pb-6">
-          <nav className="text-xs mb-6" style={{ color: "#1A2B1E" }}>
+          <nav className="text-sm mb-6" style={{ color: "#1A2B1E" }}>
             <a href="/" className="opacity-50 hover:opacity-80 transition-opacity">ホーム</a>
             <span className="mx-2 opacity-30">›</span>
             <a href="/#activities" className="opacity-50 hover:opacity-80 transition-opacity">各地の食べられる森</a>
@@ -73,14 +73,14 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
 
           <div className="flex flex-wrap gap-2 mb-4">
             <span
-              className="inline-block text-xs font-medium px-3"
+              className="inline-block text-sm font-medium px-3"
               style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: ensemble.regionColor, color: "white" }}
             >
               {ensemble.region}
             </span>
             {ensemble.forestType && (
               <span
-                className="inline-block text-xs font-medium px-3"
+                className="inline-block text-sm font-medium px-3"
                 style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: "rgba(0,95,2,0.08)", color: "#3C6B4F" }}
               >
                 {ensemble.forestType}
@@ -89,12 +89,12 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
           </div>
 
           <h1
-            className="text-3xl md:text-4xl font-bold mb-3 leading-tight"
+            className="text-4xl md:text-5xl font-bold mb-3 leading-tight"
             style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
           >
             {ensemble.name}
           </h1>
-          <p className="text-sm flex items-center gap-1.5" style={{ color: "#1A2B1E", opacity: 0.6 }}>
+          <p className="text-base flex items-center gap-1.5" style={{ color: "#1A2B1E", opacity: 0.6 }}>
             <span>📍</span>
             <span>{ensemble.sub}</span>
           </p>
@@ -122,10 +122,10 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                       className="mt-6 rounded-2xl p-5"
                       style={{ backgroundColor: "rgba(255,200,0,0.05)", border: "1px solid rgba(200,150,0,0.2)" }}
                     >
-                      <p className="text-sm font-bold mb-3" style={{ color: "#1A2B1E" }}>注意事項</p>
+                      <p className="text-base font-bold mb-3" style={{ color: "#1A2B1E" }}>注意事項</p>
                       <ul className="flex flex-col gap-2.5">
                         {ensemble.notes.map((note, i) => (
-                          <li key={i} className="flex gap-2 text-xs leading-relaxed" style={{ color: "#1A2B1E" }}>
+                          <li key={i} className="flex gap-2 text-sm leading-relaxed" style={{ color: "#1A2B1E" }}>
                             <span className="flex-shrink-0" style={{ color: "#B8860B" }}>・</span>
                             <span>{note}</span>
                           </li>
@@ -133,9 +133,9 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                       </ul>
                       {ensemble.travelConditions && (
                         <div className="mt-5 pt-5 border-t" style={{ borderColor: "rgba(200,150,0,0.2)" }}>
-                          <p className="text-sm font-bold mb-3" style={{ color: "#1A2B1E" }}>旅行条件等</p>
+                          <p className="text-base font-bold mb-3" style={{ color: "#1A2B1E" }}>旅行条件等</p>
                           <pre
-                            className="text-xs leading-[1.9] whitespace-pre-wrap font-sans"
+                            className="text-sm leading-[1.9] whitespace-pre-wrap font-sans"
                             style={{ color: "#1A2B1E", opacity: 0.8 }}
                           >
                             {ensemble.travelConditions}
@@ -149,9 +149,9 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                       className="mt-6 rounded-2xl p-5"
                       style={{ backgroundColor: "rgba(255,200,0,0.05)", border: "1px solid rgba(200,150,0,0.2)" }}
                     >
-                      <p className="text-sm font-bold mb-3" style={{ color: "#1A2B1E" }}>旅行条件等</p>
+                      <p className="text-base font-bold mb-3" style={{ color: "#1A2B1E" }}>旅行条件等</p>
                       <pre
-                        className="text-xs leading-[1.9] whitespace-pre-wrap font-sans"
+                        className="text-sm leading-[1.9] whitespace-pre-wrap font-sans"
                         style={{ color: "#1A2B1E", opacity: 0.8 }}
                       >
                         {ensemble.travelConditions}
@@ -165,7 +165,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
               {ensemble.activities && ensemble.activities.length > 0 && (
                 <section className="mb-12">
                   <h2
-                    className="text-xl font-bold mb-6"
+                    className="text-2xl font-bold mb-6"
                     style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
                   >
                     体験できること
@@ -182,11 +182,11 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                             <img src={a.img} alt={a.title} className="w-full h-full object-cover" />
                           </div>
                         ) : (
-                          <div className="flex-shrink-0 text-3xl leading-none pt-0.5">{a.icon}</div>
+                          <div className="flex-shrink-0 text-4xl leading-none pt-0.5">{a.icon}</div>
                         )}
                         <div className="flex-1">
-                          <h3 className="text-sm font-bold mb-1.5" style={{ color: "#3C6B4F" }}>{a.title}</h3>
-                          <p className="text-xs leading-relaxed" style={{ color: "#1A2B1E", opacity: 0.72 }}>{a.desc}</p>
+                          <h3 className="text-base font-bold mb-1.5" style={{ color: "#3C6B4F" }}>{a.title}</h3>
+                          <p className="text-sm leading-relaxed" style={{ color: "#1A2B1E", opacity: 0.72 }}>{a.desc}</p>
                         </div>
                       </div>
                     ))}
@@ -200,7 +200,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                   className="mb-12 p-6 rounded-3xl"
                   style={{ backgroundColor: "rgba(0,95,2,0.03)", border: "1px solid rgba(0,95,2,0.08)" }}
                 >
-                  <p className="text-xs font-bold mb-5 tracking-wide uppercase" style={{ color: "#3C6B4F", opacity: 0.6 }}>
+                  <p className="text-sm font-bold mb-5 tracking-wide uppercase" style={{ color: "#3C6B4F", opacity: 0.6 }}>
                     Organizer
                   </p>
                   <div className="flex gap-5 items-start">
@@ -212,7 +212,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                         <img src={ensemble.organizer.avatar} alt={ensemble.organizer.name} className="w-full h-full object-cover" />
                       ) : (
                         <div
-                          className="w-full h-full flex items-center justify-center text-2xl font-bold text-white"
+                          className="w-full h-full flex items-center justify-center text-3xl font-bold text-white"
                           style={{ backgroundColor: ensemble.regionColor }}
                         >
                           {ensemble.organizer.name.slice(0, 1)}
@@ -220,14 +220,14 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                       )}
                     </div>
                     <div className="flex-1">
-                      <p className="text-xs mb-1" style={{ color: "#3C6B4F", opacity: 0.65 }}>{ensemble.organizer.role}</p>
+                      <p className="text-sm mb-1" style={{ color: "#3C6B4F", opacity: 0.65 }}>{ensemble.organizer.role}</p>
                       <h3
                         className="text-base font-bold mb-2"
                         style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
                       >
                         {ensemble.organizer.name}
                       </h3>
-                      <p className="text-xs leading-[1.9]" style={{ color: "#1A2B1E" }}>{ensemble.organizer.bio}</p>
+                      <p className="text-sm leading-[1.9]" style={{ color: "#1A2B1E" }}>{ensemble.organizer.bio}</p>
                     </div>
                   </div>
                 </section>
@@ -237,7 +237,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
               {galleryImages.length > 0 && (
                 <section className="mb-12">
                   <h2
-                    className="text-xl font-bold mb-6"
+                    className="text-2xl font-bold mb-6"
                     style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
                   >
                     活動の様子
@@ -285,8 +285,8 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                   style={{ border: "1.5px solid rgba(0,95,2,0.15)", boxShadow: "0 4px 24px rgba(0,95,2,0.07)" }}
                 >
                   <div className="px-6 py-4" style={{ backgroundColor: "#3C6B4F" }}>
-                    <p className="text-white text-sm font-semibold">{ensemble.name}</p>
-                    <p className="text-white text-xs mt-0.5 opacity-75">体験参加・お問い合わせ</p>
+                    <p className="text-white text-base font-semibold">{ensemble.name}</p>
+                    <p className="text-white text-sm mt-0.5 opacity-75">体験参加・お問い合わせ</p>
                   </div>
 
                   <div className="px-6 pt-5 pb-2 bg-white">
@@ -296,18 +296,18 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                         className="flex gap-3 py-3 border-b"
                         style={{ borderColor: "rgba(0,95,2,0.08)" }}
                       >
-                        <span className="text-xs w-20 flex-shrink-0 font-medium" style={{ color: "#1A2B1E", opacity: 0.5 }}>
+                        <span className="text-sm w-20 flex-shrink-0 font-medium" style={{ color: "#1A2B1E", opacity: 0.5 }}>
                           {s.label}
                         </span>
-                        <span className="text-xs font-bold" style={{ color: "#3C6B4F" }}>{s.value}</span>
+                        <span className="text-sm font-bold" style={{ color: "#3C6B4F" }}>{s.value}</span>
                       </div>
                     ))}
                     {(!ensemble.stats || ensemble.stats.length === 0) && (
                       <div className="py-3 border-b" style={{ borderColor: "rgba(0,95,2,0.08)" }}>
-                        <span className="text-xs w-20 flex-shrink-0 font-medium" style={{ color: "#1A2B1E", opacity: 0.5 }}>
+                        <span className="text-sm w-20 flex-shrink-0 font-medium" style={{ color: "#1A2B1E", opacity: 0.5 }}>
                           開催地
                         </span>
-                        <span className="text-xs" style={{ color: "#1A2B1E" }}>{ensemble.sub}</span>
+                        <span className="text-sm" style={{ color: "#1A2B1E" }}>{ensemble.sub}</span>
                       </div>
                     )}
                   </div>
@@ -336,7 +336,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
 
                 <a
                   href="/#activities"
-                  className="flex items-center gap-1.5 text-xs px-2 transition-opacity hover:opacity-70"
+                  className="flex items-center gap-1.5 text-sm px-2 transition-opacity hover:opacity-70"
                   style={{ color: "#3C6B4F" }}
                 >
                   ← 各地の食べられる森に戻る
@@ -351,7 +351,7 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
           <section className="py-16 md:py-20" style={{ backgroundColor: "rgba(0,95,2,0.03)" }}>
             <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
               <h2
-                className="text-xl md:text-2xl font-bold mb-10 text-center"
+                className="text-2xl md:text-3xl font-bold mb-10 text-center"
                 style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
               >
                 他の食べられる森を見る
@@ -370,13 +370,13 @@ export default async function EnsembleDetailPage({ params }: PageProps) {
                       <img src={r.img} alt={r.name} className="w-full h-full object-cover" />
                     </div>
                     <span
-                      className="inline-block text-[11px] font-medium px-3 mb-2"
+                      className="inline-block text-xs font-medium px-3 mb-2"
                       style={{ height: "20px", lineHeight: "20px", borderRadius: "10px", backgroundColor: r.regionColor, color: "white" }}
                     >
                       {r.region}
                     </span>
-                    <h3 className="text-sm font-bold mb-1" style={{ color: "#3C6B4F" }}>{r.name}</h3>
-                    <p className="text-xs" style={{ color: "#1A2B1E", opacity: 0.65 }}>{r.sub}</p>
+                    <h3 className="text-base font-bold mb-1" style={{ color: "#3C6B4F" }}>{r.name}</h3>
+                    <p className="text-sm" style={{ color: "#1A2B1E", opacity: 0.65 }}>{r.sub}</p>
                   </a>
                 ))}
               </div>

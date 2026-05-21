@@ -84,7 +84,7 @@ function LoginForm() {
     }
   }
 
-  const fieldBase = "w-full px-4 py-3 rounded-2xl text-sm outline-none transition-all";
+  const fieldBase = "w-full px-4 py-3 rounded-2xl text-base outline-none transition-all";
   const fieldStyle = (hasError: boolean, isTouched: boolean) =>
     `${fieldBase} ${hasError && isTouched
       ? "border-2 border-red-400 bg-red-50"
@@ -96,8 +96,8 @@ function LoginForm() {
 
         <div className="text-center mb-8">
           <a href="/" className="inline-block">
-            <div className="text-lg font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>食べられる森</div>
-            <div className="text-xs" style={{ color: "#1A2B1E" }}>アンサンブル倶楽部</div>
+            <div className="text-xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>食べられる森</div>
+            <div className="text-sm" style={{ color: "#1A2B1E" }}>アンサンブル倶楽部</div>
           </a>
         </div>
 
@@ -108,24 +108,24 @@ function LoginForm() {
             <>
               <button
                 onClick={() => { setResetMode(false); setResetSent(false); setResetError(""); setResetTouched(false); setResetEmail(""); }}
-                className="flex items-center gap-1 text-xs mb-5 transition-opacity hover:opacity-70"
+                className="flex items-center gap-1 text-sm mb-5 transition-opacity hover:opacity-70"
                 style={{ color: "#3C6B4F" }}
               >
                 ← ログインに戻る
               </button>
 
-              <h2 className="text-lg font-bold text-center mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+              <h2 className="text-xl font-bold text-center mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
                 パスワードをリセット
               </h2>
-              <p className="text-xs text-center mb-6" style={{ color: "#1A2B1E", opacity: 0.65 }}>
+              <p className="text-sm text-center mb-6" style={{ color: "#1A2B1E", opacity: 0.65 }}>
                 登録済みのメールアドレスにリセットリンクを送信します
               </p>
 
               {resetSent ? (
                 <div className="text-center py-4">
-                  <div className="text-3xl mb-3">📬</div>
-                  <p className="text-sm font-medium mb-1" style={{ color: "#3C6B4F" }}>送信しました</p>
-                  <p className="text-xs" style={{ color: "#1A2B1E", opacity: 0.65 }}>
+                  <div className="text-4xl mb-3">📬</div>
+                  <p className="text-base font-medium mb-1" style={{ color: "#3C6B4F" }}>送信しました</p>
+                  <p className="text-sm" style={{ color: "#1A2B1E", opacity: 0.65 }}>
                     {resetEmail} にリセットリンクを送りました。メールボックスをご確認ください。
                   </p>
                 </div>
@@ -142,16 +142,16 @@ function LoginForm() {
                       style={{ color: "#1A2B1E" }}
                     />
                     {resetTouched && resetEmailError && (
-                      <p className="text-[11px] mt-1.5 ml-1" style={{ color: "#ef4444" }}>{resetEmailError}</p>
+                      <p className="text-xs mt-1.5 ml-1" style={{ color: "#ef4444" }}>{resetEmailError}</p>
                     )}
                     {resetError && (
-                      <p className="text-[11px] mt-1.5 ml-1" style={{ color: "#ef4444" }}>{resetError}</p>
+                      <p className="text-xs mt-1.5 ml-1" style={{ color: "#ef4444" }}>{resetError}</p>
                     )}
                   </div>
                   <button
                     type="submit"
                     disabled={resetLoading}
-                    className="w-full py-3 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
+                    className="w-full py-3 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60"
                     style={{ backgroundColor: "#3C6B4F" }}
                   >
                     {resetLoading ? "送信中..." : "リセットリンクを送信"}
@@ -163,23 +163,23 @@ function LoginForm() {
 
           /* ── ログインモード ── */
           <>
-            <h1 className="text-xl font-bold text-center mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+            <h1 className="text-2xl font-bold text-center mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               ログイン
             </h1>
-            <p className="text-xs text-center mb-7" style={{ color: "#1A2B1E", opacity: 0.6 }}>
+            <p className="text-sm text-center mb-7" style={{ color: "#1A2B1E", opacity: 0.6 }}>
               メンバーアカウントでログイン
             </p>
 
             {error && (
               <div className="mb-4 px-4 py-2.5 rounded-2xl bg-red-50 border border-red-200">
-                <p className="text-xs text-center text-red-600">{error}</p>
+                <p className="text-sm text-center text-red-600">{error}</p>
               </div>
             )}
 
             <form onSubmit={handleLogin} className="space-y-4" noValidate>
               {/* Email */}
               <div>
-                <label className="block text-xs font-medium mb-1.5 ml-1" style={{ color: "#555" }}>メールアドレス</label>
+                <label className="block text-sm font-medium mb-1.5 ml-1" style={{ color: "#555" }}>メールアドレス</label>
                 <input
                   type="email"
                   placeholder="your@email.com"
@@ -190,18 +190,18 @@ function LoginForm() {
                   style={{ color: "#1A2B1E" }}
                 />
                 {touched.email && emailError && (
-                  <p className="text-[11px] mt-1.5 ml-1" style={{ color: "#ef4444" }}>{emailError}</p>
+                  <p className="text-xs mt-1.5 ml-1" style={{ color: "#ef4444" }}>{emailError}</p>
                 )}
               </div>
 
               {/* Password */}
               <div>
                 <div className="flex items-center justify-between mb-1.5">
-                  <label className="text-xs font-medium ml-1" style={{ color: "#555" }}>パスワード</label>
+                  <label className="text-sm font-medium ml-1" style={{ color: "#555" }}>パスワード</label>
                   <button
                     type="button"
                     onClick={() => { setResetMode(true); setResetEmail(email); }}
-                    className="text-[11px] transition-opacity hover:opacity-70"
+                    className="text-xs transition-opacity hover:opacity-70"
                     style={{ color: "#3C6B4F" }}
                   >
                     パスワードを忘れた方
@@ -217,21 +217,21 @@ function LoginForm() {
                   style={{ color: "#1A2B1E" }}
                 />
                 {touched.password && passwordError && (
-                  <p className="text-[11px] mt-1.5 ml-1" style={{ color: "#ef4444" }}>{passwordError}</p>
+                  <p className="text-xs mt-1.5 ml-1" style={{ color: "#ef4444" }}>{passwordError}</p>
                 )}
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60 mt-2"
+                className="w-full py-3 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-60 mt-2"
                 style={{ backgroundColor: "#3C6B4F" }}
               >
                 {loading ? "ログイン中..." : "ログイン"}
               </button>
             </form>
 
-            <p className="text-center text-[11px] mt-6" style={{ color: "#1A2B1E" }}>
+            <p className="text-center text-xs mt-6" style={{ color: "#1A2B1E" }}>
               アカウントをお持ちでない方は{" "}
               <a href="/join" className="underline font-medium transition-opacity hover:opacity-70" style={{ color: "#3C6B4F" }}>
                 無料登録
@@ -241,7 +241,7 @@ function LoginForm() {
           )}
         </div>
 
-        <p className="text-center text-xs mt-6" style={{ color: "#1A2B1E" }}>
+        <p className="text-center text-sm mt-6" style={{ color: "#1A2B1E" }}>
           <a href="/" className="hover:underline">← サイトトップへ戻る</a>
         </p>
       </div>

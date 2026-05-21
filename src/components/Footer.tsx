@@ -1,46 +1,98 @@
 import { Logo } from "./Logo";
 
+const FOOTER_NAV = [
+  {
+    title: "食べられる森について",
+    links: [
+      { label: "コンセプト", href: "/concept" },
+      { label: "食べられる森とは", href: "/#about" },
+    ],
+  },
+  {
+    title: "各地の拠点",
+    links: [
+      { label: "LC（ローカルコミュニティ）", href: "/#events" },
+      { label: "地図から探す", href: "/#search" },
+      { label: "拠点一覧", href: "/ensembles" },
+    ],
+  },
+  {
+    title: "宿泊・参加",
+    links: [
+      { label: "宿泊拠点一覧", href: "/spots" },
+      { label: "倶楽部に参加", href: "/join" },
+      { label: "ログイン", href: "/login" },
+    ],
+  },
+  {
+    title: "活動・お知らせ",
+    links: [
+      { label: "活動レポート", href: "/reports" },
+      { label: "お問い合わせ", href: "/contact" },
+    ],
+  },
+];
+
+const UTILITY_LINKS = [
+  { label: "プライバシーポリシー", href: "/privacy" },
+  { label: "利用規約", href: "/terms" },
+  { label: "お問い合わせ", href: "/contact" },
+];
+
 export function Footer() {
   return (
-    <footer id="contact" className="pt-14 pb-8 border-t" style={{ backgroundColor: "#FFFFFF", borderColor: "rgba(0,95,2,0.15)" }}>
-      <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
-        <div className="flex flex-col md:flex-row md:justify-between gap-8 mb-10">
-          <div>
-            <div className="mb-4"><Logo size="lg" /></div>
-            <p className="text-xs leading-relaxed max-w-xs" style={{ color: "#1A2B1E" }}>
-              自然界の仕組みを人間社会とテクノロジーに応用し、
-              新しい生き方を実践・発信するコミュニティです。
-            </p>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-8 text-sm" style={{ color: "#1A2B1E" }}>
-            <div>
-              <p className="font-medium mb-3" style={{ color: "#3C6B4F" }}>倶楽部について</p>
-              <ul className="space-y-2 text-xs">
-                <li><a href="/#about"     className="hover:text-[#3C6B4F] transition-colors">コンセプト</a></li>
-                <li><a href="/#pillars"   className="hover:text-[#3C6B4F] transition-colors">4つの柱</a></li>
-                <li><a href="/#locations" className="hover:text-[#3C6B4F] transition-colors">活動拠点（LC）</a></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-medium mb-3" style={{ color: "#3C6B4F" }}>サービス</p>
-              <ul className="space-y-2 text-xs">
-                <li><a href="/#activities" className="hover:text-[#3C6B4F] transition-colors">活動・体験</a></li>
-                <li><a href="/#membership" className="hover:text-[#3C6B4F] transition-colors">会員プラン</a></li>
-                <li><a href="/reports"     className="hover:text-[#3C6B4F] transition-colors">活動レポート</a></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-medium mb-3" style={{ color: "#3C6B4F" }}>お問い合わせ</p>
-              <ul className="space-y-2 text-xs">
-                <li><a href="/#join"                         className="hover:text-[#3C6B4F] transition-colors">参加・入会</a></li>
-                <li><a href="mailto:info@edible-forest.jp"   className="hover:text-[#3C6B4F] transition-colors break-all">info@edible-forest.jp</a></li>
-              </ul>
-            </div>
-          </div>
+    <footer
+      id="contact"
+      className="pt-16 pb-8"
+      style={{ backgroundColor: "#F4F4F2", borderTop: "1px solid rgba(0,0,0,0.06)" }}
+    >
+      <div className="max-w-[1400px] mx-auto px-5 lg:px-12">
+        <div className="mb-12">
+          <Logo size="lg" />
         </div>
-        <p className="text-xs border-t pt-6 text-center" style={{ color: "#1A2B1E", borderColor: "rgba(0,95,2,0.15)" }}>
-          © 2024 食べられる森アンサンブル倶楽部. All rights reserved.
-        </p>
+
+        <div
+          className="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-8 mb-14"
+          style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
+        >
+          {FOOTER_NAV.map((col) => (
+            <div key={col.title}>
+              <p className="text-lg font-bold mb-5" style={{ color: "#1A2B1E" }}>
+                {col.title}
+              </p>
+              <ul className="space-y-3">
+                {col.links.map((link) => (
+                  <li key={link.href}>
+                    <a
+                      href={link.href}
+                      className="text-base hover:text-[#3C6B4F] transition-colors"
+                      style={{ color: "rgba(26,43,30,0.75)" }}
+                    >
+                      {link.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div
+          className="flex flex-wrap items-center gap-3 pt-8 border-t text-sm"
+          style={{ borderColor: "rgba(0,0,0,0.1)", color: "rgba(26,43,30,0.55)", fontFamily: "'Noto Sans JP', sans-serif" }}
+        >
+          {UTILITY_LINKS.map((link, i) => (
+            <span key={link.href} className="flex items-center gap-3">
+              {i > 0 && <span aria-hidden style={{ color: "rgba(0,0,0,0.2)" }}>|</span>}
+              <a href={link.href} className="hover:text-[#3C6B4F] transition-colors">
+                {link.label}
+              </a>
+            </span>
+          ))}
+          <span className="w-full sm:w-auto sm:ml-auto pt-2 sm:pt-0">
+            © 2024 食べられる森アンサンブル倶楽部
+          </span>
+        </div>
       </div>
     </footer>
   );

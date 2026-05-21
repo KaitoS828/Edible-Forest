@@ -60,23 +60,23 @@ export default function JoinPage() {
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
       <Header />
-      <main className="pt-16">
+      <main className="pt-[72px]">
         <section className="py-14 md:py-20">
           <div className="max-w-[680px] mx-auto px-5">
 
             <div className="text-center mb-10">
-              <span className="inline-block text-xs font-medium px-4 mb-4" style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}>
+              <span className="inline-block text-sm font-medium px-4 mb-4" style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}>
                 倶楽部に参加する
               </span>
-              <h1 className="text-2xl md:text-3xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+              <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
                 食べられる森アンサンブル倶楽部<br />参加登録（無料）
               </h1>
-              <p className="text-sm" style={{ color: "#1A2B1E" }}>
+              <p className="text-base" style={{ color: "#1A2B1E" }}>
                 登録は無料です。参加費が発生するのはイベント参加時のみ。
               </p>
             </div>
 
-            <div className="rounded-2xl p-5 mb-6 text-sm" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
+            <div className="rounded-2xl p-5 mb-6 text-base" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
               <p className="font-medium mb-2" style={{ color: "#3C6B4F" }}>登録するとできること</p>
               <ul className="space-y-1.5" style={{ color: "#1A2B1E" }}>
                 <li>✓ 各地のアンサンブル（イベント）の案内が届きます</li>
@@ -86,7 +86,7 @@ export default function JoinPage() {
             </div>
 
             {error && (
-              <p className="text-xs text-center mb-4 py-2 px-3 rounded-xl bg-red-50 text-red-600">
+              <p className="text-sm text-center mb-4 py-2 px-3 rounded-xl bg-red-50 text-red-600">
                 {error}
               </p>
             )}
@@ -131,8 +131,8 @@ export default function JoinPage() {
               </FormSection>
 
               {/* プライバシー */}
-              <div className="rounded-2xl p-5 text-sm" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-                <ul className="space-y-1 text-xs mb-4" style={{ color: "#1A2B1E" }}>
+              <div className="rounded-2xl p-5 text-base" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
+                <ul className="space-y-1 text-sm mb-4" style={{ color: "#1A2B1E" }}>
                   <li>・参加登録に費用はかかりません</li>
                   <li>・ご入力いただいた個人情報は、サービス提供・ご連絡のみに使用します</li>
                 </ul>
@@ -144,7 +144,7 @@ export default function JoinPage() {
                     className="mt-0.5 accent-green-700"
                     required
                   />
-                  <span className="text-sm" style={{ color: "#3C6B4F" }}>
+                  <span className="text-base" style={{ color: "#3C6B4F" }}>
                     注意事項およびプライバシーポリシーに同意します
                   </span>
                 </label>
@@ -153,13 +153,13 @@ export default function JoinPage() {
               <button
                 type="submit"
                 disabled={loading || !form.privacy}
-                className="w-full py-4 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                className="w-full py-4 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                 style={{ backgroundColor: "#3C6B4F" }}
               >
                 {loading ? "登録中..." : "無料で登録する"}
               </button>
 
-              <p className="text-center text-xs" style={{ color: "#1A2B1E" }}>
+              <p className="text-center text-sm" style={{ color: "#1A2B1E" }}>
                 すでにアカウントをお持ちの方は{" "}
                 <a href="/login" className="underline" style={{ color: "#3C6B4F" }}>ログイン</a>
               </p>
@@ -175,7 +175,7 @@ export default function JoinPage() {
 function FormSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="rounded-2xl p-5 space-y-3" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-      <p className="text-sm font-bold" style={{ color: "#3C6B4F" }}>{title}</p>
+      <p className="text-base font-bold" style={{ color: "#3C6B4F" }}>{title}</p>
       {children}
     </div>
   );
@@ -184,10 +184,10 @@ function FormSection({ title, children }: { title: string; children: React.React
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="block text-xs mb-1.5" style={{ color: "#777777" }}>{label}</label>
+      <label className="block text-sm mb-1.5" style={{ color: "#777777" }}>{label}</label>
       {children}
     </div>
   );
 }
 
-const ic = "w-full px-4 py-2.5 rounded-2xl text-sm outline-none bg-gray-50 border border-transparent focus:border-green-700 transition-colors";
+const ic = "w-full px-4 py-2.5 rounded-2xl text-base outline-none bg-gray-50 border border-transparent focus:border-green-700 transition-colors";

@@ -5,7 +5,7 @@ export default function JoinSuccessPage() {
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
       <Header />
-      <main className="pt-16 min-h-screen flex items-center justify-center">
+      <main className="pt-[72px] min-h-screen flex items-center justify-center">
         <div className="max-w-[560px] mx-auto px-5 text-center">
 
           {/* アイコン */}
@@ -19,20 +19,20 @@ export default function JoinSuccessPage() {
           </div>
 
           <span
-            className="inline-block text-xs font-medium px-4 mb-5"
+            className="inline-block text-sm font-medium px-4 mb-5"
             style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}
           >
             お支払い完了
           </span>
 
           <h1
-            className="text-2xl md:text-3xl font-bold mb-4"
+            className="text-3xl md:text-4xl font-bold mb-4"
             style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
           >
             ご入会ありがとうございます
           </h1>
 
-          <p className="text-sm mb-8" style={{ color: "#1A2B1E", lineHeight: "1.9" }}>
+          <p className="text-base mb-8" style={{ color: "#1A2B1E", lineHeight: "1.9" }}>
             食べられる森アンサンブル倶楽部へのご入会が完了しました。<br />
             次のステップとして、会員アカウントを作成してください。<br />
             アカウントを作成すると、アンサンブルへの参加や<br />
@@ -44,25 +44,25 @@ export default function JoinSuccessPage() {
             className="bg-white rounded-2xl p-6 mb-8 text-left"
             style={{ border: "1px solid rgba(0,95,2,0.15)" }}
           >
-            <p className="text-sm font-bold mb-4" style={{ color: "#3C6B4F" }}>次のステップ</p>
-            <ol className="space-y-3 text-sm" style={{ color: "#1A2B1E" }}>
+            <p className="text-base font-bold mb-4" style={{ color: "#3C6B4F" }}>次のステップ</p>
+            <ol className="space-y-3 text-base" style={{ color: "#1A2B1E" }}>
               <li className="flex items-start gap-3">
                 <span
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5"
+                  className="w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 mt-0.5"
                   style={{ backgroundColor: "#3C6B4F" }}
                 >1</span>
                 <span>下のボタンから会員アカウントを作成（メールアドレスはお支払い時と同じものをご使用ください）</span>
               </li>
               <li className="flex items-start gap-3">
                 <span
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5"
+                  className="w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 mt-0.5"
                   style={{ backgroundColor: "#3C6B4F" }}
                 >2</span>
                 <span>全国のアンサンブル・宿泊施設にアクセスできます</span>
               </li>
               <li className="flex items-start gap-3">
                 <span
-                  className="w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold shrink-0 mt-0.5"
+                  className="w-6 h-6 rounded-full flex items-center justify-center text-white text-sm font-bold shrink-0 mt-0.5"
                   style={{ backgroundColor: "#3C6B4F" }}
                 >3</span>
                 <span>解約はマイページからいつでも手続きできます</span>
@@ -73,21 +73,21 @@ export default function JoinSuccessPage() {
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
               href="/join"
-              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-white text-sm font-medium transition-opacity hover:opacity-90"
+              className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-white text-base font-medium transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#3C6B4F" }}
             >
               アカウントを作成する →
             </a>
             <a
               href="/"
-              className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-sm font-medium border transition-opacity hover:opacity-70"
+              className="inline-flex items-center justify-center px-8 py-3.5 rounded-full text-base font-medium border transition-opacity hover:opacity-70"
               style={{ borderColor: "rgba(0,95,2,0.2)", color: "#3C6B4F" }}
             >
               トップへ戻る
             </a>
           </div>
 
-          <p className="text-xs mt-8" style={{ color: "#1A2B1E" }}>
+          <p className="text-sm mt-8" style={{ color: "#1A2B1E" }}>
             ご不明な点は <a href="/contact" className="underline" style={{ color: "#3C6B4F" }}>お問い合わせ</a> からご連絡ください。
           </p>
         </div>

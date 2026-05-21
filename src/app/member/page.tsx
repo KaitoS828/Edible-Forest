@@ -17,7 +17,7 @@ export default async function MemberPage() {
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
       <Header />
-      <main className="pt-16">
+      <main className="pt-[72px]">
 
         {/* ページヘッダー */}
         <section className="py-12 md:py-16 border-b" style={{ borderColor: "rgba(0,95,2,0.1)" }}>
@@ -25,24 +25,24 @@ export default async function MemberPage() {
             <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
               <div>
                 <span
-                  className="inline-block text-xs font-medium px-4 mb-4"
+                  className="inline-block text-sm font-medium px-4 mb-4"
                   style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}
                 >
                   メンバーエリア
                 </span>
                 <h1
-                  className="text-3xl md:text-4xl font-bold mb-3"
+                  className="text-4xl md:text-5xl font-bold mb-3"
                   style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
                 >
                   アンサンブルと宿泊拠点
                 </h1>
-                <p className="text-sm" style={{ color: "#1A2B1E", lineHeight: "1.8" }}>
+                <p className="text-base" style={{ color: "#1A2B1E", lineHeight: "1.8" }}>
                   全国各地のアンサンブル（活動拠点）と宿泊施設を一覧でご覧いただけます。
                 </p>
               </div>
               <a
                 href="/member/dashboard"
-                className="shrink-0 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
+                className="shrink-0 inline-flex items-center gap-2 px-6 py-2.5 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90"
                 style={{ backgroundColor: "#3C6B4F" }}
               >
                 マイページ →
@@ -56,12 +56,12 @@ export default async function MemberPage() {
           <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
             <div className="flex items-baseline gap-3 mb-10">
               <h2
-                className="text-xl md:text-2xl font-bold"
+                className="text-2xl md:text-3xl font-bold"
                 style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
               >
                 アンサンブル一覧
               </h2>
-              <span className="text-xs" style={{ color: "#1A2B1E" }}>{ensembles.length} 拠点</span>
+              <span className="text-sm" style={{ color: "#1A2B1E" }}>{ensembles.length} 拠点</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 md:gap-10">
               {ensembles.map((e) => (
@@ -78,15 +78,15 @@ export default async function MemberPage() {
                     <img src={e.img} alt={e.name} className="w-full h-full object-cover" />
                   </div>
                   <span
-                    className="inline-block text-[11px] font-medium px-3 mb-2"
+                    className="inline-block text-xs font-medium px-3 mb-2"
                     style={{ height: "20px", lineHeight: "20px", borderRadius: "10px", backgroundColor: "#3C6B4F", color: "white" }}
                   >
                     {e.region}
                   </span>
-                  <h3 className="text-sm font-bold mb-1 transition-opacity group-hover:opacity-70" style={{ color: "#3C6B4F" }}>
+                  <h3 className="text-base font-bold mb-1 transition-opacity group-hover:opacity-70" style={{ color: "#3C6B4F" }}>
                     {e.name}
                   </h3>
-                  <p className="text-xs" style={{ color: "#1A2B1E" }}>{e.sub}</p>
+                  <p className="text-sm" style={{ color: "#1A2B1E" }}>{e.sub}</p>
                 </a>
               ))}
             </div>
@@ -103,16 +103,16 @@ export default async function MemberPage() {
           <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
             <div className="flex items-baseline gap-3 mb-10">
               <h2
-                className="text-xl md:text-2xl font-bold"
+                className="text-2xl md:text-3xl font-bold"
                 style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
               >
                 宿泊施設・拠点一覧
               </h2>
-              <span className="text-xs" style={{ color: "#1A2B1E" }}>{spots.length} 件</span>
+              <span className="text-sm" style={{ color: "#1A2B1E" }}>{spots.length} 件</span>
             </div>
             {spots.length === 0 ? (
               <div className="text-center py-20">
-                <p className="text-sm" style={{ color: "#1A2B1E" }}>現在、公開中の宿泊拠点はありません</p>
+                <p className="text-base" style={{ color: "#1A2B1E" }}>現在、公開中の宿泊拠点はありません</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -130,7 +130,7 @@ export default async function MemberPage() {
                           <div className="w-full h-full" style={{ backgroundColor: "#f5f5f5" }} />
                         )}
                         <span
-                          className="absolute top-3 left-3 text-[11px] font-medium px-3"
+                          className="absolute top-3 left-3 text-xs font-medium px-3"
                           style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: spot.regionColor || "#3C6B4F", color: "white" }}
                         >
                           {spot.region}
@@ -146,26 +146,26 @@ export default async function MemberPage() {
                           {spot.name}
                         </h3>
                       </a>
-                      <p className="text-xs mb-3" style={{ color: "#1A2B1E" }}>{spot.sub}</p>
-                      <p className="text-sm leading-relaxed line-clamp-2" style={{ color: "#1A2B1E" }}>{spot.desc}</p>
+                      <p className="text-sm mb-3" style={{ color: "#1A2B1E" }}>{spot.sub}</p>
+                      <p className="text-base leading-relaxed line-clamp-2" style={{ color: "#1A2B1E" }}>{spot.desc}</p>
                       <div className="mt-4 pt-4 border-t" style={{ borderColor: "rgba(0,95,2,0.1)" }}>
                         <div className="flex gap-4 mb-4">
                           {spot.capacity && (
                             <div>
-                              <p className="text-[10px]" style={{ color: "#1A2B1E" }}>定員</p>
-                              <p className="text-xs font-medium" style={{ color: "#3C6B4F" }}>{spot.capacity}</p>
+                              <p className="text-xs" style={{ color: "#1A2B1E" }}>定員</p>
+                              <p className="text-sm font-medium" style={{ color: "#3C6B4F" }}>{spot.capacity}</p>
                             </div>
                           )}
                           {spot.price && (
                             <div>
-                              <p className="text-[10px]" style={{ color: "#1A2B1E" }}>料金</p>
-                              <p className="text-xs font-medium" style={{ color: "#3C6B4F" }}>{spot.price}</p>
+                              <p className="text-xs" style={{ color: "#1A2B1E" }}>料金</p>
+                              <p className="text-sm font-medium" style={{ color: "#3C6B4F" }}>{spot.price}</p>
                             </div>
                           )}
                         </div>
                         <a
                           href={"/contact?spot=" + encodeURIComponent(spot.name)}
-                          className="block w-full text-center py-2.5 rounded-full text-xs font-medium text-white transition-opacity hover:opacity-90"
+                          className="block w-full text-center py-2.5 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
                           style={{ backgroundColor: "#3C6B4F" }}
                         >
                           予約する
@@ -185,20 +185,20 @@ export default async function MemberPage() {
             <p className="text-base font-bold mb-2" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               アンサンブルを管理・投稿する
             </p>
-            <p className="text-sm mb-6" style={{ color: "#1A2B1E" }}>
+            <p className="text-base mb-6" style={{ color: "#1A2B1E" }}>
               メンバーとしてログインすると、アンサンブルや宿泊施設を投稿・管理できます。
             </p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <a
                 href="/member/dashboard"
-                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
+                className="inline-flex items-center justify-center gap-2 px-7 py-3 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90"
                 style={{ backgroundColor: "#3C6B4F" }}
               >
                 マイページへ
               </a>
               <a
                 href="/login"
-                className="inline-flex items-center justify-center px-7 py-3 rounded-full text-sm font-medium border transition-all hover:opacity-70"
+                className="inline-flex items-center justify-center px-7 py-3 rounded-full text-base font-medium border transition-all hover:opacity-70"
                 style={{ borderColor: "rgba(0,95,2,0.3)", color: "#3C6B4F" }}
               >
                 ログイン
