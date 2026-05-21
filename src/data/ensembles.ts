@@ -2,6 +2,7 @@ export interface Ensemble {
   id: string;
   region: string;
   regionColor: string;
+  forestType: string;
   name: string;
   sub: string;
   desc: string;
@@ -14,6 +15,8 @@ export interface Ensemble {
   gallery?: string[];
   stats?: { label: string; value: string }[];
   organizer?: { name: string; role: string; bio: string; avatar?: string };
+  notes?: string[];
+  travelConditions?: string;
 }
 
 export const ENSEMBLES: Ensemble[] = [
@@ -21,7 +24,8 @@ export const ENSEMBLES: Ensemble[] = [
     id: "hiroo",
     region: "北海道",
     regionColor: "#005F02",
-    name: "広尾町アンサンブル",
+    forestType: "海の森",
+    name: "広尾の森",
     sub: "北海道十勝郡広尾町",
     desc: "十勝の大地で食べられる植物を育て、庭づくりワークショップや宿泊体験を展開しています。",
     img: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=800&q=80",
@@ -57,9 +61,12 @@ export const ENSEMBLES: Ensemble[] = [
       "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=600&q=70",
     ],
     stats: [
-      { label: "活動開始", value: "2022年" },
-      { label: "面積", value: "約2ha" },
-      { label: "在来種記録数", value: "25種" },
+      { label: "開催期間", value: "夏季（7月〜8月）" },
+      { label: "所要時間", value: "1日" },
+      { label: "料金", value: "大人8,500円 / 子供4,000円（税込）" },
+      { label: "定員", value: "各回10名限定" },
+      { label: "持ち物", value: "動きやすい服装・長靴（貸出可）・飲み物" },
+      { label: "集合場所", value: "北海道広尾郡広尾町並木通" },
     ],
     organizer: {
       name: "田村 拓海",
@@ -72,7 +79,8 @@ export const ENSEMBLES: Ensemble[] = [
     id: "urahoro",
     region: "北海道",
     regionColor: "#005F02",
-    name: "浦幌町アンサンブル",
+    forestType: "川と森",
+    name: "浦幌の森",
     sub: "北海道十勝郡浦幌町",
     desc: "浦幌の森と川の生態系をフィールドに、在来種の記録と食べられる森のマッピングを進めています。",
     img: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=800&q=80",
@@ -82,14 +90,6 @@ export const ENSEMBLES: Ensemble[] = [
 <p>北海道浦幌町。十勝川の支流・浦幌川が流れるこの土地には、農業が始まる以前から続く豊かな生態系が残っています。</p>
 <p>今回のアンサンブルは、地元のガイドと共に森と川を歩き、自分の手で「食べられる自然」を発見するフィールドワーク体験です。図鑑の知識ではなく、実際に土を触り、匂いを嗅ぎ、口に含むことで初めて分かる、生命の豊かさがここにあります。</p>
 <hr>
-<h2>体験のストーリー：浦幌の原野を五感で歩く</h2>
-<h3>1. 森に分け入る——食べられる植物との出会い</h3>
-<p>早朝、露に濡れた草の匂いの中、浦幌川沿いの林縁へ。ガイドが指さす先には、ふきのとう、ギョウジャニンニク、ウドの芽。食べられる植物とは、スーパーの棚で待つものではなく、歩きながら見つけるもの。一歩一歩が新しい発見に変わります。</p>
-<h3>2. 川辺で採取、その場で味わう</h3>
-<p>浦幌川のほとりにたどり着いたら、採れたての植物をその場で調理。焚き火でさっと炒めた山菜と、川岸で汲んだ清水で淹れたハーブティー——シェフのいないこの食卓が、人生で最も美味しい食事になるかもしれません。</p>
-<h3>3. データに残す——次の世代への地図づくり</h3>
-<p>体験の最後には、発見した植物をGPSで記録し、オープンマップに書き込みます。あなたの今日の発見が、未来の誰かの宝の地図になる。浦幌の食の記憶を、次世代へ繋ぐプロジェクトの一員になってください。</p>
-<hr>
 <h2>開催概要</h2>
 <p><strong>開催日程：</strong> 春〜秋（山菜・野草シーズン）※要予約<br>
 <strong>場所：</strong> 北海道浦幌町 浦幌川流域<br>
@@ -97,6 +97,27 @@ export const ENSEMBLES: Ensemble[] = [
 （ガイド料、保険料、昼食代を含む）<br>
 <strong>定員：</strong> 各回8名限定</p>
 <p>自然の中を歩くことが、こんなにも豊かであることを、浦幌が教えてくれます。</p>`,
+    notes: [
+      "雨天催行。ただし、台風・暴風雪等の場合は中止する場合があります。",
+      "天候によって、案内ルートが短縮・変更になる場合があります。",
+      "学生ガイドのスケジュールが確認できますまで、お申込みへのお返事に時間を要する場合がございます。ご了承の上、お申込みいただけますようお願いいたします。",
+    ],
+    travelConditions: `■旅行企画・実施
+株式会社北海道宝島旅行社
+北海道知事登録　旅行業第2-597号／全国旅行業協会（ANTA）正会員
+〒060-0052　北海道札幌市中央区南2条東2丁目8‐1大都ビル9階
+国内旅行業務取扱管理者　林 直樹
+
+・国内旅行業務取扱管理者とは、お客様の旅行取引に関する責任者です。この旅行契約に関し、担当者からの説明にご不明な点があれば、ご遠慮なく上記の国内旅行業務取扱管理者にメールにてお尋ね下さい。
+
+・この商品は、株式会社北海道宝島旅行社の企画旅行商品になりますので、お申し込みには必ず旅行業約款をご確認ください。
+
+■取消・変更
+2日前：旅行代金の30％
+前日：同40％
+当日：同50％
+旅行開始後の解除および無連絡不参加：同100％
+※天候等により中止となった場合はキャンセル料は発生しません。`,
     activities: [
       { icon: "🗺️", title: "食べられる森マッピング", desc: "GPS・AIを活用して在来食用植物の分布を記録。誰でも使えるオープンマップとして公開予定。", img: "/images/activities/urahoro_mapping.png" },
       { icon: "🌊", title: "川と共にある暮らし体験", desc: "浦幌川の生態系を観察しながら、川がもたらす恵みを学ぶフィールドワーク。", img: "/images/activities/urahoro_river.png" },
@@ -108,9 +129,12 @@ export const ENSEMBLES: Ensemble[] = [
       "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=70",
     ],
     stats: [
-      { label: "活動開始", value: "2023年" },
-      { label: "記録種数", value: "32種" },
-      { label: "協力農家数", value: "8軒" },
+      { label: "開催期間", value: "春〜秋（山菜・野草シーズン）" },
+      { label: "所要時間", value: "1日（約6時間）" },
+      { label: "料金", value: "大人6,500円 / 子供3,500円（税込）" },
+      { label: "定員", value: "各回8名限定" },
+      { label: "持ち物", value: "歩きやすい靴・長袖長ズボン・雨具" },
+      { label: "集合場所", value: "北海道中川郡浦幌町字浦幌484" },
     ],
     organizer: {
       name: "中村 里奈",
@@ -123,7 +147,8 @@ export const ENSEMBLES: Ensemble[] = [
     id: "musashino",
     region: "関東",
     regionColor: "#005F02",
-    name: "武蔵野アンサンブル",
+    forestType: "都市の森",
+    name: "武蔵野の森",
     sub: "東京都武蔵野市",
     desc: "都市に「生活生産」を取り込む試み。商店街再構築・都市農園を通じて新しい暮らしを実験中。",
     img: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=800&q=80",
@@ -159,9 +184,12 @@ export const ENSEMBLES: Ensemble[] = [
       "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=70",
     ],
     stats: [
-      { label: "活動開始", value: "2023年" },
-      { label: "都市農園数", value: "12箇所" },
-      { label: "連携店舗", value: "5店" },
+      { label: "開催期間", value: "毎月第2・第4土曜日（通年）" },
+      { label: "所要時間", value: "1日（7:00〜16:00）" },
+      { label: "料金", value: "4,500円（税込）" },
+      { label: "定員", value: "各回12名" },
+      { label: "持ち物", value: "動きやすい服装・軍手・タオル" },
+      { label: "集合場所", value: "東京都武蔵野市吉祥寺本町1丁目" },
     ],
     organizer: {
       name: "森田 亮",
@@ -174,6 +202,7 @@ export const ENSEMBLES: Ensemble[] = [
     id: "bunji",
     region: "関東",
     regionColor: "#005F02",
+    forestType: "都市の森",
     name: "ぶんじ食堂",
     sub: "東京都国分寺市",
     desc: "地域の駅として機能するコミュニティ拠点。食を中心に人と人をつなぎ、都市の生活生産を実践。",
@@ -210,9 +239,12 @@ export const ENSEMBLES: Ensemble[] = [
       "https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&q=70",
     ],
     stats: [
-      { label: "活動開始", value: "2022年" },
-      { label: "月間来店者", value: "約200人" },
-      { label: "連携LC数", value: "5拠点" },
+      { label: "開催期間", value: "毎週土曜日（通年）" },
+      { label: "所要時間", value: "4時間（11:00〜15:00）" },
+      { label: "料金", value: "3,800円（税込）" },
+      { label: "定員", value: "各回15名" },
+      { label: "持ち物", value: "エプロン（貸出可）・筆記用具" },
+      { label: "集合場所", value: "東京都国分寺市本町2丁目1-3" },
     ],
     organizer: {
       name: "石田 和恵",
@@ -225,7 +257,8 @@ export const ENSEMBLES: Ensemble[] = [
     id: "omaezaki",
     region: "東海",
     regionColor: "#005F02",
-    name: "御前崎アンサンブル",
+    forestType: "海の森",
+    name: "御前崎の森",
     sub: "静岡県御前崎市",
     desc: "海と山に囲まれた御前崎で、海産物と森の恵みをかけ合わせた「食と暮らし」の新モデルを探求。",
     img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=800&q=80",
@@ -261,9 +294,12 @@ export const ENSEMBLES: Ensemble[] = [
       "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=70",
     ],
     stats: [
-      { label: "活動開始", value: "2023年" },
-      { label: "連携漁師数", value: "4名" },
-      { label: "連携農家数", value: "6軒" },
+      { label: "開催期間", value: "通年（要予約）" },
+      { label: "所要時間", value: "1日（早朝〜夕方）" },
+      { label: "料金", value: "12,000円（税込）" },
+      { label: "定員", value: "各回8名" },
+      { label: "持ち物", value: "動きやすい服装・日焼け止め・長靴（貸出可）" },
+      { label: "集合場所", value: "静岡県御前崎市港6090" },
     ],
     organizer: {
       name: "浜田 誠一",
@@ -276,7 +312,8 @@ export const ENSEMBLES: Ensemble[] = [
     id: "takeno",
     region: "近畿",
     regionColor: "#005F02",
-    name: "竹野アンサンブル",
+    forestType: "海の森",
+    name: "竹野の森",
     sub: "兵庫県豊岡市竹野町",
     desc: "竹野の豊かな自然の中で、伝統的な生活様式と現代テクノロジーを融合させた暮らしを実践。",
     img: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=800&q=80",
@@ -312,9 +349,12 @@ export const ENSEMBLES: Ensemble[] = [
       "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=70",
     ],
     stats: [
-      { label: "活動開始", value: "2023年" },
-      { label: "空き家活用数", value: "2棟" },
-      { label: "伝統知恵記録数", value: "180件" },
+      { label: "開催期間", value: "春〜秋（4月〜10月）" },
+      { label: "所要時間", value: "2泊3日" },
+      { label: "料金", value: "28,000円（税込）" },
+      { label: "定員", value: "各回10名" },
+      { label: "持ち物", value: "動きやすい服装・長靴・水着（夏季）" },
+      { label: "集合場所", value: "兵庫県豊岡市竹野町竹野1" },
     ],
     organizer: {
       name: "木村 美沙",
@@ -327,7 +367,8 @@ export const ENSEMBLES: Ensemble[] = [
     id: "shimanto",
     region: "中国・四国",
     regionColor: "#005F02",
-    name: "四万十アンサンブル",
+    forestType: "川と森",
+    name: "四万十の森",
     sub: "高知県四万十市",
     desc: "四万十川流域の豊かな生態系から学び、川と共にある暮らしを実践。食べられる森の本質を体感できる拠点。",
     img: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=800&q=80",
@@ -363,9 +404,12 @@ export const ENSEMBLES: Ensemble[] = [
       "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=600&q=70",
     ],
     stats: [
-      { label: "活動開始", value: "2022年" },
-      { label: "川辺整備区域", value: "約1.2km" },
-      { label: "食文化記録数", value: "45品" },
+      { label: "開催期間", value: "春〜秋（3月〜11月）" },
+      { label: "所要時間", value: "1泊2日" },
+      { label: "料金", value: "18,000円（税込）" },
+      { label: "定員", value: "各回8名" },
+      { label: "持ち物", value: "動きやすい服装・帽子・虫除けスプレー" },
+      { label: "集合場所", value: "高知県四万十市中村大橋通2丁目" },
     ],
     organizer: {
       name: "岡本 健太",

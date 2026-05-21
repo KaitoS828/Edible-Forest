@@ -72,7 +72,7 @@ export default function JoinSuccessPage() {
 
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a
-              href="/signup"
+              href="/join"
               className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-white text-sm font-medium transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#3C6B4F" }}
             >

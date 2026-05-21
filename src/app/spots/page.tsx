@@ -63,6 +63,14 @@ export default async function SpotsPage() {
                         >
                           {spot.region}
                         </span>
+                        {spot.forestType && (
+                          <span
+                            className="absolute top-3 right-3 text-[11px] font-medium px-3"
+                            style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: "rgba(26,43,30,0.78)", color: "white" }}
+                          >
+                            🌳 {spot.forestType}
+                          </span>
+                        )}
                       </div>
                     </a>
 

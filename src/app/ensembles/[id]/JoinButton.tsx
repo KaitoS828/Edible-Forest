@@ -4,16 +4,19 @@ import { useAuth } from "@/contexts/AuthContext";
 
 interface Props {
   ensembleName: string;
+  fullWidth?: boolean;
 }
 
-export function JoinButton({ ensembleName }: Props) {
+export function JoinButton({ ensembleName, fullWidth }: Props) {
   const { user, loading } = useAuth();
+
+  const wFull = fullWidth ? "w-full" : "";
 
   if (loading) {
     return (
       <div
-        className="h-12 rounded-full animate-pulse"
-        style={{ backgroundColor: "rgba(0,95,2,0.1)", width: "200px" }}
+        className={`h-12 rounded-full animate-pulse ${wFull}`}
+        style={{ backgroundColor: "rgba(0,95,2,0.1)", width: fullWidth ? undefined : "200px" }}
       />
     );
   }
@@ -22,45 +25,28 @@ export function JoinButton({ ensembleName }: Props) {
     return (
       <a
         href={`/contact?ensemble=${encodeURIComponent(ensembleName)}`}
-        className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-white text-sm font-medium transition-opacity hover:opacity-90"
+        className={`inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-white text-sm font-medium transition-opacity hover:opacity-90 ${wFull}`}
         style={{ backgroundColor: "#3C6B4F" }}
       >
-        このアンサンブルに参加する →
+        参加を問い合わせる →
       </a>
     );
   }
 
   return (
-    <div className="flex flex-col items-start gap-2">
-      <button
-        disabled
-        className="inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium cursor-not-allowed"
-        style={{
-          backgroundColor: "rgba(0,95,2,0.08)",
-          color: "rgba(0,95,2,0.35)",
-          border: "1px solid rgba(0,95,2,0.15)",
-        }}
+    <div className={`flex flex-col gap-2 ${fullWidth ? "items-stretch" : "items-start"}`}>
+      <a
+        href={`/join?from=ensemble&name=${encodeURIComponent(ensembleName)}`}
+        className={`inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-white text-sm font-medium transition-opacity hover:opacity-90 ${wFull}`}
+        style={{ backgroundColor: "#3C6B4F" }}
       >
-        このアンサンブルに参加する
-      </button>
-      <p className="text-xs" style={{ color: "#1A2B1E" }}>
-        参加するには{" "}
-        <a
-          href="/login"
-          className="underline font-medium transition-opacity hover:opacity-70"
-          style={{ color: "#3C6B4F" }}
-        >
-          ログイン
-        </a>
+        参加を問い合わせる →
+      </a>
+      <p className="text-xs text-center" style={{ color: "#1A2B1E", opacity: 0.6 }}>
+        <a href="/login" className="underline transition-opacity hover:opacity-70" style={{ color: "#3C6B4F" }}>ログイン</a>
         {" "}または{" "}
-        <a
-          href="/join"
-          className="underline font-medium transition-opacity hover:opacity-70"
-          style={{ color: "#3C6B4F" }}
-        >
-          会員登録
-        </a>
-        {" "}が必要です。
+        <a href="/join" className="underline transition-opacity hover:opacity-70" style={{ color: "#3C6B4F" }}>無料会員登録</a>
+        {" "}で詳細確認
       </p>
     </div>
   );

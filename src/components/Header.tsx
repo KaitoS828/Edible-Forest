@@ -4,7 +4,7 @@ import { Logo } from "./Logo";
 import { useAuth } from "@/contexts/AuthContext";
 
 const NAV = [
-  { label: "倶楽部について", href: "/#about" },
+  { label: "食べられる森について", href: "/#about" },
   { label: "イベント",       href: "/#events" },
   { label: "拠点",           href: "/spots" },
   { label: "活動レポート",   href: "/reports" },
@@ -15,7 +15,7 @@ export function Header() {
   const { user, loading, signOut } = useAuth();
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b" style={{ backgroundColor: "rgba(255,255,255,0.95)", backdropFilter: "blur(8px)", borderColor: "rgba(0,95,2,0.15)" }}>
+    <header className="fixed top-0 left-0 right-0 z-50 border-b" style={{ backgroundColor: "rgba(255,255,255,0.5)", backdropFilter: "blur(16px)", borderColor: "rgba(0,95,2,0.1)" }}>
       <div className="max-w-[1200px] mx-auto px-5 lg:px-10 h-16 flex items-center justify-between">
         <a href="/"><Logo size="sm" /></a>
 
@@ -59,7 +59,7 @@ export function Header() {
                     className="px-4 py-2 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
                     style={{ backgroundColor: "#3C6B4F" }}
                   >
-                    会員登録する
+                    倶楽部に参加（無料）
                   </a>
                 </div>
               )}
@@ -88,7 +88,7 @@ export function Header() {
             ) : (
               <>
                 <a href="/login" onClick={() => setOpen(false)} className="flex-1 text-center px-4 py-2.5 rounded-full font-medium border" style={{ borderColor: "rgba(0,95,2,0.15)", color: "#1A2B1E" }}>ログインする</a>
-                <a href="/join" onClick={() => setOpen(false)} className="flex-1 text-center px-4 py-2.5 rounded-full font-medium text-white" style={{ backgroundColor: "#3C6B4F" }}>会員登録する</a>
+                <a href="/join" onClick={() => setOpen(false)} className="flex-1 text-center px-4 py-2.5 rounded-full font-medium text-white" style={{ backgroundColor: "#3C6B4F" }}>倶楽部に参加（無料）</a>
               </>
             )}
           </div>

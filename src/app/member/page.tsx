@@ -3,10 +3,15 @@ import { Footer } from "@/components/Footer";
 import { ENSEMBLES } from "@/data/ensembles";
 import { getPublishedSpots } from "@/lib/firestore";
 
-export const revalidate = 60;
+export const dynamic = "force-dynamic";
 
 export default async function MemberPage() {
-  const spots = await getPublishedSpots();
+  let spots: Awaited<ReturnType<typeof getPublishedSpots>> = [];
+  try {
+    spots = await getPublishedSpots();
+  } catch {
+    // Firestore 未設定時は空配列で表示
+  }
   const ensembles = ENSEMBLES.filter((e) => e.active);
 
   return (

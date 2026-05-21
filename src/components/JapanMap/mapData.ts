@@ -33,13 +33,13 @@ export const REGIONS: Record<RegionId, RegionInfo> = {
     hoverColor: "#005F02",
     spots: [
       {
-        name: "広尾町アンサンブル",
+        name: "広尾の森",
         sub: "十勝郡広尾町",
         desc: "十勝の広大な大地で食べられる植物を育て、庭づくりワークショップや宿泊体験を展開しています。",
         img: "https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=70",
       },
       {
-        name: "浦幌町アンサンブル",
+        name: "浦幌の森",
         sub: "十勝郡浦幌町",
         desc: "浦幌の森と川の生態系をフィールドに、在来種の記録と食べられる森のマッピングを進めています。",
         img: "https://images.unsplash.com/photo-1448375240586-882707db888b?w=600&q=70",
@@ -62,7 +62,7 @@ export const REGIONS: Record<RegionId, RegionInfo> = {
     hoverColor: "#005F02",
     spots: [
       {
-        name: "武蔵野アンサンブル",
+        name: "武蔵野の森",
         sub: "東京都武蔵野市",
         desc: "都市の中に「生活生産」を取り込む試み。商店街の再構築や都市農園を通じて新しい暮らしを実験しています。",
         img: "https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=70",
@@ -91,7 +91,7 @@ export const REGIONS: Record<RegionId, RegionInfo> = {
     hoverColor: "#005F02",
     spots: [
       {
-        name: "御前崎アンサンブル",
+        name: "御前崎の森",
         sub: "静岡県御前崎市",
         desc: "海と山に囲まれた御前崎で、海産物と森の恵みをかけ合わせた「食と暮らし」の新モデルを探求しています。",
         img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=600&q=70",
@@ -106,7 +106,7 @@ export const REGIONS: Record<RegionId, RegionInfo> = {
     hoverColor: "#005F02",
     spots: [
       {
-        name: "竹野アンサンブル",
+        name: "竹野の森",
         sub: "兵庫県豊岡市竹野町",
         desc: "竹野の豊かな自然の中で、伝統的な生活様式と現代テクノロジーを融合させた実験的な暮らしを実践します。",
         img: "https://images.unsplash.com/photo-1553361371-9b22f78e8b1d?w=600&q=70",
@@ -121,7 +121,7 @@ export const REGIONS: Record<RegionId, RegionInfo> = {
     hoverColor: "#005F02",
     spots: [
       {
-        name: "四万十アンサンブル",
+        name: "四万十の森",
         sub: "高知県四万十市",
         desc: "四万十川流域の豊かな生態系から学び、川と共にある暮らしを実践する拠点。食べられる森の本質を体感できます。",
         img: "https://images.unsplash.com/photo-1536098561742-ca998e48cbcc?w=600&q=70",

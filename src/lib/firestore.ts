@@ -52,6 +52,7 @@ export type EnsembleDoc = {
   sub: string;
   region: string;
   regionColor: string;
+  forestType?: string;
   desc: string;
   tagline: string;
   philosophy: string;
@@ -60,6 +61,8 @@ export type EnsembleDoc = {
   stats:      { label: string; value: string }[];
   organizer?: { name: string; role: string; bio: string; avatar?: string };
   gallery:    string[];
+  notes?:     string[];
+  travelConditions?: string;
   active: boolean;
   status: EnsembleStatus;
   isOfficial: boolean;
@@ -245,6 +248,7 @@ export type SpotDoc = {
   sub: string;         // サブタイトル
   region: string;
   regionColor: string;
+  forestType: string;  // 食べられる森のタイプ（例：海の森、砂丘の森、都市の森）
   desc: string;        // 概要（カード表示用）
   content: string;     // リッチテキスト（詳細）
   img: string;         // カバー画像
@@ -315,4 +319,19 @@ export async function updateSpot(
 
 export async function deleteSpot(id: string) {
   await adminDb.collection("spots").doc(id).delete();
+}
+
+// ─────────────────────────────────────────
+// Inquiries（お問い合わせ）
+// ─────────────────────────────────────────
+export async function createInquiry(data: {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}) {
+  await adminDb.collection("inquiries").add({
+    ...data,
+    createdAt: FieldValue.serverTimestamp(),
+  });
 }

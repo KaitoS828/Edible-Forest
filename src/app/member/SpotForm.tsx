@@ -20,6 +20,7 @@ interface Props {
 }
 
 const REGIONS = ["北海道", "東北", "関東", "中部", "近畿", "中国", "四国", "九州・沖縄"];
+const FOREST_TYPES = ["海の森", "川と森", "山の森", "砂丘の森", "都市の森", "牧畜の森", "里の森"];
 const REGION_COLORS: Record<string, string> = {
   "北海道": "#3C6B4F", "東北": "#3C6B4F", "関東": "#3C6B4F",
   "中部": "#3C6B4F", "近畿": "#3C6B4F", "中国": "#3C6B4F",
@@ -31,6 +32,7 @@ export default function SpotForm({ mode, spotId, authorId, authorName, initialDa
   const [name, setName]       = useState(d?.name ?? "");
   const [sub, setSub]         = useState(d?.sub ?? "");
   const [region, setRegion]   = useState(d?.region ?? "関東");
+  const [forestType, setForestType] = useState(d?.forestType ?? "海の森");
   const [desc, setDesc]       = useState(d?.desc ?? "");
   const [content, setContent] = useState(d?.content ?? "");
   const [img, setImg]         = useState(d?.img ?? "");
@@ -69,7 +71,7 @@ export default function SpotForm({ mode, spotId, authorId, authorName, initialDa
     setError("");
     setSaving(true);
     const body = {
-      authorId, authorName, name, sub, region,
+      authorId, authorName, name, sub, region, forestType,
       regionColor: REGION_COLORS[region] ?? "#3C6B4F",
       desc, content, img, address, capacity, price, access,
       active: status === "published", status, isOfficial: false,
@@ -112,6 +114,11 @@ export default function SpotForm({ mode, spotId, authorId, authorName, initialDa
         <Field label="地域">
           <select value={region} onChange={(e) => setRegion(e.target.value)} className={ic}>
             {REGIONS.map((r) => <option key={r} value={r}>{r}</option>)}
+          </select>
+        </Field>
+        <Field label="食べられる森のタイプ">
+          <select value={forestType} onChange={(e) => setForestType(e.target.value)} className={ic}>
+            {FOREST_TYPES.map((f) => <option key={f} value={f}>{f}</option>)}
           </select>
         </Field>
         <Field label="概要（一覧カード用）">

@@ -40,12 +40,22 @@ export default async function SpotDetailPage({ params }: PageProps) {
             <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-center">
               {/* 左：テキスト */}
               <div className="flex-1 order-2 md:order-1">
-                <span
-                  className="inline-block text-xs font-medium px-4 mb-5"
-                  style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: spot.regionColor || "#3C6B4F", color: "white" }}
-                >
-                  {spot.region}
-                </span>
+                <div className="flex items-center gap-2 mb-5">
+                  <span
+                    className="inline-block text-xs font-medium px-4"
+                    style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: spot.regionColor || "#3C6B4F", color: "white" }}
+                  >
+                    {spot.region}
+                  </span>
+                  {spot.forestType && (
+                    <span
+                      className="inline-block text-xs font-medium px-4"
+                      style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "rgba(26,43,30,0.85)", color: "white" }}
+                    >
+                      🌳 {spot.forestType}
+                    </span>
+                  )}
+                </div>
                 <h1
                   className="text-3xl md:text-4xl font-bold leading-tight mb-4"
                   style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}

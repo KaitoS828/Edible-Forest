@@ -38,4 +38,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ],
   pages: { signIn: "/admin/login" },
   session: { strategy: "jwt" },
+  callbacks: {
+    async jwt({ token, user }) {
+      if (user) token.isAdmin = true;
+      return token;
+    },
+    async session({ session, token }) {
+      (session.user as unknown as Record<string, unknown>).isAdmin = token.isAdmin ?? false;
+      return session;
+    },
+  },
 });

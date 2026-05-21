@@ -1,13 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
-export default function ContactPage() {
-  const [form, setForm] = useState({ name: "", email: "", subject: "", message: "", privacy: false });
+const SUBJECTS = [
+  "アンサンブルを主催したい",
+  "拠点を登録・活用したい",
+  "イベントへの参加について",
+  "取材・メディアのご依頼",
+  "その他",
+];
+
+const TYPE_TO_SUBJECT: Record<string, string> = {
+  ensemble: "アンサンブルを主催したい",
+  spot: "拠点を登録・活用したい",
+};
+
+function ContactForm() {
+  const searchParams = useSearchParams();
+  const typeParam = searchParams.get("type") ?? "";
+  const spotParam = searchParams.get("spot") ?? "";
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: TYPE_TO_SUBJECT[typeParam] ?? (spotParam ? "拠点を登録・活用したい" : ""),
+    message: spotParam ? `「${spotParam}」について\n\n` : "",
+    privacy: false,
+  });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   function update(key: string, val: string | boolean) {
     setForm((prev) => ({ ...prev, [key]: val }));
@@ -16,10 +41,25 @@ export default function ContactPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
-    // TODO: メール送信 or Firestore 保存
-    await new Promise((r) => setTimeout(r, 800));
-    setSubmitted(true);
-    setLoading(false);
+    setError("");
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name,
+          email: form.email,
+          subject: form.subject,
+          message: form.message,
+        }),
+      });
+      if (!res.ok) throw new Error();
+      setSubmitted(true);
+    } catch {
+      setError("送信に失敗しました。もう一度お試しください");
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (submitted) {
@@ -61,6 +101,10 @@ export default function ContactPage() {
               </p>
             </div>
 
+            {error && (
+              <p className="text-xs text-center mb-4 py-2 px-3 rounded-xl bg-red-50 text-red-600">{error}</p>
+            )}
+
             <form onSubmit={handleSubmit} className="bg-white rounded-3xl p-8 space-y-4" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
               <Field label="お名前">
                 <input value={form.name} onChange={(e) => update("name", e.target.value)} required placeholder="山田 太郎" className={ic} />
@@ -68,14 +112,10 @@ export default function ContactPage() {
               <Field label="メールアドレス">
                 <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} required placeholder="your@email.com" className={ic} />
               </Field>
-              <Field label="件名">
+              <Field label="ご用件">
                 <select value={form.subject} onChange={(e) => update("subject", e.target.value)} required className={ic}>
                   <option value="">選択してください</option>
-                  <option>会員登録について</option>
-                  <option>イベント・アンサンブルについて</option>
-                  <option>宿泊拠点について</option>
-                  <option>取材・メディアのご依頼</option>
-                  <option>その他</option>
+                  {SUBJECTS.map((s) => <option key={s}>{s}</option>)}
                 </select>
               </Field>
               <Field label="メッセージ">
@@ -115,3 +155,11 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
   );
 }
 const ic = "w-full px-4 py-2.5 rounded-2xl text-sm outline-none bg-gray-50 border border-transparent focus:border-green-700 transition-colors";
+
+export default function ContactPage() {
+  return (
+    <Suspense fallback={null}>
+      <ContactForm />
+    </Suspense>
+  );
+}
