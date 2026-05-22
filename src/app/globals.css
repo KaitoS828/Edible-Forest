@@ -87,29 +87,7 @@ body > * {
   animation: heroTextIn var(--duration-base) var(--ease-out) 0.75s both;
 }
 
-/* ── スクロール連動 Reveal ── */
-.reveal-bottom {
-  opacity: 0;
-  transform: translateY(28px);
-  transition: opacity var(--duration-base) var(--ease-out),
-              transform var(--duration-base) var(--ease-out);
-}
-.reveal-left {
-  opacity: 0;
-  transform: translateX(-28px);
-  transition: opacity var(--duration-base) var(--ease-out),
-              transform var(--duration-base) var(--ease-out);
-}
-.reveal-right {
-  opacity: 0;
-  transform: translateX(28px);
-  transition: opacity var(--duration-base) var(--ease-out),
-              transform var(--duration-base) var(--ease-out);
-}
-.reveal-visible {
-  opacity: 1 !important;
-  transform: none !important;
-}
+/* ── スクロール連動 Reveal（GSAP ScrollTrigger で制御） ── */
 
 /* ── カードホバー ── */
 .card-lift {
