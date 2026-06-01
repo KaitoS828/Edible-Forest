@@ -78,7 +78,7 @@ function HeroSection() {
   return (
     <section
       className="w-full flex"
-      style={{ height: "40vh", minHeight: "280px" }}
+      style={{ height: "52vh", minHeight: "340px" }}
     >
       {/* 左：カルーセル 70% */}
       <div className="relative overflow-hidden" style={{ width: "70%" }}>
@@ -194,7 +194,7 @@ function HeroSection() {
             更新履歴
           </p>
           <ul className="space-y-3">
-            {NEWS_UPDATES.map((item, i) => (
+            {NEWS_UPDATES.slice(0, 2).map((item, i) => (
               <li key={i}>
                 <a href={item.href} className="group flex flex-col gap-0.5 hover:opacity-80 transition-opacity">
                   <div className="flex items-center gap-2">
