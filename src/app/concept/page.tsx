@@ -2,7 +2,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
 export const metadata = {
-  title: "食べられる森とは | 食べられる森アンサンブル倶楽部",
+  title: "食べられる森とは | アンサンブル倶楽部～食べられる森を目指して～",
 };
 
 const FOREST_EXAMPLES = [

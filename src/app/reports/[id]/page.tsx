@@ -157,7 +157,7 @@ export default async function ReportDetailPage({ params }: PageProps) {
                   全文を読むにはログインが必要です
                 </h2>
                 <p className="text-base mb-6" style={{ color: "#1A2B1E" }}>
-                  活動レポートの全文は、食べられる森アンサンブル倶楽部の会員のみご覧いただけます。
+                  活動レポートの全文は、アンサンブル倶楽部～食べられる森を目指して～の会員のみご覧いただけます。
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <a

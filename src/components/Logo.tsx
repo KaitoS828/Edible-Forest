@@ -31,13 +31,13 @@ export function Logo({ size = "md" }: { size?: "sm" | "md" | "lg" }) {
         style={{ fontFamily: "'Noto Sans JP', sans-serif", color: "#1A2B1E" }}
       >
         <div className={`${s.text} font-bold tracking-wide whitespace-nowrap`}>
-          食べられる森
+          アンサンブル倶楽部
         </div>
         <div
           className={`${s.sub} font-medium tracking-[0.12em] whitespace-nowrap`}
           style={{ color: "rgba(26,43,30,0.55)" }}
         >
-          アンサンブル倶楽部
+          ～食べられる森を目指して～
         </div>
       </div>
     </div>

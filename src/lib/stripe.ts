@@ -31,7 +31,7 @@ export async function getOrCreateMonthlyPriceId(): Promise<string> {
 
   // 新規作成
   const product = await stripe.products.create({
-    name: "食べられる森アンサンブル倶楽部 月会費",
+    name: "アンサンブル倶楽部～食べられる森を目指して～ 月会費",
     description: "全国の拠点・イベントへのアクセス権",
   });
 

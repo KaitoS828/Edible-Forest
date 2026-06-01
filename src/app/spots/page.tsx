@@ -27,7 +27,7 @@ export default async function SpotsPage() {
               全国の宿泊施設・拠点
             </h1>
             <p className="text-base max-w-xl" style={{ color: "#1A2B1E", lineHeight: "1.9" }}>
-              食べられる森アンサンブル倶楽部の会員が運営する、全国各地の宿泊施設・拠点を紹介します。
+              アンサンブル倶楽部～食べられる森を目指して～の会員が運営する、全国各地の宿泊施設・拠点を紹介します。
             </p>
           </div>
         </section>

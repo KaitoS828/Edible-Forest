@@ -33,7 +33,7 @@ export default function JoinSuccessPage() {
           </h1>
 
           <p className="text-base mb-8" style={{ color: "#1A2B1E", lineHeight: "1.9" }}>
-            食べられる森アンサンブル倶楽部へのご入会が完了しました。<br />
+            アンサンブル倶楽部～食べられる森を目指して～へのご入会が完了しました。<br />
             次のステップとして、会員アカウントを作成してください。<br />
             アカウントを作成すると、アンサンブルへの参加や<br />
             宿泊施設の予約が可能になります。

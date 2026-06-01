@@ -69,7 +69,7 @@ export default function JoinPage() {
                 倶楽部に参加する
               </span>
               <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-                食べられる森アンサンブル倶楽部<br />参加登録（無料）
+                アンサンブル倶楽部～食べられる森を目指して～<br />参加登録（無料）
               </h1>
               <p className="text-base" style={{ color: "#1A2B1E" }}>
                 登録は無料です。参加費が発生するのはイベント参加時のみ。

@@ -4,7 +4,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
 export const metadata: Metadata = {
-  title: "食べられる森アンサンブル倶楽部",
+  title: "アンサンブル倶楽部～食べられる森を目指して～",
   description: "自然界の仕組みを人間社会・テクノロジーに応用し、新しい生き方を実践・発信するコミュニティ。農業以前の自然（食べられる森）と最先端AIを融合した、インターローカルな暮らしの実験場。",
 };
 
