@@ -51,6 +51,13 @@ const FOREST_TYPES = [
   { emoji: "🐄", label: "牧の森",   href: "/spots?type=farm" },
 ];
 
+const NEWS_UPDATES = [
+  { date: "2025.11", label: "NEW!", text: "広尾の森 — 冬の庭づくりワークショップ開催", href: "/ensembles/hiroo" },
+  { date: "2025.10", label: "NEW!", text: "四万十の森 — 新しい宿泊拠点が登録されました", href: "/ensembles/shimanto" },
+  { date: "2025.09", label: "",     text: "都市農園ネットワーク 収穫祭 2024 レポート公開", href: "/reports/r3" },
+  { date: "2025.08", label: "",     text: "アンサンブル倶楽部、会員募集を開始しました", href: "/join" },
+];
+
 function HeroSection() {
   const [current, setCurrent] = useState(0);
   const [fading, setFading] = useState(false);
@@ -70,89 +77,148 @@ function HeroSection() {
 
   return (
     <section
-      className="relative w-full overflow-hidden"
-      style={{ height: "75vh", minHeight: "400px" }}
+      className="w-full flex"
+      style={{ height: "40vh", minHeight: "280px" }}
     >
-      <div
-        className="absolute inset-0 bg-cover bg-center scale-[1.02]"
-        style={{
-          backgroundImage: `url('${slide.img}')`,
-          opacity: fading ? 0 : 1,
-          transition: "opacity 0.75s cubic-bezier(0.16,1,0.3,1)",
-        }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.25) 45%, rgba(0,0,0,0.05) 100%)",
-        }}
-      />
+      {/* 左：カルーセル 70% */}
+      <div className="relative overflow-hidden" style={{ width: "70%" }}>
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{
+            backgroundImage: `url('${slide.img}')`,
+            opacity: fading ? 0 : 1,
+            transition: "opacity 0.75s cubic-bezier(0.16,1,0.3,1)",
+          }}
+        />
+        <div
+          className="absolute inset-0"
+          style={{
+            background: "linear-gradient(90deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.2) 60%, rgba(0,0,0,0.05) 100%)",
+          }}
+        />
 
-      <p
-        className="absolute top-6 left-6 lg:left-12 text-xs tracking-wider z-10"
-        style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Noto Sans JP', sans-serif" }}
-      >
-        TOP &gt;
-      </p>
+        <div className="absolute inset-0 flex items-end lg:items-center z-10">
+          <div className="px-8 lg:px-12 pb-14 lg:pb-0">
+            <p
+              className="text-[13px] font-medium mb-3 tracking-wide"
+              style={{
+                color: "rgba(255,255,255,0.85)",
+                fontFamily: "'Noto Sans JP', sans-serif",
+                opacity: fading ? 0 : 1,
+                transition: "opacity 0.4s ease-out",
+              }}
+            >
+              {slide.label}
+            </p>
+            <h1
+              className="font-bold text-white mb-6"
+              style={{
+                fontFamily: "'Noto Sans JP', sans-serif",
+                fontSize: "clamp(1.6rem, 3.2vw, 2.8rem)",
+                lineHeight: 1.45,
+                letterSpacing: "0.01em",
+                wordBreak: "keep-all",
+                opacity: fading ? 0 : 1,
+                transition: "opacity 0.45s ease-out",
+              }}
+            >
+              {slide.title}
+            </h1>
+            <a
+              href={slide.link}
+              className="inline-flex items-center justify-center px-6 py-2.5 rounded-full text-sm font-bold tracking-wide transition-opacity hover:opacity-90"
+              style={{ backgroundColor: "#FFFFFF", color: "#1A2B1E", fontFamily: "'Noto Sans JP', sans-serif" }}
+            >
+              {slide.linkLabel}
+            </a>
+          </div>
+        </div>
 
-      <div className="absolute inset-0 flex items-end lg:items-center z-10">
-        <div className="w-full max-w-[1400px] mx-auto px-6 lg:px-12 pb-16 lg:pb-0">
-          <p
-            className="text-[14px] font-medium mb-3 tracking-wide"
-            style={{
-              color: "rgba(255,255,255,0.85)",
-              fontFamily: "'Noto Sans JP', sans-serif",
-              opacity: fading ? 0 : 1,
-              transition: "opacity 0.4s ease-out",
-            }}
-          >
-            {slide.label}
-          </p>
-          <h1
-            className="font-bold text-white mb-6 max-w-[640px]"
-            style={{
-              fontFamily: "'Noto Sans JP', sans-serif",
-              fontSize: "clamp(2rem, 4.6vw, calc(3.5rem - 4px))",
-              lineHeight: 1.45,
-              letterSpacing: "0.01em",
-              wordBreak: "keep-all",
-              opacity: fading ? 0 : 1,
-              transition: "opacity 0.45s ease-out",
-            }}
-          >
-            {slide.title}
-          </h1>
-          <a
-            href={slide.link}
-            className="inline-flex items-center justify-center px-7 py-3 rounded-full text-[14px] font-bold tracking-wide transition-opacity hover:opacity-90"
-            style={{
-              backgroundColor: "#FFFFFF",
-              color: "#1A2B1E",
-              fontFamily: "'Noto Sans JP', sans-serif",
-              minWidth: "160px",
-            }}
-          >
-            {slide.linkLabel}
-          </a>
+        <div className="absolute bottom-6 left-8 flex items-center gap-2 z-10">
+          {SLIDES.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => goTo(i)}
+              aria-label={`スライド ${i + 1}`}
+              className="p-0 border-0 cursor-pointer transition-all duration-200"
+              style={{
+                width: i === current ? "24px" : "7px",
+                height: "7px",
+                borderRadius: "4px",
+                backgroundColor: i === current ? "#FFFFFF" : "rgba(255,255,255,0.4)",
+              }}
+            />
+          ))}
         </div>
       </div>
 
-      <div className="absolute bottom-8 right-6 lg:right-12 flex items-center gap-2.5 z-10">
-        {SLIDES.map((_, i) => (
-          <button
-            key={i}
-            onClick={() => goTo(i)}
-            aria-label={`スライド ${i + 1}`}
-            className="p-0 border-0 cursor-pointer transition-all duration-200"
+      {/* 右：メッセージ＋更新履歴 30% */}
+      <div
+        className="flex flex-col justify-between px-6 py-8"
+        style={{ width: "30%", backgroundColor: "#F4F4F2", borderLeft: "1px solid rgba(0,0,0,0.06)" }}
+      >
+        {/* メッセージ */}
+        <div>
+          <p
+            className="text-sm font-medium mb-2 tracking-wider"
+            style={{ color: "#3C6B4F", fontFamily: "'Noto Sans JP', sans-serif" }}
+          >
+            奪うのではなく、調和する
+          </p>
+          <p
+            className="font-bold leading-snug mb-4"
             style={{
-              width: i === current ? "28px" : "8px",
-              height: "8px",
-              borderRadius: "4px",
-              backgroundColor: i === current ? "#3C6B4F" : "rgba(255,255,255,0.5)",
+              fontFamily: "'Noto Serif JP', serif",
+              fontSize: "clamp(1.1rem, 1.9vw, 1.55rem)",
+              color: "#1A2B1E",
+              wordBreak: "keep-all",
             }}
-          />
-        ))}
+          >
+            「心地よい暮らし」<br />始めませんか？
+          </p>
+          <a
+            href="/concept"
+            className="inline-flex items-center gap-1 text-sm font-medium hover:opacity-70 transition-opacity"
+            style={{ color: "#3C6B4F", fontFamily: "'Noto Sans JP', sans-serif" }}
+          >
+            詳しく見る →
+          </a>
+        </div>
+
+        {/* 更新履歴 */}
+        <div>
+          <p
+            className="text-xs font-bold mb-3 tracking-widest uppercase"
+            style={{ color: "rgba(26,43,30,0.4)", fontFamily: "'Noto Sans JP', sans-serif" }}
+          >
+            更新履歴
+          </p>
+          <ul className="space-y-3">
+            {NEWS_UPDATES.map((item, i) => (
+              <li key={i}>
+                <a href={item.href} className="group flex flex-col gap-0.5 hover:opacity-80 transition-opacity">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs" style={{ color: "rgba(26,43,30,0.4)", fontFamily: "'Noto Sans JP', sans-serif" }}>{item.date}</span>
+                    {item.label && (
+                      <span
+                        className="text-[10px] font-bold px-1.5 py-0.5 rounded"
+                        style={{ backgroundColor: "#3C6B4F", color: "white" }}
+                      >
+                        {item.label}
+                      </span>
+                    )}
+                  </div>
+                  <p
+                    className="text-xs leading-snug group-hover:text-[#3C6B4F] transition-colors"
+                    style={{ color: "#1A2B1E", fontFamily: "'Noto Sans JP', sans-serif" }}
+                  >
+                    {item.text}
+                  </p>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </section>
   );
@@ -315,7 +381,7 @@ function EnsembleSection() {
               <a
                 key={item.href}
                 href={item.href}
-                className="group block rounded-2xl p-6 transition-all hover:-translate-y-1 hover:shadow-md"
+                className="group block rounded-2xl p-6"
                 style={{ border: "1.5px solid rgba(0,0,0,0.1)", backgroundColor: "#FFFFFF" }}
               >
                 <div className="text-3xl mb-4">{item.emoji}</div>
