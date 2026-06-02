@@ -76,12 +76,9 @@ function HeroSection() {
   const slide = SLIDES[current];
 
   return (
-    <section
-      className="w-full flex"
-      style={{ height: "52vh", minHeight: "340px" }}
-    >
-      {/* 左：カルーセル 70% */}
-      <div className="relative overflow-hidden" style={{ width: "70%" }}>
+    <section className="w-full flex flex-col lg:flex-row" style={{ minHeight: "280px" }}>
+      {/* 上(mobile)/左(desktop)：カルーセル */}
+      <div className="relative overflow-hidden w-full lg:w-[70%]" style={{ height: "52vw", maxHeight: "52vh", minHeight: "220px" }}>
         <div
           className="absolute inset-0 bg-cover bg-center"
           style={{
@@ -154,8 +151,8 @@ function HeroSection() {
 
       {/* 右：メッセージ＋更新履歴 30% */}
       <div
-        className="flex flex-col justify-between px-6 py-8"
-        style={{ width: "30%", backgroundColor: "#F4F4F2", borderLeft: "1px solid rgba(0,0,0,0.06)" }}
+        className="flex flex-col justify-between px-6 py-6 w-full lg:w-[30%]"
+        style={{ backgroundColor: "#F4F4F2", borderTop: "1px solid rgba(0,0,0,0.06)" }}
       >
         {/* メッセージ */}
         <div>
@@ -233,13 +230,16 @@ function ForestTypesSection() {
       style={{ backgroundColor: "#FAFAF8", borderBottom: "1px solid rgba(0,0,0,0.06)" }}
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-8 flex flex-col items-center gap-6">
-          <p
-            className="text-base font-medium"
-            style={{ color: "#1A2B1E", fontFamily: "'Noto Sans JP', sans-serif" }}
-          >
-            ●旅に出よう「様々な食べられる森をさがしに」宿泊予約まで
-          </p>
-          <div className="flex items-center gap-10 lg:gap-16">
+        <p
+          className="text-base font-medium text-center"
+          style={{ color: "#1A2B1E", fontFamily: "'Noto Sans JP', sans-serif" }}
+        >
+          ●旅に出よう「様々な食べられる森をさがしに」宿泊予約まで
+        </p>
+
+        <div className="w-full flex flex-col lg:flex-row items-center gap-6">
+          {/* アイコン：モバイル2×2グリッド、デスクトップ均等横並び */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-12 gap-y-6 lg:flex lg:flex-1 lg:justify-between lg:items-center">
             {FOREST_TYPES.map((f) => (
               <a
                 key={f.href}
@@ -247,29 +247,31 @@ function ForestTypesSection() {
                 className="flex flex-col items-center gap-3 group"
               >
                 <div
-                  className="w-20 h-20 rounded-2xl flex items-center justify-center text-4xl transition-transform group-hover:scale-105"
+                  className="w-16 h-16 lg:w-20 lg:h-20 rounded-2xl flex items-center justify-center text-3xl lg:text-4xl transition-transform group-hover:scale-105"
                   style={{ backgroundColor: "rgba(60,107,79,0.08)" }}
                 >
                   {f.emoji}
                 </div>
                 <span
-                  className="text-base font-medium"
+                  className="text-sm lg:text-base font-medium"
                   style={{ color: "#1A2B1E", fontFamily: "'Noto Sans JP', sans-serif" }}
                 >
                   {f.label}
                 </span>
               </a>
             ))}
+          </div>
 
-            <div className="flex items-center gap-5 ml-4">
-              <svg width="36" height="22" viewBox="0 0 36 22" fill="none">
-                <path d="M0 11h32M24 2l10 9-10 9" stroke="#1A2B1E" strokeWidth="1.5" strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <div style={{ width: "130px", opacity: 0.75 }}>
-                <JapanMap value={regionId} onChange={setRegionId} />
-              </div>
+          {/* 矢印＋地図：デスクトップのみ */}
+          <div className="hidden lg:flex items-center gap-5 shrink-0">
+            <svg width="36" height="22" viewBox="0 0 36 22" fill="none">
+              <path d="M0 11h32M24 2l10 9-10 9" stroke="#1A2B1E" strokeWidth="1.5" strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <div style={{ width: "130px", opacity: 0.75 }}>
+              <JapanMap value={regionId} onChange={setRegionId} />
             </div>
           </div>
+        </div>
       </div>
     </section>
   );
