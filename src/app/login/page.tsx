@@ -4,6 +4,7 @@ import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import { GoogleButton } from "@/components/GoogleButton";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -230,6 +231,14 @@ function LoginForm() {
                 {loading ? "ログイン中..." : "ログイン"}
               </button>
             </form>
+
+            <div className="flex items-center gap-3 my-6">
+              <div className="flex-1 h-px" style={{ backgroundColor: "rgba(60,107,79,0.15)" }} />
+              <span className="text-xs" style={{ color: "#1A2B1E", opacity: 0.5 }}>または</span>
+              <div className="flex-1 h-px" style={{ backgroundColor: "rgba(60,107,79,0.15)" }} />
+            </div>
+
+            <GoogleButton callbackUrl={callbackUrl} />
 
             <p className="text-center text-xs mt-6" style={{ color: "#1A2B1E" }}>
               アカウントをお持ちでない方は{" "}

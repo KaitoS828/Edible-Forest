@@ -1,25 +1,23 @@
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getSpotDoc, getPublishedSpots } from "@/lib/firestore";
+import { getEnsemble, getSpots } from "@/lib/microcms";
+
+export const revalidate = 60;
 
 interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-export const revalidate = 60;
-
 export default async function SpotDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const spot = await getSpotDoc(id);
 
-  if (!spot || spot.status !== "published") notFound();
+  const spot = await getEnsemble(id).catch(() => null);
+  if (!spot) notFound();
 
-  const allSpots = await getPublishedSpots();
+  const allSpots = await getSpots().catch(() => []);
   const related = allSpots.filter((s) => s.id !== id).slice(0, 3);
-
-  // gallery フィールド（SpotDoc に追加予定、なければ空配列）
-  const gallery: string[] = (spot as any).gallery ?? [];
+  const galleryUrls = spot.gallery?.map((g) => g.url) ?? [];
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -40,13 +38,15 @@ export default async function SpotDetailPage({ params }: PageProps) {
             <div className="flex flex-col md:flex-row gap-12 md:gap-16 items-center">
               {/* 左：テキスト */}
               <div className="flex-1 order-2 md:order-1">
-                <div className="flex items-center gap-2 mb-5">
-                  <span
-                    className="inline-block text-sm font-medium px-4"
-                    style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: spot.regionColor || "#3C6B4F", color: "white" }}
-                  >
-                    {spot.region}
-                  </span>
+                <div className="flex flex-wrap items-center gap-2 mb-5">
+                  {spot.sub && (
+                    <span
+                      className="inline-block text-sm font-medium px-4"
+                      style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}
+                    >
+                      {spot.sub}
+                    </span>
+                  )}
                   {spot.forestType && (
                     <span
                       className="inline-block text-sm font-medium px-4"
@@ -60,18 +60,21 @@ export default async function SpotDetailPage({ params }: PageProps) {
                   className="text-4xl md:text-5xl font-bold leading-tight mb-4"
                   style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
                 >
-                  {spot.name}
+                  {spot.title}
                 </h1>
-                <p className="text-base mb-5" style={{ color: "#1A2B1E" }}>{spot.sub}</p>
-                <p className="text-base leading-[1.9]" style={{ color: "#1A2B1E" }}>{spot.desc}</p>
+                {spot.caution && (
+                  <p className="text-base leading-[1.9]" style={{ color: "#1A2B1E" }}>{spot.caution}</p>
+                )}
 
                 {/* インフォグリッド */}
-                {(spot.address || spot.capacity || spot.price || spot.access) && (
+                {spot.stats && spot.stats.length > 0 && (
                   <div className="grid grid-cols-2 gap-4 mt-8 pt-6 border-t" style={{ borderColor: "rgba(0,95,2,0.15)" }}>
-                    {spot.address && <InfoItem label="住所" value={spot.address} />}
-                    {spot.capacity && <InfoItem label="定員" value={spot.capacity} />}
-                    {spot.price && <InfoItem label="料金" value={spot.price} />}
-                    {spot.access && <InfoItem label="アクセス" value={spot.access} />}
+                    {spot.stats.map((s) => (
+                      <div key={s.fieldId}>
+                        <p className="text-xs mb-0.5" style={{ color: "#1A2B1E" }}>{s.label}</p>
+                        <p className="text-base" style={{ color: "#3C6B4F" }}>{s.value}</p>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
@@ -82,8 +85,8 @@ export default async function SpotDetailPage({ params }: PageProps) {
                   className="rounded-3xl overflow-hidden"
                   style={{ width: "320px", height: "240px", backgroundColor: "rgba(0,95,2,0.06)", boxShadow: "0 4px 24px rgba(0,0,0,0.10)" }}
                 >
-                  {spot.img ? (
-                    <img src={spot.img} alt={spot.name} className="w-full h-full object-cover" />
+                  {spot.heroImage ? (
+                    <img src={spot.heroImage.url} alt={spot.title} className="w-full h-full object-cover" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center text-5xl">🏡</div>
                   )}
@@ -94,7 +97,7 @@ export default async function SpotDetailPage({ params }: PageProps) {
         </section>
 
         {/* ── 詳細コンテンツ ── */}
-        {spot.content && (
+        {spot.philosophy && (
           <section className="py-16 md:py-20" style={{ backgroundColor: "#FFFFFF" }}>
             <div className="max-w-[800px] mx-auto px-5 lg:px-10">
               <span
@@ -106,14 +109,14 @@ export default async function SpotDetailPage({ params }: PageProps) {
               <div
                 className="prose prose-sm md:prose-base max-w-none"
                 style={{ color: "#1A2B1E" }}
-                dangerouslySetInnerHTML={{ __html: spot.content }}
+                dangerouslySetInnerHTML={{ __html: spot.philosophy }}
               />
             </div>
           </section>
         )}
 
         {/* ── ギャラリービュー ── */}
-        {gallery.length > 0 && (
+        {galleryUrls.length > 0 && (
           <section className="py-16 md:py-20" style={{ backgroundColor: "#FFFFFF" }}>
             <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
               <span
@@ -130,14 +133,14 @@ export default async function SpotDetailPage({ params }: PageProps) {
               </h2>
               {/* メイン + サブグリッド */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {gallery[0] && (
+                {galleryUrls[0] && (
                   <div className="col-span-2 row-span-2 rounded-2xl overflow-hidden" style={{ height: "320px" }}>
-                    <img src={gallery[0]} alt={`${spot.name} 1`} className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-500" />
+                    <img src={galleryUrls[0]} alt={`${spot.title} 1`} className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-500" />
                   </div>
                 )}
-                {gallery.slice(1).map((img, i) => (
+                {galleryUrls.slice(1).map((url, i) => (
                   <div key={i} className="rounded-2xl overflow-hidden" style={{ height: "155px" }}>
-                    <img src={img} alt={`${spot.name} ${i + 2}`} className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-500" />
+                    <img src={url} alt={`${spot.title} ${i + 2}`} className="w-full h-full object-cover hover:scale-[1.03] transition-transform duration-500" />
                   </div>
                 ))}
               </div>
@@ -149,14 +152,16 @@ export default async function SpotDetailPage({ params }: PageProps) {
         <section className="py-16" style={{ backgroundColor: "#FFFFFF" }}>
           <div className="max-w-[1200px] mx-auto px-5 lg:px-10 text-center">
             <h2 className="text-2xl font-bold mb-2" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-              {spot.name}を予約する
+              {spot.title}を予約する
             </h2>
             <p className="text-base mb-8" style={{ color: "#1A2B1E" }}>
               宿泊・見学のご予約・お問い合わせはこちらから。
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a
-                href={`/contact?spot=${encodeURIComponent(spot.name)}`}
+                href={spot.bookingUrl ?? `/contact?spot=${encodeURIComponent(spot.title)}`}
+                target={spot.bookingUrl ? "_blank" : undefined}
+                rel={spot.bookingUrl ? "noopener noreferrer" : undefined}
                 className="inline-flex items-center justify-center px-10 py-3.5 rounded-full text-white text-base font-medium hover:opacity-90 transition-opacity"
                 style={{ backgroundColor: "#3C6B4F" }}
               >
@@ -192,14 +197,14 @@ export default async function SpotDetailPage({ params }: PageProps) {
                     style={{ border: "1px solid rgba(0,95,2,0.15)" }}
                   >
                     <div style={{ height: "140px", backgroundColor: "rgba(0,95,2,0.06)" }} className="overflow-hidden">
-                      {s.img
-                        ? <img src={s.img} alt={s.name} className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500" />
+                      {s.heroImage
+                        ? <img src={s.heroImage.url} alt={s.title} className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500" />
                         : <div className="w-full h-full flex items-center justify-center text-4xl">🏡</div>
                       }
                     </div>
                     <div className="p-4">
-                      <p className="text-xs mb-1" style={{ color: "#1A2B1E" }}>{s.region}</p>
-                      <p className="text-base font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>{s.name}</p>
+                      {s.sub && <p className="text-xs mb-1" style={{ color: "#1A2B1E", opacity: 0.6 }}>{s.sub}</p>}
+                      <p className="text-base font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>{s.title}</p>
                     </div>
                   </a>
                 ))}
@@ -210,15 +215,6 @@ export default async function SpotDetailPage({ params }: PageProps) {
 
       </main>
       <Footer />
-    </div>
-  );
-}
-
-function InfoItem({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
-      <p className="text-xs mb-0.5" style={{ color: "#1A2B1E" }}>{label}</p>
-      <p className="text-base" style={{ color: "#3C6B4F" }}>{value}</p>
     </div>
   );
 }

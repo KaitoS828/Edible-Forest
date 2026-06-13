@@ -2,17 +2,17 @@
 
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import type { EnsembleDoc } from "@/lib/firestore";
+import type { Ensemble } from "@/lib/microcms";
 
-const ALL_REGIONS = ["すべて", "北海道", "東北", "関東", "甲信越", "東海", "近畿", "中国・四国", "九州・沖縄"];
-
-export default function EnsembleList({ ensembles }: { ensembles: Omit<EnsembleDoc, "createdAt" | "updatedAt">[] }) {
+export default function EnsembleList({ ensembles }: { ensembles: Ensemble[] }) {
   const { user, loading } = useAuth();
   const isLoggedIn = !loading && !!user;
-  const [selectedRegion, setSelectedRegion] = useState("すべて");
+
+  const forestTypes = ["すべて", ...Array.from(new Set(ensembles.map((e) => e.forestType).filter(Boolean) as string[]))];
+  const [selected, setSelected] = useState("すべて");
 
   const filtered = ensembles.filter(
-    (e) => selectedRegion === "すべて" || e.region === selectedRegion
+    (e) => selected === "すべて" || e.forestType === selected
   );
 
   return (
@@ -36,27 +36,29 @@ export default function EnsembleList({ ensembles }: { ensembles: Omit<EnsembleDo
         </div>
       )}
 
-      {/* 地域フィルター */}
-      <section className="py-6 bg-white border-b" style={{ borderColor: "rgba(0,95,2,0.15)" }}>
-        <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
-          <div className="flex flex-wrap gap-2">
-            {ALL_REGIONS.map((r) => (
-              <button
-                key={r}
-                onClick={() => setSelectedRegion(r)}
-                className="text-xs px-4 py-1.5 rounded-full border transition-colors"
-                style={{
-                  backgroundColor: selectedRegion === r ? "#3C6B4F" : "white",
-                  color: selectedRegion === r ? "white" : "#3C6B4F",
-                  borderColor: selectedRegion === r ? "#3C6B4F" : "#3C6B4F",
-                }}
-              >
-                {r}
-              </button>
-            ))}
+      {/* 森タイプフィルター */}
+      {forestTypes.length > 1 && (
+        <section className="py-6 bg-white border-b" style={{ borderColor: "rgba(0,95,2,0.15)" }}>
+          <div className="max-w-[1200px] mx-auto px-5 lg:px-10">
+            <div className="flex flex-wrap gap-2">
+              {forestTypes.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setSelected(t)}
+                  className="text-xs px-4 py-1.5 rounded-full border transition-colors"
+                  style={{
+                    backgroundColor: selected === t ? "#3C6B4F" : "white",
+                    color: selected === t ? "white" : "#3C6B4F",
+                    borderColor: "#3C6B4F",
+                  }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* アンサンブル一覧グリッド */}
       <section className="py-12 md:py-16">
@@ -78,25 +80,28 @@ export default function EnsembleList({ ensembles }: { ensembles: Omit<EnsembleDo
                       style={{
                         width: "160px",
                         height: "160px",
-                        boxShadow: `0 0 0 4px white, 0 0 0 6px ${e.regionColor}40`,
-                        backgroundColor: "#FFFFFF",
+                        boxShadow: "0 0 0 4px white, 0 0 0 6px rgba(60,107,79,0.25)",
+                        backgroundColor: "#F0F6F2",
                       }}
                     >
-                      <img src={e.img} alt={e.name} className="w-full h-full object-cover" />
+                      {e.heroImage ? (
+                        <img src={e.heroImage.url} alt={e.title} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-4xl">🌿</div>
+                      )}
                     </div>
-                    <span
-                      className="inline-block text-[11px] font-medium px-3 mb-2"
-                      style={{ height: "20px", lineHeight: "20px", borderRadius: "10px", backgroundColor: e.regionColor, color: "white" }}
-                    >
-                      {e.region}
-                    </span>
+                    {e.forestType && (
+                      <span
+                        className="inline-block text-[11px] font-medium px-3 mb-2"
+                        style={{ height: "20px", lineHeight: "20px", borderRadius: "10px", backgroundColor: "#3C6B4F", color: "white" }}
+                      >
+                        {e.forestType}
+                      </span>
+                    )}
                     <h2 className="text-sm font-bold mb-1 group-hover:text-[#3C6B4F] transition-colors" style={{ color: "#3C6B4F" }}>
-                      {e.name}
+                      {e.title}
                     </h2>
-                    <p className="text-xs mb-2" style={{ color: "#1A2B1E" }}>{e.sub}</p>
-                    <p className="text-xs leading-relaxed line-clamp-2 max-w-[160px]" style={{ color: "#1A2B1E" }}>
-                      {e.desc}
-                    </p>
+                    {e.sub && <p className="text-xs" style={{ color: "#1A2B1E" }}>{e.sub}</p>}
                   </a>
                 ))}
               </div>

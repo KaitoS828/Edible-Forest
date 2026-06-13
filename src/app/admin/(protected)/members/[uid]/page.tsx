@@ -60,7 +60,7 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ u
         {/* 編集フォーム */}
         <MemberEditForm
           uid={uid}
-          currentType={(serialized.memberType as MemberType) ?? "free"}
+          currentType={(serialized.memberType as MemberType) ?? "participant"}
           currentNote={serialized.memberNote ?? ""}
         />
       </div>

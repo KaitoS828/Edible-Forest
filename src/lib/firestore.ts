@@ -1,5 +1,6 @@
 import { adminDb } from "./firebase-admin";
 import { FieldValue } from "firebase-admin/firestore";
+import type { MemberType } from "./access";
 
 // ─────────────────────────────────────────
 // 型定義
@@ -8,7 +9,7 @@ export type UserRole = "member" | "admin";
 
 export type SubscriptionStatus = "active" | "past_due" | "canceled" | "trialing" | "none";
 
-export type MemberType = "free" | "member" | "supporter" | "organizer" | "staff";
+export type { MemberType };
 
 export type UserDoc = {
   uid: string;
@@ -24,6 +25,25 @@ export type UserDoc = {
   bio?: string;
   avatarUrl?: string;
   profileCompleted?: boolean;
+  // 会員プロフィール（2026-06-13 確定スキーマ）
+  registeredAs?: "participant" | "organizer"; // 登録時に選んだ種別
+  lastName?: string;          // 姓
+  firstName?: string;         // 名
+  lastNameKana?: string;      // 姓フリガナ
+  firstNameKana?: string;     // 名フリガナ
+  country?: string;           // 居住国
+  address?: string;           // 住所
+  contactEmail?: string;      // 連絡用メールアドレス
+  phone?: string;             // 電話番号
+  interests?: string[];       // 興味分野（複数）
+  occupation?: string;        // 職業
+  comment?: string;           // コメント（自己紹介）
+  operatingBodyName?: string; // 登録施設の運営母体名（開催会員）
+  facilityIds?: string[];     // 登録した宿泊施設ID
+  fieldUpdatedAt?: Record<string, number>; // 各項目の最終更新日（unix ms）
+  // 旧仮項目（後方互換）
+  region?: string;
+  motivation?: string;
   // Stripe
   stripeCustomerId?: string;
   subscriptionId?: string;
@@ -322,6 +342,35 @@ export async function deleteSpot(id: string) {
 }
 
 // ─────────────────────────────────────────
+// Mail Subscribers（メルマガ連携：Benchmark）
+// ─────────────────────────────────────────
+export type MailSubscriberStatus = "subscribed" | "pending";
+
+export type MailSubscriberDoc = {
+  email: string;
+  status: MailSubscriberStatus;
+  benchmarkContactId?: string;
+  syncedAt: FirebaseFirestore.Timestamp;
+};
+
+/** メルマガ購読状態を保存（Benchmark未設定でも Firestore には残す）。email をドキュメントIDに使う */
+export async function upsertMailSubscriber(data: {
+  email: string;
+  status: MailSubscriberStatus;
+  benchmarkContactId?: string;
+}) {
+  await adminDb.collection("mailSubscribers").doc(data.email).set(
+    {
+      email: data.email,
+      status: data.status,
+      ...(data.benchmarkContactId ? { benchmarkContactId: data.benchmarkContactId } : {}),
+      syncedAt: FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
+}
+
+// ─────────────────────────────────────────
 // Inquiries（お問い合わせ）
 // ─────────────────────────────────────────
 export async function createInquiry(data: {
@@ -334,4 +383,163 @@ export async function createInquiry(data: {
     ...data,
     createdAt: FieldValue.serverTimestamp(),
   });
+}
+
+// ─────────────────────────────────────────
+// Facilities（開催会員が登録する宿泊施設・要審査）
+// ─────────────────────────────────────────
+export type FacilityStatus = "pending" | "approved" | "rejected"; // 審査中/承認/却下
+
+export type FacilityDoc = {
+  id: string;
+  ownerId: string;        // 開催会員 uid
+  ownerName: string;
+  name: string;           // 施設名
+  operatingBody?: string; // 運営母体名
+  region?: string;
+  address?: string;
+  status: FacilityStatus; // 登録時は pending（審査中）
+  createdAt: FirebaseFirestore.Timestamp;
+  updatedAt: FirebaseFirestore.Timestamp;
+};
+
+export async function createFacility(
+  data: Omit<FacilityDoc, "id" | "status" | "createdAt" | "updatedAt"> & { status?: FacilityStatus }
+): Promise<string> {
+  const ref = await adminDb.collection("facilities").add({
+    ...data,
+    status: data.status ?? "pending",
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+  return ref.id;
+}
+
+export async function getFacility(id: string): Promise<FacilityDoc | null> {
+  const snap = await adminDb.collection("facilities").doc(id).get();
+  if (!snap.exists) return null;
+  return { id: snap.id, ...snap.data() } as FacilityDoc;
+}
+
+export async function getOwnerFacilities(ownerId: string): Promise<FacilityDoc[]> {
+  const snap = await adminDb.collection("facilities").where("ownerId", "==", ownerId).get();
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as FacilityDoc);
+}
+
+/** 承認済みの自施設のみ（イベント会場のラジオ選択用） */
+export async function getApprovedOwnerFacilities(ownerId: string): Promise<FacilityDoc[]> {
+  const list = await getOwnerFacilities(ownerId);
+  return list.filter((f) => f.status === "approved");
+}
+
+export async function getAllFacilities(): Promise<FacilityDoc[]> {
+  const snap = await adminDb.collection("facilities").orderBy("createdAt", "desc").get();
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as FacilityDoc);
+}
+
+export async function updateFacility(id: string, data: Partial<Omit<FacilityDoc, "id" | "createdAt">>) {
+  await adminDb.collection("facilities").doc(id).update({
+    ...data,
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+}
+
+/** 管理側が審査フラグを更新（pending → approved 等） */
+export async function updateFacilityStatus(id: string, status: FacilityStatus) {
+  await updateFacility(id, { status });
+}
+
+export async function deleteFacility(id: string) {
+  await adminDb.collection("facilities").doc(id).delete();
+}
+
+// ─────────────────────────────────────────
+// Events（開催会員以上が登録するイベント）
+// ─────────────────────────────────────────
+export type EventFormat = "onsite" | "online" | "both"; // 現地/オンライン/両方
+
+export type EventDoc = {
+  id: string;
+  organizerId: string;          // 主催者 uid
+  organizerName: string;        // 主催者氏名
+  organizerFacilityId?: string; // 主催者として選んだ登録施設
+  organizerBodyName?: string;   // 運営母体名
+  title: string;
+  summary: string;
+  startAt?: number;             // 開催日時（unix ms）
+  endAt?: number;               // 終了日時（unix ms）
+  venueFacilityId?: string;     // 会場（審査済み自施設）
+  format: EventFormat;
+  image?: string;
+  terms?: string;               // イベント規約
+  memberOnly: boolean;          // true=会員限定 / false=オープン
+  status: "draft" | "published";
+  participants?: string[];      // 参加者 uid
+  createdAt: FirebaseFirestore.Timestamp;
+  updatedAt: FirebaseFirestore.Timestamp;
+};
+
+export async function createEvent(
+  data: Omit<EventDoc, "id" | "createdAt" | "updatedAt" | "participants"> & { participants?: string[] }
+): Promise<string> {
+  const ref = await adminDb.collection("events").add({
+    participants: [],
+    ...data,
+    createdAt: FieldValue.serverTimestamp(),
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+  return ref.id;
+}
+
+export async function getEvent(id: string): Promise<EventDoc | null> {
+  const snap = await adminDb.collection("events").doc(id).get();
+  if (!snap.exists) return null;
+  return { id: snap.id, ...snap.data() } as EventDoc;
+}
+
+export async function getPublishedEvents(): Promise<EventDoc[]> {
+  const snap = await adminDb.collection("events").where("status", "==", "published").get();
+  const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as EventDoc);
+  return docs.sort((a, b) => (b.startAt ?? 0) - (a.startAt ?? 0));
+}
+
+export async function getOrganizerEvents(organizerId: string): Promise<EventDoc[]> {
+  const snap = await adminDb.collection("events").where("organizerId", "==", organizerId).get();
+  const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as EventDoc);
+  return docs.sort((a, b) => {
+    const at = a.updatedAt?.toMillis?.() ?? 0;
+    const bt = b.updatedAt?.toMillis?.() ?? 0;
+    return bt - at;
+  });
+}
+
+export async function updateEvent(id: string, data: Partial<Omit<EventDoc, "id" | "createdAt">>) {
+  await adminDb.collection("events").doc(id).update({
+    ...data,
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+}
+
+export async function deleteEvent(id: string) {
+  await adminDb.collection("events").doc(id).delete();
+}
+
+/** イベントに参加（参加者 uid を追加） */
+export async function joinEvent(eventId: string, uid: string) {
+  await adminDb.collection("events").doc(eventId).update({
+    participants: FieldValue.arrayUnion(uid),
+    updatedAt: FieldValue.serverTimestamp(),
+  });
+}
+
+/** マイページの「イベント開催・参加履歴」用：主催 or 参加したイベント */
+export async function getUserEventHistory(uid: string): Promise<{ organized: EventDoc[]; joined: EventDoc[] }> {
+  const [orgSnap, joinSnap] = await Promise.all([
+    adminDb.collection("events").where("organizerId", "==", uid).get(),
+    adminDb.collection("events").where("participants", "array-contains", uid).get(),
+  ]);
+  return {
+    organized: orgSnap.docs.map((d) => ({ id: d.id, ...d.data() }) as EventDoc),
+    joined: joinSnap.docs.map((d) => ({ id: d.id, ...d.data() }) as EventDoc),
+  };
 }

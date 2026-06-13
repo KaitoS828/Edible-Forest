@@ -46,6 +46,13 @@ export default async function AdminLayout({
               会員管理
             </a>
             <a
+              href="/admin/facilities"
+              className="text-xs transition-colors hover:text-[#3C6B4F]"
+              style={{ color: "#1A2B1E" }}
+            >
+              施設審査
+            </a>
+            <a
               href="/"
               className="text-xs transition-colors hover:text-[#3C6B4F]"
               style={{ color: "#1A2B1E" }}

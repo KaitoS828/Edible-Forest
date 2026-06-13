@@ -1,77 +1,174 @@
 import { createClient } from "microcms-js-sdk";
 
-export type MicroCMSEnsemble = {
+// ─────────────────────────────────────────
+// クライアント（未設定時は null → 各関数が安全な空値を返す）
+// ─────────────────────────────────────────
+const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
+const apiKey = process.env.MICROCMS_API_KEY;
+export const isCmsConfigured = !!serviceDomain && !!apiKey;
+
+const client = isCmsConfigured
+  ? createClient({ serviceDomain: serviceDomain!, apiKey: apiKey! })
+  : null;
+
+// ─────────────────────────────────────────
+// 共通型
+// ─────────────────────────────────────────
+export type MicroCMSImage = { url: string; height?: number; width?: number };
+
+export type StatItem = { fieldId: string; label: string; value: string };
+
+export type ActivityItem = {
+  fieldId: string;
+  name?: string;
+  title?: string;
+  description?: string;
+  desc?: string;
+  icon?: string;
+  image?: MicroCMSImage[];
+};
+
+// ─────────────────────────────────────────
+// ensembles（type=ensemble / type=spot を内包）
+// ─────────────────────────────────────────
+export type Ensemble = {
   id: string;
+  type?: "ensemble" | "spot";
+  title: string;
+  sub?: string;
+  forestType?: string;
+  tags?: string;
+  heroImage?: MicroCMSImage;
+  philosophy?: string;
+  caution?: string;
+  travelConditions?: string;
+  stats?: StatItem[];
+  activity?: ActivityItem[];
+  gallery?: MicroCMSImage[];
+  bookingUrl?: string;
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
-  name: string;
-  sub: string;
-  region: string;
-  regionColor: string;
-  desc: string;
-  tagline?: string;
-  philosophy?: string;
-  img?: { url: string };
-  active: boolean;
-  activities?: { fieldId: string; icon: string; title: string; desc: string }[];
-  stats?: { fieldId: string; label: string; value: string }[];
-  gallery?: { url: string }[];
 };
 
-const isConfigured =
-  !!process.env.MICROCMS_SERVICE_DOMAIN && !!process.env.MICROCMS_API_KEY;
-
-const client = isConfigured
-  ? createClient({
-      serviceDomain: process.env.MICROCMS_SERVICE_DOMAIN!,
-      apiKey: process.env.MICROCMS_API_KEY!,
-    })
-  : null;
-
-const ENDPOINT = "ansanbulu";
-
-export async function getEnsembleList(): Promise<MicroCMSEnsemble[]> {
+export async function getEnsembles(): Promise<Ensemble[]> {
   if (!client) return [];
-  const res = await client.getList<MicroCMSEnsemble>({
-    endpoint: ENDPOINT,
-    queries: { limit: 50 },
-  });
-  return res.contents;
+  try {
+    const res = await client.getList<Ensemble>({
+      endpoint: "ensembles",
+      queries: { filters: "type[equals]ensemble", limit: 100 },
+    });
+    return res.contents;
+  } catch {
+    return [];
+  }
 }
 
-export async function getEnsembleContent(
-  id: string
-): Promise<MicroCMSEnsemble | null> {
+export async function getEnsemble(id: string): Promise<Ensemble | null> {
   if (!client) return null;
   try {
-    return await client.getListDetail<MicroCMSEnsemble>({
-      endpoint: ENDPOINT,
-      contentId: id,
-    });
+    return await client.getListDetail<Ensemble>({ endpoint: "ensembles", contentId: id });
   } catch {
     return null;
   }
 }
 
-export async function updateEnsembleContent(
-  id: string,
-  data: Partial<Omit<MicroCMSEnsemble, "id" | "createdAt" | "updatedAt" | "publishedAt">>
-): Promise<boolean> {
-  const serviceDomain = process.env.MICROCMS_SERVICE_DOMAIN;
-  const writeApiKey = process.env.MICROCMS_WRITE_API_KEY;
-  if (!serviceDomain || !writeApiKey) return false;
+export async function getSpots(): Promise<Ensemble[]> {
+  if (!client) return [];
+  try {
+    const res = await client.getList<Ensemble>({
+      endpoint: "ensembles",
+      queries: { filters: "type[equals]spot", limit: 100 },
+    });
+    return res.contents;
+  } catch {
+    return [];
+  }
+}
 
-  const res = await fetch(
-    `https://${serviceDomain}.microcms.io/api/v1/${ENDPOINT}/${id}`,
-    {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-        "X-MICROCMS-API-KEY": writeApiKey,
-      },
-      body: JSON.stringify(data),
-    }
-  );
-  return res.ok;
+/** ensembles エンドポイント全件（type 問わず） */
+export async function getAllEnsembleEntries(): Promise<Ensemble[]> {
+  if (!client) return [];
+  try {
+    const res = await client.getList<Ensemble>({ endpoint: "ensembles", queries: { limit: 100 } });
+    return res.contents;
+  } catch {
+    return [];
+  }
+}
+
+// ─────────────────────────────────────────
+// pages（公開ページの文言を丸ごとCMS管理）
+// ─────────────────────────────────────────
+export type Slide = {
+  fieldId: string;
+  image?: MicroCMSImage;
+  label?: string;
+  title?: string;
+  link?: string;
+  linkLabel?: string;
+};
+
+export type Page = {
+  id: string;
+  pageId: string;
+  heroTitle?: string;
+  heroCaption?: string;
+  body?: string;
+  conceptTag?: string;
+  conceptLinkLabel?: string;
+  slides?: Slide[];
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+};
+
+export async function getPage(pageId: string): Promise<Page | null> {
+  if (!client) return null;
+  try {
+    const res = await client.getList<Page>({
+      endpoint: "pages",
+      queries: { filters: `pageId[equals]${pageId}`, limit: 1 },
+    });
+    return res.contents[0] ?? null;
+  } catch {
+    return null;
+  }
+}
+
+// ─────────────────────────────────────────
+// reports（活動レポート）
+// ─────────────────────────────────────────
+export type Report = {
+  id: string;
+  title: string;
+  date?: string;
+  category?: string;
+  image?: MicroCMSImage;
+  body?: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+};
+
+export async function getReports(): Promise<Report[]> {
+  if (!client) return [];
+  try {
+    const res = await client.getList<Report>({
+      endpoint: "reports",
+      queries: { limit: 100, orders: "-publishedAt" },
+    });
+    return res.contents;
+  } catch {
+    return [];
+  }
+}
+
+export async function getReport(id: string): Promise<Report | null> {
+  if (!client) return null;
+  try {
+    return await client.getListDetail<Report>({ endpoint: "reports", contentId: id });
+  } catch {
+    return null;
+  }
 }

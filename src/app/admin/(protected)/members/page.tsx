@@ -1,21 +1,12 @@
 import { getAllUsers } from "@/lib/firestore";
+import { MEMBER_TYPE_LABELS, type MemberType } from "@/lib/access";
 
 export const dynamic = "force-dynamic";
 
-const MEMBER_TYPE_LABEL: Record<string, string> = {
-  free:       "無料会員",
-  member:     "正会員",
-  supporter:  "サポーター",
-  organizer:  "拠点運営者",
-  staff:      "スタッフ",
-};
-
-const MEMBER_TYPE_COLOR: Record<string, string> = {
-  free:      "#9CA3AF",
-  member:    "#3C6B4F",
-  supporter: "#5A8D73",
-  organizer: "#2563EB",
-  staff:     "#7C3AED",
+const MEMBER_TYPE_COLOR: Record<MemberType, string> = {
+  participant: "#5A8D73",
+  organizer:   "#3C6B4F",
+  inner:       "#7C3AED",
 };
 
 export default async function MembersPage() {
@@ -28,12 +19,11 @@ export default async function MembersPage() {
   }));
 
   const stats = {
-    total:     serialized.length,
-    free:      serialized.filter((u) => !u.memberType || u.memberType === "free").length,
-    member:    serialized.filter((u) => u.memberType === "member").length,
-    supporter: serialized.filter((u) => u.memberType === "supporter").length,
-    organizer: serialized.filter((u) => u.memberType === "organizer").length,
-    active:    serialized.filter((u) => u.subscriptionStatus === "active").length,
+    total:       serialized.length,
+    participant: serialized.filter((u) => !u.memberType || u.memberType === "participant").length,
+    organizer:   serialized.filter((u) => u.memberType === "organizer").length,
+    inner:       serialized.filter((u) => u.memberType === "inner").length,
+    active:      serialized.filter((u) => u.subscriptionStatus === "active").length,
   };
 
   return (
@@ -48,14 +38,13 @@ export default async function MembersPage() {
       </div>
 
       {/* 統計カード */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 mb-8">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
         {[
-          { label: "総会員数",    value: stats.total,     color: "#1A2B1E" },
-          { label: "無料会員",    value: stats.free,      color: "#9CA3AF" },
-          { label: "正会員",      value: stats.member,    color: "#3C6B4F" },
-          { label: "サポーター",  value: stats.supporter, color: "#5A8D73" },
-          { label: "拠点運営者",  value: stats.organizer, color: "#2563EB" },
-          { label: "Stripe有効",  value: stats.active,    color: "#D97706" },
+          { label: "総会員数",   value: stats.total,       color: "#1A2B1E" },
+          { label: "参加会員",   value: stats.participant, color: MEMBER_TYPE_COLOR.participant },
+          { label: "開催会員",   value: stats.organizer,   color: MEMBER_TYPE_COLOR.organizer },
+          { label: "森の奥",     value: stats.inner,       color: MEMBER_TYPE_COLOR.inner },
+          { label: "Stripe有効", value: stats.active,      color: "#D97706" },
         ].map(({ label, value, color }) => (
           <div key={label} className="bg-white rounded-2xl p-4" style={{ border: "1px solid rgba(60,107,79,0.15)" }}>
             <p className="text-2xl font-bold mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color }}>{value}</p>
@@ -85,9 +74,9 @@ export default async function MembersPage() {
               </tr>
             )}
             {serialized.map((user, i) => {
-              const type  = user.memberType ?? "free";
-              const color = MEMBER_TYPE_COLOR[type] ?? "#9CA3AF";
-              const label = MEMBER_TYPE_LABEL[type] ?? "無料会員";
+              const type  = (user.memberType ?? "participant") as MemberType;
+              const color = MEMBER_TYPE_COLOR[type] ?? "#5A8D73";
+              const label = MEMBER_TYPE_LABELS[type] ?? "参加会員";
               return (
                 <tr key={user.uid} style={{ borderBottom: i < serialized.length - 1 ? "1px solid rgba(60,107,79,0.08)" : "none" }}>
                   <td className="px-5 py-3.5">
