@@ -5,11 +5,9 @@ import { useRouter } from "next/navigation";
 import type { MemberType } from "@/lib/firestore";
 
 const MEMBER_TYPES: { value: MemberType; label: string; desc: string }[] = [
-  { value: "free",      label: "無料会員",  desc: "閲覧のみ" },
-  { value: "member",    label: "正会員",    desc: "アンサンブル参加・宿泊予約" },
-  { value: "supporter", label: "サポーター", desc: "活動支援者" },
-  { value: "organizer", label: "拠点運営者", desc: "自分の拠点を編集可能" },
-  { value: "staff",     label: "スタッフ",  desc: "運営スタッフ" },
+  { value: "participant", label: "参加会員",          desc: "イベント参加（全会員）" },
+  { value: "organizer",   label: "開催会員",          desc: "イベント開催・施設登録" },
+  { value: "inner",       label: "森の奥（本部が付与）", desc: "他メンバー閲覧・本部運営" },
 ];
 
 type Props = { uid: string; currentType: MemberType; currentNote: string };

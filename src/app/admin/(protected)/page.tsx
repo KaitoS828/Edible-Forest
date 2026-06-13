@@ -17,6 +17,26 @@ export default async function AdminDashboard() {
         </p>
       </div>
 
+      {/* 管理メニュー導線 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-12">
+        {[
+          { href: "/admin/members",    title: "会員管理", desc: "会員種別の変更・森の奥の付与" },
+          { href: "/admin/facilities", title: "施設審査", desc: "登録施設の承認・却下" },
+        ].map(({ href, title, desc }) => (
+          <a
+            key={href}
+            href={href}
+            className="block bg-white rounded-2xl p-5 card-lift transition-all"
+            style={{ border: "1px solid rgba(60,107,79,0.15)", boxShadow: "0 2px 16px rgba(0,0,0,0.06)" }}
+          >
+            <p className="text-base font-bold mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+              {title}
+            </p>
+            <p className="text-xs" style={{ color: "#1A2B1E", opacity: 0.6 }}>{desc}</p>
+          </a>
+        ))}
+      </div>
+
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-10">
         {ensembles.map((item) => (
           <div key={item.id} className="circle-card flex flex-col items-center text-center card-enter">

@@ -2,25 +2,19 @@
 
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { resolveEventGate, type MemberType } from "@/lib/access";
+import { resolveEventGate } from "@/lib/access";
 
 interface Props {
   ensembleName: string;
   fullWidth?: boolean;
   /** 会員限定イベントか（省略時 false = 一般公開扱いで従来通り動作） */
   memberOnly?: boolean;
-  /** 参加に必要な最低種別（省略時は member） */
-  requiredType?: MemberType;
-  /** ログインユーザーの種別（省略時は AuthContext から判定。種別は未取得のため未指定時 undefined） */
-  memberType?: MemberType | null;
 }
 
 export function JoinButton({
   ensembleName,
   fullWidth,
   memberOnly = false,
-  requiredType = "member",
-  memberType,
 }: Props) {
   const { user, loading } = useAuth();
   const pathname = usePathname();
@@ -39,8 +33,6 @@ export function JoinButton({
   const gate = resolveEventGate({
     memberOnly,
     isLoggedIn: !!user,
-    memberType,
-    requiredType,
   });
 
   const primaryBtn =
@@ -59,54 +51,25 @@ export function JoinButton({
     );
   }
 
-  // 未ログイン → 「無料会員登録して参加」（前向きな登録導線）
-  if (gate.kind === "needs_login") {
-    const callbackUrl = encodeURIComponent(pathname || `/ensembles`);
-    return (
-      <div className={`flex flex-col gap-2 ${fullWidth ? "items-stretch" : "items-start"}`}>
-        <a
-          href={`/signup?callbackUrl=${callbackUrl}`}
-          className={primaryBtn}
-          style={{ backgroundColor: "#3C6B4F" }}
-        >
-          無料会員登録して参加 →
-        </a>
-        <p className="text-xs text-center" style={{ color: "#1A2B1E", opacity: 0.6 }}>
-          すでに会員の方は{" "}
-          <a
-            href={`/login?callbackUrl=${callbackUrl}`}
-            className="underline transition-opacity hover:opacity-70"
-            style={{ color: "#3C6B4F" }}
-          >
-            ログイン
-          </a>
-        </p>
-      </div>
-    );
-  }
-
-  // ログイン済みだが種別不足 → 控えめ表示 + アップグレード導線
+  // 未ログイン ×会員限定 → 「無料会員登録して参加」（前向きな登録導線）
+  const callbackUrl = encodeURIComponent(pathname || `/ensembles`);
   return (
     <div className={`flex flex-col gap-2 ${fullWidth ? "items-stretch" : "items-start"}`}>
-      <span
-        className={`inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full text-sm font-medium cursor-not-allowed ${wFull}`}
-        style={{
-          backgroundColor: "transparent",
-          color: "#3C6B4F",
-          border: "1px solid rgba(60,107,79,0.3)",
-          opacity: 0.55,
-        }}
+      <a
+        href={`/signup?callbackUrl=${callbackUrl}`}
+        className={primaryBtn}
+        style={{ backgroundColor: "#3C6B4F" }}
       >
-        会員限定イベント
-      </span>
-      <p className="text-xs text-center" style={{ color: "#1A2B1E", opacity: 0.7 }}>
-        正会員になると参加できます{" "}
+        無料会員登録して参加 →
+      </a>
+      <p className="text-xs text-center" style={{ color: "#1A2B1E", opacity: 0.6 }}>
+        すでに会員の方は{" "}
         <a
-          href="/join"
+          href={`/login?callbackUrl=${callbackUrl}`}
           className="underline transition-opacity hover:opacity-70"
           style={{ color: "#3C6B4F" }}
         >
-          会員種別をアップグレード
+          ログイン
         </a>
       </p>
     </div>

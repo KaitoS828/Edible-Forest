@@ -6,39 +6,48 @@ import { auth } from "@/lib/firebase";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { GoogleButton } from "@/components/GoogleButton";
+import {
+  MemberProfileFields,
+  emptyProfileForm,
+  validateProfileForm,
+  type ProfileFormState,
+} from "@/components/MemberProfileFields";
 
 export default function JoinPage() {
-  const [form, setForm] = useState({
-    lastName: "", firstName: "",
-    email: "", password: "", password2: "",
-    region: "", phone: "", motivation: "",
-    newsletter: true, privacy: false,
-  });
+  const [profile, setProfile] = useState<ProfileFormState>(emptyProfileForm);
+  const [account, setAccount] = useState({ email: "", password: "", password2: "" });
+  const [newsletter, setNewsletter] = useState(true);
+  const [privacy, setPrivacy] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  function update(key: string, val: string | boolean) {
-    setForm((prev) => ({ ...prev, [key]: val }));
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError("");
 
-    if (form.password !== form.password2) {
+    const fieldError = validateProfileForm(profile, { requireLoginEmail: true });
+    if (fieldError) {
+      setError(fieldError);
+      return;
+    }
+    if (!account.email.trim()) {
+      setError("ログイン用メールアドレスを入力してください");
+      return;
+    }
+    if (account.password !== account.password2) {
       setError("パスワードが一致しません");
       return;
     }
-    if (form.password.length < 8) {
+    if (account.password.length < 8) {
       setError("パスワードは8文字以上で設定してください");
       return;
     }
-    if (!form.privacy) return;
+    if (!privacy) return;
 
     setLoading(true);
     try {
-      const displayName = `${form.lastName} ${form.firstName}`.trim();
-      const cred = await createUserWithEmailAndPassword(auth, form.email, form.password);
+      const displayName = `${profile.lastName} ${profile.firstName}`.trim();
+      const cred = await createUserWithEmailAndPassword(auth, account.email, account.password);
       await updateProfile(cred.user, { displayName });
       const idToken = await cred.user.getIdToken(true);
 
@@ -48,23 +57,34 @@ export default function JoinPage() {
         body: JSON.stringify({
           idToken,
           profile: {
-            region: form.region,
-            phone: form.phone,
-            motivation: form.motivation,
+            registeredAs: profile.registeredAs,
+            lastName: profile.lastName,
+            firstName: profile.firstName,
+            lastNameKana: profile.noKana ? "" : profile.lastNameKana,
+            firstNameKana: profile.noKana ? "" : profile.firstNameKana,
+            country: profile.country,
+            address: profile.address,
+            contactEmail: profile.sameAsLogin ? account.email : profile.contactEmail,
+            phone: profile.phone,
+            interests: profile.interests,
+            occupation: profile.occupation,
+            comment: profile.comment,
+            operatingBodyName: profile.registeredAs === "organizer" ? profile.operatingBodyName : "",
+            facilities: profile.registeredAs === "organizer" ? profile.facilities : [],
           },
         }),
       });
       const data = await res.json();
 
       // メルマガ購読（任意・デフォルトON）。失敗しても登録フローは止めない。
-      if (form.newsletter) {
+      if (newsletter) {
         fetch("/api/newsletter", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            email: form.email,
-            firstName: form.firstName,
-            lastName: form.lastName,
+            email: account.email,
+            firstName: profile.firstName,
+            lastName: profile.lastName,
           }),
         }).catch(() => {});
       }
@@ -99,15 +119,6 @@ export default function JoinPage() {
               </p>
             </div>
 
-            <div className="rounded-2xl p-5 mb-6 text-base" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-              <p className="font-medium mb-2" style={{ color: "#3C6B4F" }}>登録するとできること</p>
-              <ul className="space-y-1.5" style={{ color: "#1A2B1E" }}>
-                <li>✓ 各地のアンサンブル（イベント）の案内が届きます</li>
-                <li>✓ 気になるイベントに参加できます（参加費は各イベントごと）</li>
-                <li>✓ 各地のローカルコミュニティとつながれます</li>
-              </ul>
-            </div>
-
             {error && (
               <p className="text-sm text-center mb-4 py-2 px-3 rounded-xl bg-red-50 text-red-600">
                 {error}
@@ -116,57 +127,39 @@ export default function JoinPage() {
 
             <form onSubmit={handleSubmit} className="space-y-5">
 
-              {/* お名前 */}
-              <FormSection title="お名前">
-                <div className="grid grid-cols-2 gap-3">
-                  <Field label="姓">
-                    <input value={form.lastName} onChange={(e) => update("lastName", e.target.value)} required placeholder="山田" className={ic} />
-                  </Field>
-                  <Field label="名">
-                    <input value={form.firstName} onChange={(e) => update("firstName", e.target.value)} required placeholder="太郎" className={ic} />
-                  </Field>
-                </div>
-              </FormSection>
+              {/* 種別選択＋全プロフィール項目（2分岐） */}
+              <MemberProfileFields form={profile} setForm={setProfile} loginEmail={account.email} />
 
               {/* アカウント情報 */}
-              <FormSection title="アカウント情報">
-                <Field label="メールアドレス">
-                  <input type="email" value={form.email} onChange={(e) => update("email", e.target.value)} required placeholder="your@email.com" className={ic} />
-                </Field>
-                <Field label="パスワード（8文字以上）">
-                  <input type="password" value={form.password} onChange={(e) => update("password", e.target.value)} required minLength={8} placeholder="8文字以上" className={ic} />
-                </Field>
-                <Field label="パスワード（確認）">
-                  <input type="password" value={form.password2} onChange={(e) => update("password2", e.target.value)} required placeholder="もう一度入力" className={ic} />
-                </Field>
-              </FormSection>
-
-              {/* お住まいの地域（任意） */}
-              <FormSection title="お住まいの地域（任意）">
-                <Field label="地域">
-                  <input value={form.region} onChange={(e) => update("region", e.target.value)} placeholder="例：北海道広尾町" className={ic} />
-                </Field>
-              </FormSection>
-
-              {/* 連絡先（任意） */}
-              <FormSection title="電話番号（任意）">
-                <Field label="電話番号">
-                  <input type="tel" value={form.phone} onChange={(e) => update("phone", e.target.value)} placeholder="090-0000-0000" className={ic} />
-                </Field>
-              </FormSection>
-
-              {/* 参加動機（任意） */}
-              <FormSection title="参加動機（任意）">
-                <textarea value={form.motivation} onChange={(e) => update("motivation", e.target.value)} rows={3} placeholder="興味のあることや、参加したいアンサンブルがあればお聞かせください" className={ic} />
-              </FormSection>
+              <div className="rounded-2xl p-5 space-y-3" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
+                <p className="text-base font-bold" style={{ color: "#3C6B4F" }}>ログイン情報</p>
+                <div>
+                  <label className="block text-sm mb-1.5" style={{ color: "#777777" }}>
+                    ログイン用メールアドレス<span className="text-red-500"> ＊</span>
+                  </label>
+                  <input type="email" value={account.email} onChange={(e) => setAccount((p) => ({ ...p, email: e.target.value }))} required placeholder="your@email.com" className={ic} />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1.5" style={{ color: "#777777" }}>
+                    パスワード（8文字以上）<span className="text-red-500"> ＊</span>
+                  </label>
+                  <input type="password" value={account.password} onChange={(e) => setAccount((p) => ({ ...p, password: e.target.value }))} required minLength={8} placeholder="8文字以上" className={ic} />
+                </div>
+                <div>
+                  <label className="block text-sm mb-1.5" style={{ color: "#777777" }}>
+                    パスワード（確認）<span className="text-red-500"> ＊</span>
+                  </label>
+                  <input type="password" value={account.password2} onChange={(e) => setAccount((p) => ({ ...p, password2: e.target.value }))} required placeholder="もう一度入力" className={ic} />
+                </div>
+              </div>
 
               {/* メルマガ購読（任意・デフォルトON） */}
               <div className="rounded-2xl p-5 text-base" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={form.newsletter}
-                    onChange={(e) => update("newsletter", e.target.checked)}
+                    checked={newsletter}
+                    onChange={(e) => setNewsletter(e.target.checked)}
                     className="mt-0.5 accent-green-700"
                   />
                   <span className="text-base" style={{ color: "#1A2B1E" }}>
@@ -184,8 +177,8 @@ export default function JoinPage() {
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
                     type="checkbox"
-                    checked={form.privacy}
-                    onChange={(e) => update("privacy", e.target.checked)}
+                    checked={privacy}
+                    onChange={(e) => setPrivacy(e.target.checked)}
                     className="mt-0.5 accent-green-700"
                     required
                   />
@@ -197,7 +190,7 @@ export default function JoinPage() {
 
               <button
                 type="submit"
-                disabled={loading || !form.privacy}
+                disabled={loading || !privacy}
                 className="w-full py-4 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90 disabled:opacity-50"
                 style={{ backgroundColor: "#3C6B4F" }}
               >
@@ -221,24 +214,6 @@ export default function JoinPage() {
         </section>
       </main>
       <Footer />
-    </div>
-  );
-}
-
-function FormSection({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div className="rounded-2xl p-5 space-y-3" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
-      <p className="text-base font-bold" style={{ color: "#3C6B4F" }}>{title}</p>
-      {children}
-    </div>
-  );
-}
-
-function Field({ label, children }: { label: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <label className="block text-sm mb-1.5" style={{ color: "#777777" }}>{label}</label>
-      {children}
     </div>
   );
 }
