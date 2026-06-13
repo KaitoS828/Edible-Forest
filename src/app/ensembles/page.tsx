@@ -1,13 +1,12 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getPublishedEnsembles } from "@/lib/firestore";
+import { getEnsembles } from "@/lib/microcms";
 import EnsembleList from "./EnsembleList";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 60;
 
 export default async function EnsemblesPage() {
-  const raw = await getPublishedEnsembles();
-  const ensembles = raw.map(({ createdAt, updatedAt, ...rest }) => rest);
+  const ensembles = await getEnsembles().catch(() => []);
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>

@@ -1,7 +1,23 @@
 import Stripe from "stripe";
 
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2026-02-25.clover",
+// 遅延初期化：STRIPE_SECRET_KEY 未設定でもモジュール読み込み（ビルド）は通し、
+// 実際に Stripe を呼び出した時だけエラーにする（firebase-admin と同じ Proxy パターン）。
+let _stripe: Stripe | null = null;
+function getStripeClient(): Stripe {
+  if (!_stripe) {
+    const key = process.env.STRIPE_SECRET_KEY;
+    if (!key) throw new Error("STRIPE_SECRET_KEY が設定されていません");
+    _stripe = new Stripe(key, { apiVersion: "2026-02-25.clover" });
+  }
+  return _stripe;
+}
+
+export const stripe = new Proxy({} as Stripe, {
+  get(_target, prop) {
+    const client = getStripeClient();
+    const value = client[prop as keyof Stripe];
+    return typeof value === "function" ? (value as (...args: unknown[]) => unknown).bind(client) : value;
+  },
 });
 
 /** 月額 ¥1,000 の Price ID をキャッシュ（起動時に1回取得 or 作成） */

@@ -1,9 +1,15 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { getPage } from "@/lib/microcms";
 
 export const metadata = {
   title: "食べられる森とは | アンサンブル倶楽部～食べられる森を目指して～",
 };
+
+export const revalidate = 60;
+
+// CMS 未設定／空のときのフォールバック本文
+const BODY_DEFAULT = `<p>食べられる森とは、産業が生まれる以前から続く「食べていくための森」のことです。効率よく何かを大量生産する畑や養殖場とは違い、自然界の仕組みのなかで、人が暮らし、食べていける環境そのものを指します。</p><p>たとえば昆布漁。海で昆布を一生懸命に育てている人は、昆布だけを見ているわけではありません。魚や貝、ほかの海藻が共に育つ海の生態系を整えている——つまり「海の森」を育てているのです。</p><p>エビの養殖だけがうまくいけばいいと考え、まわりの海が死んでいくような営みは、食べられる森にはなりません。隣にあるものと一緒に豊かになっていく。それが、食べられる森の本来の姿です。</p><p>私たちは、各地の暮らしをこの同じ切り口で捉え直しています。地域だけで完結させるのではなく、海の森も、砂丘の森も、都市の小さな庭も、同じ「食べられる森」として並べて発信していく。そうすることで、これまでとは違う旅の形、人やものの移動が生まれてくると考えています。</p>`;
 
 const FOREST_EXAMPLES = [
   { emoji: "🌊", title: "海の森", desc: "昆布を育てることは、海の森を育てること。漁師たちは魚や貝、海藻が共に生きる海の生態系そのものを耕しています。" },
@@ -12,7 +18,15 @@ const FOREST_EXAMPLES = [
   { emoji: "🐄", title: "牧畜の森", desc: "家畜を育てることも、その土地の循環の一部。牧場の背景にも、食べていくための森があります。" },
 ];
 
-export default function ConceptPage() {
+export default async function ConceptPage() {
+  const page = await getPage("concept").catch(() => null);
+
+  const title = page?.heroTitle || "食べられる森とは";
+  const bodyHtml = page?.body || BODY_DEFAULT;
+  const galleryImages = (page?.slides ?? [])
+    .map((s) => s.image)
+    .filter((img): img is NonNullable<typeof img> => Boolean(img));
+
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
       <Header />
@@ -23,23 +37,28 @@ export default function ConceptPage() {
               コンセプト
             </span>
             <h1 className="text-4xl md:text-5xl font-bold leading-tight mb-8" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-              食べられる森とは
+              {title}
             </h1>
 
-            <div className="space-y-5 text-base md:text-[15px] leading-[2]" style={{ color: "#1A2B1E" }}>
-              <p>
-                食べられる森とは、産業が生まれる以前から続く「食べていくための森」のことです。効率よく何かを大量生産する畑や養殖場とは違い、自然界の仕組みのなかで、人が暮らし、食べていける環境そのものを指します。
-              </p>
-              <p>
-                たとえば昆布漁。海で昆布を一生懸命に育てている人は、昆布だけを見ているわけではありません。魚や貝、ほかの海藻が共に育つ海の生態系を整えている——つまり「海の森」を育てているのです。
-              </p>
-              <p>
-                エビの養殖だけがうまくいけばいいと考え、まわりの海が死んでいくような営みは、食べられる森にはなりません。隣にあるものと一緒に豊かになっていく。それが、食べられる森の本来の姿です。
-              </p>
-              <p>
-                私たちは、各地の暮らしをこの同じ切り口で捉え直しています。地域だけで完結させるのではなく、海の森も、砂丘の森も、都市の小さな庭も、同じ「食べられる森」として並べて発信していく。そうすることで、これまでとは違う旅の形、人やものの移動が生まれてくると考えています。
-              </p>
-            </div>
+            <div
+              className="space-y-5 text-base md:text-[15px] leading-[2] [&_p]:mb-5"
+              style={{ color: "#1A2B1E" }}
+              dangerouslySetInnerHTML={{ __html: bodyHtml }}
+            />
+
+            {galleryImages.length > 0 && (
+              <div className="mt-10 grid grid-cols-2 gap-3">
+                {galleryImages.map((img, i) => (
+                  <div
+                    key={i}
+                    className="overflow-hidden rounded-2xl"
+                    style={{ height: i === 0 && galleryImages.length > 1 ? "280px" : "200px", gridColumn: i === 0 && galleryImages.length > 1 ? "1 / -1" : undefined }}
+                  >
+                    <img src={img.url} alt="" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
+                  </div>
+                ))}
+              </div>
+            )}
 
             <h2 className="text-2xl md:text-3xl font-bold mt-14 mb-8" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               さまざまな食べられる森
@@ -55,7 +74,7 @@ export default function ConceptPage() {
             </div>
 
             <div className="mt-14 text-center">
-              <a href="/#search" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: "#3C6B4F" }}>
+              <a href="/ensembles" className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90" style={{ backgroundColor: "#3C6B4F" }}>
                 各地の食べられる森を見る →
               </a>
             </div>

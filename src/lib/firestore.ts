@@ -24,6 +24,10 @@ export type UserDoc = {
   bio?: string;
   avatarUrl?: string;
   profileCompleted?: boolean;
+  // 会員登録フォームの追加項目（仮・6/12 確定）
+  region?: string;
+  phone?: string;
+  motivation?: string;
   // Stripe
   stripeCustomerId?: string;
   subscriptionId?: string;
@@ -319,6 +323,35 @@ export async function updateSpot(
 
 export async function deleteSpot(id: string) {
   await adminDb.collection("spots").doc(id).delete();
+}
+
+// ─────────────────────────────────────────
+// Mail Subscribers（メルマガ連携：Benchmark）
+// ─────────────────────────────────────────
+export type MailSubscriberStatus = "subscribed" | "pending";
+
+export type MailSubscriberDoc = {
+  email: string;
+  status: MailSubscriberStatus;
+  benchmarkContactId?: string;
+  syncedAt: FirebaseFirestore.Timestamp;
+};
+
+/** メルマガ購読状態を保存（Benchmark未設定でも Firestore には残す）。email をドキュメントIDに使う */
+export async function upsertMailSubscriber(data: {
+  email: string;
+  status: MailSubscriberStatus;
+  benchmarkContactId?: string;
+}) {
+  await adminDb.collection("mailSubscribers").doc(data.email).set(
+    {
+      email: data.email,
+      status: data.status,
+      ...(data.benchmarkContactId ? { benchmarkContactId: data.benchmarkContactId } : {}),
+      syncedAt: FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
 }
 
 // ─────────────────────────────────────────

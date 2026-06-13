@@ -2,8 +2,10 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { REPORTS } from "@/data/reports";
+import { getReport } from "@/lib/microcms";
 import { ReportInteractions } from "@/components/ReportInteractions";
+
+export const revalidate = 60;
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -22,24 +24,25 @@ async function isLoggedIn(): Promise<boolean> {
   }
 }
 
+const CATEGORY_COLORS: Record<string, string> = {
+  "北海道・十勝":      "#4A7C59",
+  "静岡・御前崎":      "#C4712E",
+  "兵庫・竹野":        "#8FB996",
+  "高知・四万十":      "#C4A832",
+  "東京・武蔵野":      "#5C6B55",
+  "アンサンブル":      "#4A7C59",
+  "AI・テクノロジー":  "#7BA3C4",
+  "生活生産":          "#A47C5C",
+};
+
 export default async function ReportDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const report = REPORTS.find((r) => r.id === id);
+
+  const report = await getReport(id).catch(() => null);
   if (!report) notFound();
 
   const loggedIn = await isLoggedIn();
-
-  const colorMap: Record<string, string> = {
-    "北海道・十勝": "#4A7C59",
-    "静岡・御前崎": "#C4712E",
-    "兵庫・竹野":   "#8FB996",
-    "高知・四万十": "#C4A832",
-    "東京・武蔵野": "#5C6B55",
-    "アンサンブル": "#4A7C59",
-    "AI・テクノロジー": "#7BA3C4",
-    "生活生産":     "#A47C5C",
-  };
-  const mainColor = colorMap[report.tags[0]] ?? "#4A7C59";
+  const color = report.category ? (CATEGORY_COLORS[report.category] ?? "#4A7C59") : "#4A7C59";
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -58,17 +61,17 @@ export default async function ReportDetailPage({ params }: PageProps) {
               ← 活動レポート一覧
             </a>
 
-            {/* タグ */}
-            <div className="flex flex-wrap gap-2 mb-5">
-              {report.tags.map((tag) => {
-                const c = colorMap[tag] ?? "#4A7C59";
-                return (
-                  <span key={tag} className="text-sm px-3 py-1 rounded-full font-medium" style={{ backgroundColor: c + "20", color: c }}>
-                    {tag}
-                  </span>
-                );
-              })}
-            </div>
+            {/* カテゴリ */}
+            {report.category && (
+              <div className="mb-5">
+                <span
+                  className="text-sm px-3 py-1 rounded-full font-medium"
+                  style={{ backgroundColor: color + "20", color }}
+                >
+                  {report.category}
+                </span>
+              </div>
+            )}
 
             {/* 日付 */}
             <p className="text-base mb-4" style={{ color: "#1A2B1E", opacity: 0.5 }}>{report.date}</p>
@@ -82,9 +85,9 @@ export default async function ReportDetailPage({ params }: PageProps) {
             </h1>
 
             {/* カバー画像 */}
-            {report.img && (
+            {report.image && (
               <div className="rounded-2xl overflow-hidden mb-10" style={{ height: "320px" }}>
-                <img src={report.img} alt={report.title} className="w-full h-full object-cover" />
+                <img src={report.image.url} alt={report.title} className="w-full h-full object-cover" />
               </div>
             )}
           </div>

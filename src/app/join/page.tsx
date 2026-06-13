@@ -5,12 +5,14 @@ import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { GoogleButton } from "@/components/GoogleButton";
 
 export default function JoinPage() {
   const [form, setForm] = useState({
     lastName: "", firstName: "",
     email: "", password: "", password2: "",
-    phone: "", motivation: "", privacy: false,
+    region: "", phone: "", motivation: "",
+    newsletter: true, privacy: false,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -43,9 +45,30 @@ export default function JoinPage() {
       const res = await fetch("/api/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
+        body: JSON.stringify({
+          idToken,
+          profile: {
+            region: form.region,
+            phone: form.phone,
+            motivation: form.motivation,
+          },
+        }),
       });
       const data = await res.json();
+
+      // メルマガ購読（任意・デフォルトON）。失敗しても登録フローは止めない。
+      if (form.newsletter) {
+        fetch("/api/newsletter", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: form.email,
+            firstName: form.firstName,
+            lastName: form.lastName,
+          }),
+        }).catch(() => {});
+      }
+
       window.location.href = data.profileCompleted === false ? "/member/setup" : "/member/dashboard";
     } catch (err: unknown) {
       if (err instanceof Error && err.message.includes("email-already-in-use")) {
@@ -118,6 +141,13 @@ export default function JoinPage() {
                 </Field>
               </FormSection>
 
+              {/* お住まいの地域（任意） */}
+              <FormSection title="お住まいの地域（任意）">
+                <Field label="地域">
+                  <input value={form.region} onChange={(e) => update("region", e.target.value)} placeholder="例：北海道広尾町" className={ic} />
+                </Field>
+              </FormSection>
+
               {/* 連絡先（任意） */}
               <FormSection title="電話番号（任意）">
                 <Field label="電話番号">
@@ -129,6 +159,21 @@ export default function JoinPage() {
               <FormSection title="参加動機（任意）">
                 <textarea value={form.motivation} onChange={(e) => update("motivation", e.target.value)} rows={3} placeholder="興味のあることや、参加したいアンサンブルがあればお聞かせください" className={ic} />
               </FormSection>
+
+              {/* メルマガ購読（任意・デフォルトON） */}
+              <div className="rounded-2xl p-5 text-base" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={form.newsletter}
+                    onChange={(e) => update("newsletter", e.target.checked)}
+                    className="mt-0.5 accent-green-700"
+                  />
+                  <span className="text-base" style={{ color: "#1A2B1E" }}>
+                    メルマガを受け取る（イベント情報・各地の便りをお届けします）
+                  </span>
+                </label>
+              </div>
 
               {/* プライバシー */}
               <div className="rounded-2xl p-5 text-base" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
@@ -158,6 +203,14 @@ export default function JoinPage() {
               >
                 {loading ? "登録中..." : "無料で登録する"}
               </button>
+
+              <div className="flex items-center gap-3">
+                <div className="flex-1 h-px" style={{ backgroundColor: "rgba(60,107,79,0.15)" }} />
+                <span className="text-xs" style={{ color: "#1A2B1E", opacity: 0.5 }}>または</span>
+                <div className="flex-1 h-px" style={{ backgroundColor: "rgba(60,107,79,0.15)" }} />
+              </div>
+
+              <GoogleButton callbackUrl="/member/dashboard" />
 
               <p className="text-center text-sm" style={{ color: "#1A2B1E" }}>
                 すでにアカウントをお持ちの方は{" "}

@@ -1,11 +1,11 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getPublishedSpots } from "@/lib/firestore";
+import { getSpots } from "@/lib/microcms";
 
 export const revalidate = 60;
 
 export default async function SpotsPage() {
-  const spots = await getPublishedSpots();
+  const spots = await getSpots().catch(() => []);
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -43,77 +43,87 @@ export default async function SpotsPage() {
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {spots.map((spot) => (
-                  <div
-                    key={spot.id}
-                    className="group block bg-white rounded-3xl overflow-hidden card-lift"
-                    style={{ boxShadow: "0 2px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,95,2,0.15)" }}
-                  >
-                    {/* 画像 */}
-                    <a href={`/spots/${spot.id}`} className="block">
-                      <div className="relative overflow-hidden" style={{ height: "200px", backgroundColor: "#FFFFFF" }}>
-                        {spot.img ? (
-                          <img src={spot.img} alt={spot.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
-                        ) : (
-                          <div className="w-full h-full" style={{ backgroundColor: "#FFFFFF" }} />
-                        )}
-                        <span
-                          className="absolute top-3 left-3 text-xs font-medium px-3"
-                          style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: spot.regionColor || "#3C6B4F", color: "white" }}
-                        >
-                          {spot.region}
-                        </span>
-                        {spot.forestType && (
-                          <span
-                            className="absolute top-3 right-3 text-xs font-medium px-3"
-                            style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: "rgba(26,43,30,0.78)", color: "white" }}
-                          >
-                            🌳 {spot.forestType}
-                          </span>
-                        )}
-                      </div>
-                    </a>
+                {spots.map((spot) => {
+                  const capacity = spot.stats?.find((s) => s.label === "定員")?.value;
+                  const price = spot.stats?.find((s) => s.label === "料金")?.value;
 
-                    {/* テキスト */}
-                    <div className="p-5">
-                      <a href={`/spots/${spot.id}`} className="block mb-1">
-                        <h2
-                          className="text-base font-bold group-hover:text-[#3C6B4F] transition-colors"
-                          style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
-                        >
-                          {spot.name}
-                        </h2>
-                      </a>
-                      <p className="text-sm mb-3" style={{ color: "#1A2B1E" }}>{spot.sub}</p>
-                      <p className="text-base leading-relaxed line-clamp-2" style={{ color: "#1A2B1E" }}>{spot.desc}</p>
-
-                      {/* インフォ + 予約ボタン */}
-                      <div className="mt-4 pt-4 border-t" style={{ borderColor: "rgba(0,95,2,0.15)" }}>
-                        <div className="flex gap-4 mb-4">
-                          {spot.capacity && (
-                            <div>
-                              <p className="text-xs" style={{ color: "#1A2B1E" }}>定員</p>
-                              <p className="text-sm font-medium" style={{ color: "#3C6B4F" }}>{spot.capacity}</p>
-                            </div>
+                  return (
+                    <div
+                      key={spot.id}
+                      className="group block bg-white rounded-3xl overflow-hidden card-lift"
+                      style={{ boxShadow: "0 2px 16px rgba(0,0,0,0.06)", border: "1px solid rgba(0,95,2,0.15)" }}
+                    >
+                      {/* 画像 */}
+                      <a href={`/spots/${spot.id}`} className="block">
+                        <div className="relative overflow-hidden" style={{ height: "200px", backgroundColor: "#F0F6F2" }}>
+                          {spot.heroImage ? (
+                            <img src={spot.heroImage.url} alt={spot.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-4xl">🏡</div>
                           )}
-                          {spot.price && (
-                            <div>
-                              <p className="text-xs" style={{ color: "#1A2B1E" }}>料金</p>
-                              <p className="text-sm font-medium" style={{ color: "#3C6B4F" }}>{spot.price}</p>
-                            </div>
+                          {spot.sub && (
+                            <span
+                              className="absolute top-3 left-3 text-xs font-medium px-3"
+                              style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: "#3C6B4F", color: "white" }}
+                            >
+                              {spot.sub}
+                            </span>
+                          )}
+                          {spot.forestType && (
+                            <span
+                              className="absolute top-3 right-3 text-xs font-medium px-3"
+                              style={{ height: "22px", lineHeight: "22px", borderRadius: "11px", backgroundColor: "rgba(26,43,30,0.78)", color: "white" }}
+                            >
+                              🌳 {spot.forestType}
+                            </span>
                           )}
                         </div>
-                        <a
-                          href={`/contact?spot=${encodeURIComponent(spot.name)}`}
-                          className="block w-full text-center py-2.5 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
-                          style={{ backgroundColor: "#3C6B4F" }}
-                        >
-                          予約する
+                      </a>
+
+                      {/* テキスト */}
+                      <div className="p-5">
+                        <a href={`/spots/${spot.id}`} className="block mb-1">
+                          <h2
+                            className="text-base font-bold group-hover:text-[#3C6B4F] transition-colors"
+                            style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
+                          >
+                            {spot.title}
+                          </h2>
                         </a>
+                        {spot.caution && (
+                          <p className="text-base leading-relaxed line-clamp-2 mt-1" style={{ color: "#1A2B1E" }}>{spot.caution}</p>
+                        )}
+
+                        {/* インフォ + 予約ボタン */}
+                        <div className="mt-4 pt-4 border-t" style={{ borderColor: "rgba(0,95,2,0.15)" }}>
+                          <div className="flex gap-4 mb-4">
+                            {capacity && (
+                              <div>
+                                <p className="text-xs" style={{ color: "#1A2B1E" }}>定員</p>
+                                <p className="text-sm font-medium" style={{ color: "#3C6B4F" }}>{capacity}</p>
+                              </div>
+                            )}
+                            {price && (
+                              <div>
+                                <p className="text-xs" style={{ color: "#1A2B1E" }}>料金</p>
+                                <p className="text-sm font-medium" style={{ color: "#3C6B4F" }}>{price}</p>
+                              </div>
+                            )}
+                          </div>
+                          <a
+                            href={spot.bookingUrl ?? `/contact?spot=${encodeURIComponent(spot.title)}`}
+                            target={spot.bookingUrl ? "_blank" : undefined}
+                            rel={spot.bookingUrl ? "noopener noreferrer" : undefined}
+                            className="block w-full text-center py-2.5 rounded-full text-sm font-medium text-white transition-opacity hover:opacity-90"
+                            style={{ backgroundColor: "#3C6B4F" }}
+                          >
+                            予約する
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </div>
