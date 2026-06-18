@@ -9,6 +9,8 @@ const NAV_ITEMS = [
   { href: "/admin/members", label: "会員管理", icon: "◉" },
   { href: "/admin/ensembles", label: "アンサンブル管理", icon: "▤" },
   { href: "/admin/spots", label: "宿泊施設管理", icon: "⌂" },
+  { href: "/admin/cms/pages", label: "固定ページCMS", icon: "▣" },
+  { href: "/admin/reports", label: "活動レポート管理", icon: "▥" },
   { href: "/admin/facilities", label: "施設審査", icon: "□" },
 ];
 

@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { revalidatePath } from "next/cache";
 
-// microCMS Webhook 用の On-Demand ISR エンドポイント。
-// microCMS 管理画面の Webhook 設定で、コンテンツ更新時に
-// POST {origin}/api/revalidate を叩くよう設定する。
+// CMS更新後の On-Demand ISR エンドポイント。
+// 管理画面や外部Webhookから POST {origin}/api/revalidate を叩く想定です。
 //
-// TODO: 本番運用時は ?secret=... もしくは X-MICROCMS-Signature を検証して、
+// TODO: 本番運用時は ?secret=... もしくは署名を検証して、
 //       不正な再生成リクエストを弾くこと（現状は secret 検証を省略）。
 
-// microCMS の api（エンドポイント名）→ 再生成すべきパス
+// CMS の api（エンドポイント名）→ 再生成すべきパス
 const PATHS_BY_API: Record<string, string[]> = {
   pages: ["/", "/concept"],
   ensembles: ["/", "/ensembles", "/spots"],

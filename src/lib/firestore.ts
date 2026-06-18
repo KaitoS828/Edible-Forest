@@ -282,6 +282,7 @@ export type SpotDoc = {
   capacity: string;    // 定員
   price: string;       // 料金
   access: string;      // アクセス
+  bookingUrl?: string; // 外部予約URL
   active: boolean;
   status: "draft" | "published";
   isOfficial: boolean;
@@ -353,6 +354,111 @@ export async function updateSpot(
 
 export async function deleteSpot(id: string) {
   await adminDb.collection("spots").doc(id).delete();
+}
+
+// ─────────────────────────────────────────
+// CMS Pages / Reports（自作CMS）
+// ─────────────────────────────────────────
+export type CmsSlide = {
+  fieldId: string;
+  image?: { url: string };
+  label?: string;
+  title?: string;
+  link?: string;
+  linkLabel?: string;
+};
+
+export type CmsPageDoc = {
+  id: string;
+  pageId: string;
+  heroTitle?: string;
+  heroCaption?: string;
+  body?: string;
+  conceptTag?: string;
+  conceptLinkLabel?: string;
+  slides?: CmsSlide[];
+  active: boolean;
+  createdAt?: FirebaseFirestore.Timestamp;
+  updatedAt?: FirebaseFirestore.Timestamp;
+  publishedAt?: FirebaseFirestore.Timestamp;
+};
+
+export type CmsReportStatus = "draft" | "published";
+
+export type CmsReportDoc = {
+  id: string;
+  title: string;
+  date?: string;
+  category?: string;
+  image?: { url: string };
+  body?: string;
+  status: CmsReportStatus;
+  active: boolean;
+  createdAt?: FirebaseFirestore.Timestamp;
+  updatedAt?: FirebaseFirestore.Timestamp;
+  publishedAt?: FirebaseFirestore.Timestamp;
+};
+
+export async function getCmsPage(pageId: string): Promise<CmsPageDoc | null> {
+  const snap = await adminDb.collection("cmsPages").doc(pageId).get();
+  if (!snap.exists) return null;
+  return { id: snap.id, ...snap.data() } as CmsPageDoc;
+}
+
+export async function getAllCmsPages(): Promise<CmsPageDoc[]> {
+  const snap = await adminDb.collection("cmsPages").get();
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as CmsPageDoc);
+}
+
+export async function upsertCmsPage(pageId: string, data: Partial<Omit<CmsPageDoc, "id" | "createdAt" | "updatedAt">>) {
+  const ref = adminDb.collection("cmsPages").doc(pageId);
+  const exists = (await ref.get()).exists;
+  await ref.set(
+    {
+      pageId,
+      active: data.active ?? true,
+      ...data,
+      ...(exists ? {} : { createdAt: FieldValue.serverTimestamp() }),
+      updatedAt: FieldValue.serverTimestamp(),
+      publishedAt: FieldValue.serverTimestamp(),
+    },
+    { merge: true }
+  );
+}
+
+export async function getCmsReport(id: string): Promise<CmsReportDoc | null> {
+  const snap = await adminDb.collection("reports").doc(id).get();
+  if (!snap.exists) return null;
+  return { id: snap.id, ...snap.data() } as CmsReportDoc;
+}
+
+export async function getAllCmsReports(): Promise<CmsReportDoc[]> {
+  const snap = await adminDb.collection("reports").get();
+  const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as CmsReportDoc);
+  return docs.sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
+}
+
+export async function upsertCmsReport(
+  id: string,
+  data: Partial<Omit<CmsReportDoc, "id" | "createdAt" | "updatedAt">>
+) {
+  const ref = adminDb.collection("reports").doc(id);
+  const exists = (await ref.get()).exists;
+  await ref.set(
+    {
+      active: data.active ?? true,
+      status: data.status ?? "draft",
+      ...data,
+      ...(exists ? {} : { createdAt: FieldValue.serverTimestamp() }),
+      updatedAt: FieldValue.serverTimestamp(),
+      ...(data.status === "published" ? { publishedAt: FieldValue.serverTimestamp() } : {}),
+    },
+    { merge: true }
+  );
+}
+
+export async function deleteCmsReport(id: string) {
+  await adminDb.collection("reports").doc(id).delete();
 }
 
 // ─────────────────────────────────────────

@@ -1,4 +1,4 @@
-import { getPage, getReports } from "@/lib/microcms";
+import { getPage, getReports } from "@/lib/cms";
 import HomeClient, { type SlideView, type NewsView } from "./HomeClient";
 
 export const revalidate = 60;

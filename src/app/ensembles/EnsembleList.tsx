@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import type { Ensemble } from "@/lib/microcms";
+import type { Ensemble } from "@/lib/cms";
 
 export default function EnsembleList({ ensembles }: { ensembles: Ensemble[] }) {
   const { user, loading } = useAuth();

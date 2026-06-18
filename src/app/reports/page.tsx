@@ -1,4 +1,4 @@
-import { getReports } from "@/lib/microcms";
+import { getReports } from "@/lib/cms";
 import ReportsClient from "./ReportsClient";
 
 export const revalidate = 60;

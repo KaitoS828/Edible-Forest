@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { type Report } from "@/lib/microcms";
+import { type Report } from "@/lib/cms";
 
 const CATEGORY_COLORS: Record<string, string> = {
   "北海道・十勝":      "#4A7C59",

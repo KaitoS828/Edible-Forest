@@ -1,40 +1,33 @@
-import { getAllEnsembles } from "@/lib/firestore";
+import { getAllCmsReports } from "@/lib/firestore";
 
-function formatDate(value: unknown) {
-  if (!value) return "-";
-  if (typeof (value as { toDate?: unknown }).toDate === "function") {
-    return (value as { toDate: () => Date }).toDate().toLocaleDateString("ja-JP");
-  }
-  const date = new Date(String(value));
-  return Number.isNaN(date.getTime()) ? "-" : date.toLocaleDateString("ja-JP");
-}
-
-export default async function AdminEnsemblesPage() {
-  const ensembles = await getAllEnsembles();
-  const published = ensembles.filter((item) => item.status === "published").length;
-  const drafts = ensembles.length - published;
+export default async function AdminReportsPage() {
+  const reports = await getAllCmsReports();
+  const published = reports.filter((item) => item.status === "published").length;
 
   return (
     <div>
       <div className="mb-6 flex flex-col gap-3 border-b pb-5 md:flex-row md:items-end md:justify-between" style={{ borderColor: "#DCE3EA" }}>
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: "#64748B" }}>
-            Ensembles
+            Reports
           </p>
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
-            アンサンブル管理
+            活動レポート管理
           </h1>
           <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-            アンサンブル拠点の公開状態と掲載内容を管理します
+            microCMSを使わず、Firestore上の記事を作成・編集します
           </p>
         </div>
+        <a href="/admin/reports/new" className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white" style={{ backgroundColor: "#0F172A" }}>
+          新規作成
+        </a>
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {[
-          { label: "総数", value: ensembles.length, sub: "all" },
+          { label: "総数", value: reports.length, sub: "all" },
           { label: "公開中", value: published, sub: "published" },
-          { label: "下書き/非公開", value: drafts, sub: "draft" },
+          { label: "下書き", value: reports.length - published, sub: "draft" },
         ].map((item) => (
           <div key={item.label} className="rounded-md border bg-white p-4" style={{ borderColor: "#DCE3EA" }}>
             <p className="text-xs font-medium" style={{ color: "#64748B" }}>{item.label}</p>
@@ -46,53 +39,42 @@ export default async function AdminEnsemblesPage() {
 
       <div className="overflow-hidden rounded-md border bg-white" style={{ borderColor: "#DCE3EA" }}>
         <div className="border-b px-4 py-3" style={{ borderColor: "#E5EAF0" }}>
-          <h2 className="text-sm font-semibold" style={{ color: "#0F172A" }}>登録アンサンブル</h2>
+          <h2 className="text-sm font-semibold" style={{ color: "#0F172A" }}>登録レポート</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr style={{ backgroundColor: "#F8FAFC", borderBottom: "1px solid #E5EAF0" }}>
-                {["名称", "地域", "状態", "更新日", ""].map((h) => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: "#64748B" }}>
-                    {h}
-                  </th>
+                {["タイトル", "日付", "カテゴリ", "状態", ""].map((h) => (
+                  <th key={h} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: "#64748B" }}>{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {ensembles.map((item) => (
+              {reports.map((item) => (
                 <tr key={item.id} style={{ borderBottom: "1px solid #EEF2F6" }}>
                   <td className="px-4 py-3">
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 overflow-hidden rounded-md bg-slate-100">
-                        {item.img && <img src={item.img} alt="" className="h-full w-full object-cover" />}
-                      </div>
-                      <div>
-                        <p className="font-medium" style={{ color: "#0F172A" }}>{item.name}</p>
-                        <p className="text-xs" style={{ color: "#64748B" }}>{item.sub}</p>
-                      </div>
-                    </div>
+                    <p className="font-medium" style={{ color: "#0F172A" }}>{item.title}</p>
+                    <p className="text-xs" style={{ color: "#64748B" }}>{item.id}</p>
                   </td>
-                  <td className="px-4 py-3 text-xs" style={{ color: "#475569" }}>{item.region}</td>
+                  <td className="px-4 py-3 text-xs" style={{ color: "#475569" }}>{item.date}</td>
+                  <td className="px-4 py-3 text-xs" style={{ color: "#475569" }}>{item.category}</td>
                   <td className="px-4 py-3">
                     <span className="rounded px-2 py-1 text-xs font-medium" style={{ backgroundColor: item.status === "published" ? "#DCFCE7" : "#F1F5F9", color: item.status === "published" ? "#166534" : "#475569" }}>
                       {item.status}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs" style={{ color: "#64748B" }}>
-                    {formatDate(item.updatedAt)}
-                  </td>
                   <td className="px-4 py-3 text-right">
-                    <a href={`/admin/edit/${item.id}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>
+                    <a href={`/admin/reports/${item.id}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>
                       編集
                     </a>
                   </td>
                 </tr>
               ))}
-              {ensembles.length === 0 && (
+              {reports.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center text-sm" style={{ color: "#64748B" }}>
-                    アンサンブルはまだ登録されていません。
+                    Firestoreにはまだレポートがありません。新規作成してください。
                   </td>
                 </tr>
               )}

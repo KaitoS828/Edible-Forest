@@ -44,6 +44,7 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     capacity: getOptionalString(body, "capacity") ?? "",
     price: getOptionalString(body, "price") ?? "",
     access: getOptionalString(body, "access") ?? "",
+    bookingUrl: getOptionalString(body, "bookingUrl") ?? "",
     active: getOptionalBoolean(body, "active") ?? false,
     status,
     isOfficial: getOptionalBoolean(body, "isOfficial") ?? false,

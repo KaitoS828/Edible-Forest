@@ -1,5 +1,14 @@
 import { getAllEnsembles } from "@/lib/firestore";
 
+function formatDate(value: unknown) {
+  if (!value) return "-";
+  if (typeof (value as { toDate?: unknown }).toDate === "function") {
+    return (value as { toDate: () => Date }).toDate().toLocaleDateString("ja-JP");
+  }
+  const date = new Date(String(value));
+  return Number.isNaN(date.getTime()) ? "-" : date.toLocaleDateString("ja-JP");
+}
+
 export default async function AdminDashboard() {
   const ensembles = await getAllEnsembles();
   const published = ensembles.filter((item) => item.status === "published").length;
@@ -47,6 +56,8 @@ export default async function AdminDashboard() {
           { href: "/admin/members",    title: "会員管理", desc: "会員種別の変更・森の奥の付与" },
           { href: "/admin/ensembles", title: "アンサンブル管理", desc: "拠点コンテンツの公開・編集" },
           { href: "/admin/spots", title: "宿泊施設管理", desc: "宿泊施設ページの公開・編集" },
+          { href: "/admin/cms/pages", title: "固定ページCMS", desc: "トップ・コンセプトページの編集" },
+          { href: "/admin/reports", title: "活動レポート管理", desc: "記事の作成・公開・編集" },
           { href: "/admin/facilities", title: "施設審査", desc: "登録施設の承認・却下" },
         ].map(({ href, title, desc }) => (
           <a
@@ -99,7 +110,7 @@ export default async function AdminDashboard() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-xs" style={{ color: "#64748B" }}>
-                    {item.updatedAt ? item.updatedAt.toDate().toLocaleDateString("ja-JP") : "—"}
+                    {formatDate(item.updatedAt)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <a href={`/admin/edit/${item.id}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>

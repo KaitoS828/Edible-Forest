@@ -24,6 +24,7 @@ export default async function AdminSpotEditPage({ params }: PageProps) {
     capacity: doc.capacity ?? "",
     price: doc.price ?? "",
     access: doc.access ?? "",
+    bookingUrl: doc.bookingUrl ?? "",
     active: Boolean(doc.active),
     status: doc.status === "published" ? "published" : "draft",
     isOfficial: Boolean(doc.isOfficial),

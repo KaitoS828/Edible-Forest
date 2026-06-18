@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getPage } from "@/lib/microcms";
+import { getPage } from "@/lib/cms";
 
 export const metadata = {
   title: "食べられる森とは | アンサンブル倶楽部～食べられる森を目指して～",

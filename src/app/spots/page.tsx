@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getSpots } from "@/lib/microcms";
+import { getSpots } from "@/lib/cms";
 
 export const revalidate = 60;
 

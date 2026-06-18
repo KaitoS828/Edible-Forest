@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getEnsembles } from "@/lib/microcms";
+import { getEnsembles } from "@/lib/cms";
 import EnsembleList from "./EnsembleList";
 
 export const revalidate = 60;

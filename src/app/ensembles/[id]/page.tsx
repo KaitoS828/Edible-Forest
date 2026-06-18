@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getEnsemble, getEnsembles } from "@/lib/microcms";
+import { getEnsemble, getEnsembles } from "@/lib/cms";
 import { JoinButton } from "./JoinButton";
 
 export const revalidate = 60;

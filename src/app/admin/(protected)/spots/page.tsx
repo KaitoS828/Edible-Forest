@@ -1,5 +1,14 @@
 import { getAllSpots } from "@/lib/firestore";
 
+function formatDate(value: unknown) {
+  if (!value) return "-";
+  if (typeof (value as { toDate?: unknown }).toDate === "function") {
+    return (value as { toDate: () => Date }).toDate().toLocaleDateString("ja-JP");
+  }
+  const date = new Date(String(value));
+  return Number.isNaN(date.getTime()) ? "-" : date.toLocaleDateString("ja-JP");
+}
+
 export default async function AdminSpotsPage() {
   const spots = await getAllSpots();
   const published = spots.filter((item) => item.status === "published").length;
@@ -77,7 +86,7 @@ export default async function AdminSpotsPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3 text-xs" style={{ color: "#64748B" }}>
-                    {item.updatedAt ? item.updatedAt.toDate().toLocaleDateString("ja-JP") : "-"}
+                    {formatDate(item.updatedAt)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <a href={`/admin/spots/${item.id}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>

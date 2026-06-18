@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { cookies } from "next/headers";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getReport } from "@/lib/microcms";
+import { getReport } from "@/lib/cms";
 import { ReportInteractions } from "@/components/ReportInteractions";
 
 export const revalidate = 60;

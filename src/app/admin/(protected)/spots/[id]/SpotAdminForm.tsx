@@ -22,6 +22,7 @@ export type SpotAdminFormData = {
   capacity: string;
   price: string;
   access: string;
+  bookingUrl: string;
   active: boolean;
   status: "draft" | "published";
   isOfficial: boolean;
@@ -145,6 +146,9 @@ export default function SpotAdminForm({
           </Field>
           <Field label="アクセス" labelClass={labelClass}>
             <input className={inputClass} style={inputStyle} value={form.access} onChange={(e) => set("access", e.target.value)} />
+          </Field>
+          <Field label="予約URL" labelClass={labelClass}>
+            <input className={inputClass} style={inputStyle} value={form.bookingUrl} onChange={(e) => set("bookingUrl", e.target.value)} placeholder="https://..." />
           </Field>
           <Field label="定員" labelClass={labelClass}>
             <input className={inputClass} style={inputStyle} value={form.capacity} onChange={(e) => set("capacity", e.target.value)} />

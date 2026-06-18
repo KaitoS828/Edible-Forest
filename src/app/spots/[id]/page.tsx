@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getEnsemble, getSpots } from "@/lib/microcms";
+import { getEnsemble, getSpots } from "@/lib/cms";
 
 export const revalidate = 60;
 
