@@ -309,6 +309,14 @@ export async function getPublishedSpots(): Promise<SpotDoc[]> {
   });
 }
 
+export async function getAllSpots(): Promise<SpotDoc[]> {
+  const snap = await adminDb
+    .collection("spots")
+    .orderBy("createdAt", "desc")
+    .get();
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as SpotDoc);
+}
+
 export async function getMemberSpots(authorId: string): Promise<SpotDoc[]> {
   const snap = await adminDb
     .collection("spots")

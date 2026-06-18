@@ -1,38 +1,31 @@
-import { getAllEnsembles } from "@/lib/firestore";
+import { getAllSpots } from "@/lib/firestore";
 
-export default async function AdminDashboard() {
-  const ensembles = await getAllEnsembles();
-  const published = ensembles.filter((item) => item.status === "published").length;
-  const drafts = ensembles.filter((item) => item.status !== "published").length;
+export default async function AdminSpotsPage() {
+  const spots = await getAllSpots();
+  const published = spots.filter((item) => item.status === "published").length;
+  const active = spots.filter((item) => item.active).length;
 
   return (
     <div>
       <div className="mb-6 flex flex-col gap-3 border-b pb-5 md:flex-row md:items-end md:justify-between" style={{ borderColor: "#DCE3EA" }}>
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: "#64748B" }}>
-            Overview
+            Lodging
           </p>
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
-          ダッシュボード
+            宿泊施設管理
           </h1>
           <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-            会員・施設審査・公開コンテンツの状態を確認します
+            宿泊施設ページの公開状態・掲載情報を管理します
           </p>
         </div>
-        <a
-          href="/"
-          className="inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium"
-          style={{ backgroundColor: "#FFFFFF", borderColor: "#CBD5E1", color: "#334155" }}
-        >
-          サイトを開く
-        </a>
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {[
-          { label: "アンサンブル", value: ensembles.length, sub: "登録総数" },
+          { label: "総数", value: spots.length, sub: "all" },
           { label: "公開中", value: published, sub: "published" },
-          { label: "下書き/非公開", value: drafts, sub: "draft" },
+          { label: "有効", value: active, sub: "active" },
         ].map((item) => (
           <div key={item.label} className="rounded-md border bg-white p-4" style={{ borderColor: "#DCE3EA" }}>
             <p className="text-xs font-medium" style={{ color: "#64748B" }}>{item.label}</p>
@@ -42,36 +35,15 @@ export default async function AdminDashboard() {
         ))}
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {[
-          { href: "/admin/members",    title: "会員管理", desc: "会員種別の変更・森の奥の付与" },
-          { href: "/admin/ensembles", title: "アンサンブル管理", desc: "拠点コンテンツの公開・編集" },
-          { href: "/admin/spots", title: "宿泊施設管理", desc: "宿泊施設ページの公開・編集" },
-          { href: "/admin/facilities", title: "施設審査", desc: "登録施設の承認・却下" },
-        ].map(({ href, title, desc }) => (
-          <a
-            key={href}
-            href={href}
-            className="block rounded-md border bg-white p-4 transition-colors hover:bg-slate-50"
-            style={{ borderColor: "#DCE3EA" }}
-          >
-            <p className="mb-1 text-sm font-semibold" style={{ color: "#0F172A" }}>
-              {title}
-            </p>
-            <p className="text-xs" style={{ color: "#64748B" }}>{desc}</p>
-          </a>
-        ))}
-      </div>
-
       <div className="overflow-hidden rounded-md border bg-white" style={{ borderColor: "#DCE3EA" }}>
         <div className="border-b px-4 py-3" style={{ borderColor: "#E5EAF0" }}>
-          <h2 className="text-sm font-semibold" style={{ color: "#0F172A" }}>アンサンブル管理</h2>
+          <h2 className="text-sm font-semibold" style={{ color: "#0F172A" }}>登録宿泊施設</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr style={{ backgroundColor: "#F8FAFC", borderBottom: "1px solid #E5EAF0" }}>
-                {["名称", "地域", "状態", "更新日", ""].map((h) => (
+                {["施設名", "地域", "タイプ", "状態", "更新日", ""].map((h) => (
                   <th key={h} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: "#64748B" }}>
                     {h}
                   </th>
@@ -79,7 +51,7 @@ export default async function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {ensembles.map((item) => (
+              {spots.map((item) => (
                 <tr key={item.id} style={{ borderBottom: "1px solid #EEF2F6" }}>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
@@ -88,26 +60,39 @@ export default async function AdminDashboard() {
                       </div>
                       <div>
                         <p className="font-medium" style={{ color: "#0F172A" }}>{item.name}</p>
-                        <p className="text-xs" style={{ color: "#64748B" }}>{item.sub}</p>
+                        <p className="text-xs" style={{ color: "#64748B" }}>{item.authorName || "author unknown"}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-4 py-3 text-xs" style={{ color: "#475569" }}>{item.region}</td>
+                  <td className="px-4 py-3 text-xs" style={{ color: "#475569" }}>{item.forestType}</td>
                   <td className="px-4 py-3">
-                    <span className="rounded px-2 py-1 text-xs font-medium" style={{ backgroundColor: item.status === "published" ? "#DCFCE7" : "#F1F5F9", color: item.status === "published" ? "#166534" : "#475569" }}>
-                      {item.status}
-                    </span>
+                    <div className="flex flex-wrap gap-1">
+                      <span className="rounded px-2 py-1 text-xs font-medium" style={{ backgroundColor: item.status === "published" ? "#DCFCE7" : "#F1F5F9", color: item.status === "published" ? "#166534" : "#475569" }}>
+                        {item.status}
+                      </span>
+                      <span className="rounded px-2 py-1 text-xs font-medium" style={{ backgroundColor: item.active ? "#DBEAFE" : "#FEF3C7", color: item.active ? "#1D4ED8" : "#92400E" }}>
+                        {item.active ? "active" : "inactive"}
+                      </span>
+                    </div>
                   </td>
                   <td className="px-4 py-3 text-xs" style={{ color: "#64748B" }}>
-                    {item.updatedAt ? item.updatedAt.toDate().toLocaleDateString("ja-JP") : "—"}
+                    {item.updatedAt ? item.updatedAt.toDate().toLocaleDateString("ja-JP") : "-"}
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <a href={`/admin/edit/${item.id}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>
+                    <a href={`/admin/spots/${item.id}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>
                       編集
                     </a>
                   </td>
                 </tr>
               ))}
+              {spots.length === 0 && (
+                <tr>
+                  <td colSpan={6} className="px-4 py-8 text-center text-sm" style={{ color: "#64748B" }}>
+                    宿泊施設はまだ登録されていません。
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

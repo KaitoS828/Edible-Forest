@@ -17,42 +17,42 @@ export default async function MemberDetailPage({ params }: { params: Promise<{ u
   };
 
   return (
-    <div className="max-w-2xl">
+    <div className="max-w-3xl">
       <div className="mb-6">
-        <a href="/admin/members" className="text-xs hover:underline" style={{ color: "#3C6B4F" }}>
+        <a href="/admin/members" className="text-xs font-medium hover:underline" style={{ color: "#475569" }}>
           ← 会員一覧に戻る
         </a>
       </div>
 
-      <div className="bg-white rounded-2xl p-8 mb-6" style={{ border: "1px solid rgba(60,107,79,0.15)" }}>
+      <div className="mb-6 rounded-md border bg-white p-6" style={{ borderColor: "#DCE3EA" }}>
         {/* プロフィール */}
-        <div className="flex items-center gap-4 mb-8 pb-6" style={{ borderBottom: "1px solid rgba(60,107,79,0.1)" }}>
+        <div className="mb-6 flex items-center gap-4 border-b pb-5" style={{ borderColor: "#E5EAF0" }}>
           {serialized.photoURL ? (
-            <img src={serialized.photoURL} alt="" className="w-14 h-14 rounded-full object-cover" />
+            <img src={serialized.photoURL} alt="" className="h-12 w-12 rounded-md object-cover" />
           ) : (
-            <div className="w-14 h-14 rounded-full flex items-center justify-center text-xl font-bold text-white" style={{ backgroundColor: "#3C6B4F" }}>
+            <div className="flex h-12 w-12 items-center justify-center rounded-md text-lg font-semibold text-white" style={{ backgroundColor: "#334155" }}>
               {serialized.displayName?.charAt(0) ?? "?"}
             </div>
           )}
           <div>
-            <h1 className="text-xl font-bold" style={{ fontFamily: "'Noto Serif JP', serif", color: "#1A2B1E" }}>
+            <h1 className="text-xl font-semibold" style={{ color: "#0F172A" }}>
               {serialized.displayName || "名前未設定"}
             </h1>
-            <p className="text-sm mt-0.5" style={{ color: "#1A2B1E", opacity: 0.6 }}>{serialized.email}</p>
+            <p className="mt-0.5 text-sm" style={{ color: "#64748B" }}>{serialized.email}</p>
           </div>
         </div>
 
         {/* 情報グリッド */}
-        <div className="grid grid-cols-2 gap-3 mb-8">
+        <div className="mb-8 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {[
             { label: "UID",             value: serialized.uid },
             { label: "登録日",           value: serialized.createdAt ? new Date(serialized.createdAt).toLocaleDateString("ja-JP") : "—" },
             { label: "Stripeステータス", value: serialized.subscriptionStatus ?? "—" },
             { label: "プロフィール完了", value: serialized.profileCompleted ? "完了" : "未完了" },
           ].map(({ label, value }) => (
-            <div key={label} className="rounded-xl p-3" style={{ backgroundColor: "#F7FAF7" }}>
-              <p className="text-[11px] mb-1" style={{ color: "#1A2B1E", opacity: 0.5 }}>{label}</p>
-              <p className="text-xs font-medium break-all" style={{ color: "#1A2B1E" }}>{value}</p>
+            <div key={label} className="rounded-md border p-3" style={{ backgroundColor: "#F8FAFC", borderColor: "#E5EAF0" }}>
+              <p className="mb-1 text-[11px] font-medium" style={{ color: "#64748B" }}>{label}</p>
+              <p className="break-all text-xs font-medium" style={{ color: "#0F172A" }}>{value}</p>
             </div>
           ))}
         </div>

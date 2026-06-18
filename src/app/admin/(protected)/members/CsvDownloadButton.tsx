@@ -74,8 +74,8 @@ export function CsvDownloadButton({ users }: { users: UserRow[] }) {
     <button
       type="button"
       onClick={handleDownload}
-      className="inline-flex items-center gap-2 text-sm font-medium px-5 py-2.5 rounded-full text-white transition-opacity hover:opacity-90"
-      style={{ backgroundColor: "#3C6B4F" }}
+      className="inline-flex items-center gap-2 rounded-md border px-4 py-2 text-sm font-medium transition-colors hover:bg-slate-50"
+      style={{ backgroundColor: "#FFFFFF", borderColor: "#CBD5E1", color: "#334155" }}
     >
       <DownloadIcon />
       CSVエクスポート

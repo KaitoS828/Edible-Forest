@@ -15,8 +15,8 @@ type Facility = {
 
 const STATUS_BADGE: Record<FacilityStatus, { label: string; bg: string; color: string }> = {
   pending:  { label: "審査中", bg: "#FEF3C7", color: "#92400E" },
-  approved: { label: "承認済み", bg: "#D1FAE5", color: "#065F46" },
-  rejected: { label: "却下", bg: "#F3F4F6", color: "#6B7280" },
+  approved: { label: "承認済み", bg: "#DCFCE7", color: "#166534" },
+  rejected: { label: "却下", bg: "#F1F5F9", color: "#64748B" },
 };
 
 export default function FacilityRow({ facility, isLast }: { facility: Facility; isLast: boolean }) {
@@ -39,17 +39,17 @@ export default function FacilityRow({ facility, isLast }: { facility: Facility; 
   const badge = STATUS_BADGE[status];
 
   return (
-    <tr style={{ borderBottom: isLast ? "none" : "1px solid rgba(60,107,79,0.08)" }}>
+    <tr style={{ borderBottom: isLast ? "none" : "1px solid #EEF2F6" }}>
       <td className="px-5 py-3.5">
-        <span className="font-medium text-xs" style={{ color: "#1A2B1E" }}>{facility.name || "—"}</span>
+        <span className="text-xs font-medium" style={{ color: "#0F172A" }}>{facility.name || "—"}</span>
         {facility.region && (
-          <span className="block text-[11px]" style={{ color: "#1A2B1E", opacity: 0.5 }}>{facility.region}</span>
+          <span className="block text-[11px]" style={{ color: "#64748B" }}>{facility.region}</span>
         )}
       </td>
-      <td className="px-5 py-3.5 text-xs" style={{ color: "#1A2B1E", opacity: 0.7 }}>{facility.operatingBody || "—"}</td>
-      <td className="px-5 py-3.5 text-xs" style={{ color: "#1A2B1E", opacity: 0.7 }}>{facility.ownerName || "—"}</td>
+      <td className="px-5 py-3.5 text-xs" style={{ color: "#475569" }}>{facility.operatingBody || "—"}</td>
+      <td className="px-5 py-3.5 text-xs" style={{ color: "#475569" }}>{facility.ownerName || "—"}</td>
       <td className="px-5 py-3.5">
-        <span className="text-[11px] font-medium px-2.5 py-1 rounded-full" style={{ backgroundColor: badge.bg, color: badge.color }}>
+        <span className="rounded px-2.5 py-1 text-[11px] font-medium" style={{ backgroundColor: badge.bg, color: badge.color }}>
           {badge.label}
         </span>
       </td>
@@ -58,16 +58,16 @@ export default function FacilityRow({ facility, isLast }: { facility: Facility; 
           <button
             onClick={() => update("approved")}
             disabled={saving || status === "approved"}
-            className="text-xs font-medium px-3 py-1.5 rounded-full text-white transition-all disabled:opacity-40"
-            style={{ backgroundColor: "#3C6B4F" }}
+            className="rounded-md px-3 py-1.5 text-xs font-medium text-white transition-all disabled:opacity-40"
+            style={{ backgroundColor: "#166534" }}
           >
             承認
           </button>
           <button
             onClick={() => update("rejected")}
             disabled={saving || status === "rejected"}
-            className="text-xs font-medium px-3 py-1.5 rounded-full border transition-all disabled:opacity-40 hover:bg-[#F3F4F6]"
-            style={{ borderColor: "rgba(60,107,79,0.3)", color: "#1A2B1E" }}
+            className="rounded-md border px-3 py-1.5 text-xs font-medium transition-all hover:bg-slate-50 disabled:opacity-40"
+            style={{ borderColor: "#CBD5E1", color: "#334155" }}
           >
             却下
           </button>

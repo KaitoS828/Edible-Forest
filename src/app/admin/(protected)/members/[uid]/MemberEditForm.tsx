@@ -35,18 +35,18 @@ export default function MemberEditForm({ uid, currentType, currentNote }: Props)
 
   return (
     <div>
-      <h2 className="text-base font-bold mb-4" style={{ fontFamily: "'Noto Serif JP', serif", color: "#1A2B1E" }}>
+      <h2 className="mb-4 text-base font-semibold" style={{ color: "#0F172A" }}>
         会員種別・設定
       </h2>
 
-      <div className="grid grid-cols-1 gap-2 mb-6">
+      <div className="mb-6 grid grid-cols-1 gap-2">
         {MEMBER_TYPES.map((t) => (
           <label
             key={t.value}
-            className="flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-all"
+            className="flex cursor-pointer items-center gap-3 rounded-md p-3 transition-all"
             style={{
-              border: `1.5px solid ${memberType === t.value ? "#3C6B4F" : "rgba(60,107,79,0.15)"}`,
-              backgroundColor: memberType === t.value ? "#F0F6F2" : "white",
+              border: `1px solid ${memberType === t.value ? "#94A3B8" : "#DCE3EA"}`,
+              backgroundColor: memberType === t.value ? "#F8FAFC" : "white",
             }}
           >
             <input
@@ -55,18 +55,18 @@ export default function MemberEditForm({ uid, currentType, currentNote }: Props)
               value={t.value}
               checked={memberType === t.value}
               onChange={() => setMemberType(t.value)}
-              className="accent-[#3C6B4F]"
+              className="accent-slate-700"
             />
             <div>
-              <p className="text-sm font-medium" style={{ color: "#1A2B1E" }}>{t.label}</p>
-              <p className="text-xs" style={{ color: "#1A2B1E", opacity: 0.5 }}>{t.desc}</p>
+              <p className="text-sm font-medium" style={{ color: "#0F172A" }}>{t.label}</p>
+              <p className="text-xs" style={{ color: "#64748B" }}>{t.desc}</p>
             </div>
           </label>
         ))}
       </div>
 
       <div className="mb-6">
-        <label className="block text-xs font-medium mb-2" style={{ color: "#1A2B1E" }}>
+        <label className="mb-2 block text-xs font-medium" style={{ color: "#475569" }}>
           本部メモ（会員には表示されません）
         </label>
         <textarea
@@ -74,10 +74,10 @@ export default function MemberEditForm({ uid, currentType, currentNote }: Props)
           onChange={(e) => setNote(e.target.value)}
           rows={3}
           placeholder="備考・経緯などを記入..."
-          className="w-full px-4 py-3 rounded-xl text-sm outline-none resize-none"
-          style={{ border: "1.5px solid rgba(60,107,79,0.2)", backgroundColor: "white", color: "#1A2B1E" }}
-          onFocus={(e) => (e.currentTarget.style.borderColor = "#3C6B4F")}
-          onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(60,107,79,0.2)")}
+          className="w-full resize-none rounded-md px-3 py-2 text-sm outline-none"
+          style={{ border: "1px solid #CBD5E1", backgroundColor: "white", color: "#0F172A" }}
+          onFocus={(e) => (e.currentTarget.style.borderColor = "#64748B")}
+          onBlur={(e) => (e.currentTarget.style.borderColor = "#CBD5E1")}
         />
       </div>
 
@@ -85,12 +85,12 @@ export default function MemberEditForm({ uid, currentType, currentNote }: Props)
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-6 py-2.5 rounded-full text-sm font-medium text-white disabled:opacity-60"
-          style={{ backgroundColor: "#3C6B4F" }}
+          className="rounded-md px-4 py-2 text-sm font-medium text-white disabled:opacity-60"
+          style={{ backgroundColor: "#0F172A" }}
         >
           {saving ? "保存中..." : "保存する"}
         </button>
-        {saved && <span className="text-xs" style={{ color: "#3C6B4F" }}>✓ 保存しました</span>}
+        {saved && <span className="text-xs" style={{ color: "#166534" }}>保存しました</span>}
       </div>
     </div>
   );

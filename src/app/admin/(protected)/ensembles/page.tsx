@@ -1,36 +1,29 @@
 import { getAllEnsembles } from "@/lib/firestore";
 
-export default async function AdminDashboard() {
+export default async function AdminEnsemblesPage() {
   const ensembles = await getAllEnsembles();
   const published = ensembles.filter((item) => item.status === "published").length;
-  const drafts = ensembles.filter((item) => item.status !== "published").length;
+  const drafts = ensembles.length - published;
 
   return (
     <div>
       <div className="mb-6 flex flex-col gap-3 border-b pb-5 md:flex-row md:items-end md:justify-between" style={{ borderColor: "#DCE3EA" }}>
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: "#64748B" }}>
-            Overview
+            Ensembles
           </p>
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
-          ダッシュボード
+            アンサンブル管理
           </h1>
           <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-            会員・施設審査・公開コンテンツの状態を確認します
+            アンサンブル拠点の公開状態と掲載内容を管理します
           </p>
         </div>
-        <a
-          href="/"
-          className="inline-flex items-center justify-center rounded-md border px-3 py-2 text-sm font-medium"
-          style={{ backgroundColor: "#FFFFFF", borderColor: "#CBD5E1", color: "#334155" }}
-        >
-          サイトを開く
-        </a>
       </div>
 
       <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         {[
-          { label: "アンサンブル", value: ensembles.length, sub: "登録総数" },
+          { label: "総数", value: ensembles.length, sub: "all" },
           { label: "公開中", value: published, sub: "published" },
           { label: "下書き/非公開", value: drafts, sub: "draft" },
         ].map((item) => (
@@ -42,30 +35,9 @@ export default async function AdminDashboard() {
         ))}
       </div>
 
-      <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        {[
-          { href: "/admin/members",    title: "会員管理", desc: "会員種別の変更・森の奥の付与" },
-          { href: "/admin/ensembles", title: "アンサンブル管理", desc: "拠点コンテンツの公開・編集" },
-          { href: "/admin/spots", title: "宿泊施設管理", desc: "宿泊施設ページの公開・編集" },
-          { href: "/admin/facilities", title: "施設審査", desc: "登録施設の承認・却下" },
-        ].map(({ href, title, desc }) => (
-          <a
-            key={href}
-            href={href}
-            className="block rounded-md border bg-white p-4 transition-colors hover:bg-slate-50"
-            style={{ borderColor: "#DCE3EA" }}
-          >
-            <p className="mb-1 text-sm font-semibold" style={{ color: "#0F172A" }}>
-              {title}
-            </p>
-            <p className="text-xs" style={{ color: "#64748B" }}>{desc}</p>
-          </a>
-        ))}
-      </div>
-
       <div className="overflow-hidden rounded-md border bg-white" style={{ borderColor: "#DCE3EA" }}>
         <div className="border-b px-4 py-3" style={{ borderColor: "#E5EAF0" }}>
-          <h2 className="text-sm font-semibold" style={{ color: "#0F172A" }}>アンサンブル管理</h2>
+          <h2 className="text-sm font-semibold" style={{ color: "#0F172A" }}>登録アンサンブル</h2>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
@@ -99,7 +71,7 @@ export default async function AdminDashboard() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-xs" style={{ color: "#64748B" }}>
-                    {item.updatedAt ? item.updatedAt.toDate().toLocaleDateString("ja-JP") : "—"}
+                    {item.updatedAt ? item.updatedAt.toDate().toLocaleDateString("ja-JP") : "-"}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <a href={`/admin/edit/${item.id}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>
@@ -108,6 +80,13 @@ export default async function AdminDashboard() {
                   </td>
                 </tr>
               ))}
+              {ensembles.length === 0 && (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center text-sm" style={{ color: "#64748B" }}>
+                    アンサンブルはまだ登録されていません。
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

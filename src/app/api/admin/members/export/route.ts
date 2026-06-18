@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
-import { adminAuth } from "@/lib/firebase-admin";
+import { auth } from "@/auth";
 import { getAllUsers } from "@/lib/firestore";
 
 function esc(val: unknown): string {
@@ -18,15 +17,10 @@ const HEADERS = [
 ];
 
 export async function GET() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get("fb_session")?.value;
-  if (!session) return new NextResponse("Unauthorized", { status: 401 });
-
-  try {
-    const decoded = await adminAuth.verifySessionCookie(session, true);
-    if (!decoded.admin) return new NextResponse("Forbidden", { status: 403 });
-  } catch {
-    return new NextResponse("Unauthorized", { status: 401 });
+  const session = await auth();
+  if (!session?.user) return new NextResponse("Unauthorized", { status: 401 });
+  if (!(session.user as Record<string, unknown>).isAdmin) {
+    return new NextResponse("Forbidden", { status: 403 });
   }
 
   const users = await getAllUsers();

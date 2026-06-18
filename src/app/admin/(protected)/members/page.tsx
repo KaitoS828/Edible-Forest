@@ -5,8 +5,8 @@ import { CsvDownloadButton } from "./CsvDownloadButton";
 export const dynamic = "force-dynamic";
 
 const TYPE_COLOR: Record<MemberType, string> = {
-  participant: "#5A8D73",
-  organizer:   "#3C6B4F",
+  participant: "#2563EB",
+  organizer:   "#0F766E",
   inner:       "#7C3AED",
 };
 
@@ -37,12 +37,15 @@ export default async function MembersPage() {
   return (
     <div>
       {/* ページヘッダー */}
-      <div className="flex items-start justify-between gap-4 mb-8 flex-wrap">
+      <div className="mb-6 flex flex-wrap items-end justify-between gap-4 border-b pb-5" style={{ borderColor: "#DCE3EA" }}>
         <div>
-          <h1 className="text-2xl font-bold mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-[0.16em]" style={{ color: "#64748B" }}>
+            Members
+          </p>
+          <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
             会員管理
           </h1>
-          <p className="text-sm" style={{ color: "#1A2B1E", opacity: 0.6 }}>
+          <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
             全会員の一覧・種別管理・CSVエクスポート
           </p>
         </div>
@@ -70,7 +73,7 @@ export default async function MembersPage() {
       </div>
 
       {/* 統計カード */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
+      <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         {[
           { label: "総会員数",         value: stats.total,       color: "#1A2B1E" },
           { label: "参加会員",         value: stats.participant, color: TYPE_COLOR.participant },
@@ -78,24 +81,24 @@ export default async function MembersPage() {
           { label: "森の奥",           value: stats.inner,       color: TYPE_COLOR.inner },
           { label: "プロフィール完了",  value: stats.completed,   color: "#D97706" },
         ].map(({ label, value, color }) => (
-          <div key={label} className="bg-white rounded-2xl p-4" style={{ border: "1px solid rgba(60,107,79,0.15)" }}>
-            <p className="text-2xl font-bold mb-1" style={{ fontFamily: "'Noto Serif JP', serif", color }}>{value}</p>
-            <p className="text-xs" style={{ color: "#1A2B1E", opacity: 0.55 }}>{label}</p>
+          <div key={label} className="rounded-md border bg-white p-4" style={{ borderColor: "#DCE3EA" }}>
+            <p className="text-xs font-medium" style={{ color: "#64748B" }}>{label}</p>
+            <p className="mt-2 text-2xl font-semibold tabular-nums" style={{ color }}>{value}</p>
           </div>
         ))}
       </div>
 
       {/* 会員テーブル */}
-      <div className="bg-white rounded-2xl overflow-hidden" style={{ border: "1px solid rgba(60,107,79,0.15)" }}>
+      <div className="overflow-hidden rounded-md border bg-white" style={{ borderColor: "#DCE3EA" }}>
         <div className="overflow-x-auto">
           <table className="w-full text-sm" style={{ minWidth: "1100px" }}>
             <thead>
-              <tr style={{ backgroundColor: "#F7FAF7", borderBottom: "1px solid rgba(60,107,79,0.15)" }}>
+              <tr style={{ backgroundColor: "#F8FAFC", borderBottom: "1px solid #E5EAF0" }}>
                 {[
                   "名前", "ログインメール", "連絡メール", "電話番号",
                   "住所", "会員種別", "紹介者", "完了", "登録日", "",
                 ].map((h) => (
-                  <th key={h} className="text-left px-4 py-3 text-xs font-semibold whitespace-nowrap" style={{ color: "#1A2B1E", opacity: 0.55 }}>
+                  <th key={h} className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide" style={{ color: "#64748B" }}>
                     {h}
                   </th>
                 ))}
@@ -116,10 +119,7 @@ export default async function MembersPage() {
                 const isLast = i === users.length - 1;
 
                 return (
-                  <tr
-                    key={user.uid}
-                    style={{ borderBottom: isLast ? "none" : "1px solid rgba(60,107,79,0.08)" }}
-                  >
+                  <tr key={user.uid} style={{ borderBottom: isLast ? "none" : "1px solid #EEF2F6" }}>
                     {/* 名前 */}
                     <td className="px-4 py-3.5">
                       <div className="flex items-center gap-2">
@@ -131,13 +131,13 @@ export default async function MembersPage() {
                           </div>
                         )}
                         <div className="min-w-0">
-                          <p className="text-xs font-medium whitespace-nowrap" style={{ color: "#1A2B1E" }}>
+                            <p className="whitespace-nowrap text-xs font-medium" style={{ color: "#0F172A" }}>
                             {user.lastName && user.firstName
                               ? `${user.lastName} ${user.firstName}`
                               : fmt(user.displayName)}
                           </p>
                           {user.lastNameKana && (
-                            <p className="text-[10px]" style={{ color: "#1A2B1E", opacity: 0.45 }}>
+                            <p className="text-[10px]" style={{ color: "#64748B" }}>
                               {user.lastNameKana} {user.firstNameKana}
                             </p>
                           )}
@@ -146,22 +146,22 @@ export default async function MembersPage() {
                     </td>
 
                     {/* ログインメール */}
-                    <td className="px-4 py-3.5 text-xs whitespace-nowrap" style={{ color: "#1A2B1E", opacity: 0.7 }}>
+                    <td className="whitespace-nowrap px-4 py-3.5 text-xs" style={{ color: "#475569" }}>
                       {fmt(user.email)}
                     </td>
 
                     {/* 連絡メール */}
-                    <td className="px-4 py-3.5 text-xs whitespace-nowrap" style={{ color: "#1A2B1E", opacity: 0.7 }}>
+                    <td className="whitespace-nowrap px-4 py-3.5 text-xs" style={{ color: "#475569" }}>
                       {fmt(user.contactEmail)}
                     </td>
 
                     {/* 電話番号 */}
-                    <td className="px-4 py-3.5 text-xs whitespace-nowrap" style={{ color: "#1A2B1E", opacity: 0.7 }}>
+                    <td className="whitespace-nowrap px-4 py-3.5 text-xs" style={{ color: "#475569" }}>
                       {fmt(user.phone)}
                     </td>
 
                     {/* 住所 */}
-                    <td className="px-4 py-3.5 text-xs" style={{ color: "#1A2B1E", opacity: 0.7, maxWidth: "180px" }}>
+                    <td className="px-4 py-3.5 text-xs" style={{ color: "#475569", maxWidth: "180px" }}>
                       <span className="block truncate" title={user.address ?? ""}>
                         {fmt(user.address)}
                       </span>
@@ -169,27 +169,27 @@ export default async function MembersPage() {
 
                     {/* 会員種別 */}
                     <td className="px-4 py-3.5">
-                      <span className="text-[11px] font-medium px-2.5 py-1 rounded-full text-white whitespace-nowrap" style={{ backgroundColor: color }}>
+                      <span className="whitespace-nowrap rounded px-2.5 py-1 text-[11px] font-medium text-white" style={{ backgroundColor: color }}>
                         {label}
                       </span>
                     </td>
 
                     {/* 紹介者 */}
-                    <td className="px-4 py-3.5 text-xs" style={{ color: "#1A2B1E", opacity: 0.7 }}>
+                    <td className="px-4 py-3.5 text-xs" style={{ color: "#475569" }}>
                       {fmt(user.referrer)}
                     </td>
 
                     {/* プロフィール完了 */}
                     <td className="px-4 py-3.5 text-center">
                       {user.profileCompleted ? (
-                        <span className="text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: "#D1FAE5", color: "#065F46" }}>完了</span>
+                        <span className="rounded px-2 py-0.5 text-[11px] font-medium" style={{ backgroundColor: "#DCFCE7", color: "#166534" }}>完了</span>
                       ) : (
-                        <span className="text-[11px] font-medium px-2 py-0.5 rounded-full" style={{ backgroundColor: "#FEF3C7", color: "#92400E" }}>未完了</span>
+                        <span className="rounded px-2 py-0.5 text-[11px] font-medium" style={{ backgroundColor: "#FEF3C7", color: "#92400E" }}>未完了</span>
                       )}
                     </td>
 
                     {/* 登録日 */}
-                    <td className="px-4 py-3.5 text-xs whitespace-nowrap" style={{ color: "#1A2B1E", opacity: 0.5 }}>
+                    <td className="whitespace-nowrap px-4 py-3.5 text-xs" style={{ color: "#64748B" }}>
                       {fmtDate(user.createdAt)}
                     </td>
 
@@ -197,8 +197,8 @@ export default async function MembersPage() {
                     <td className="px-4 py-3.5 text-right">
                       <a
                         href={`/admin/members/${user.uid}`}
-                        className="text-xs font-medium px-4 py-1.5 rounded-full border transition-all hover:bg-[#3C6B4F] hover:text-white hover:border-[#3C6B4F] whitespace-nowrap"
-                        style={{ borderColor: "rgba(60,107,79,0.3)", color: "#3C6B4F" }}
+                        className="whitespace-nowrap rounded-md border px-3 py-1.5 text-xs font-medium transition-colors hover:bg-slate-50"
+                        style={{ borderColor: "#CBD5E1", color: "#334155" }}
                       >
                         管理
                       </a>
@@ -212,7 +212,7 @@ export default async function MembersPage() {
 
         {/* フッター */}
         {users.length > 0 && (
-          <div className="px-5 py-3 text-xs text-right" style={{ color: "#1A2B1E", opacity: 0.4, borderTop: "1px solid rgba(60,107,79,0.08)" }}>
+          <div className="px-5 py-3 text-right text-xs" style={{ color: "#64748B", borderTop: "1px solid #EEF2F6" }}>
             {users.length} 件
           </div>
         )}

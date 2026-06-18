@@ -1,102 +1,140 @@
 "use client";
 
 import { useState } from "react";
-import { useAuth } from "@/contexts/AuthContext";
 import { usePathname } from "next/navigation";
+import { signOut } from "next-auth/react";
 
-const NAV = [
-  { href: "/admin/members",    label: "会員管理" },
-  { href: "/admin/facilities", label: "施設審査" },
-  { href: "/",                 label: "サイトを見る" },
+const NAV_ITEMS = [
+  { href: "/admin", label: "ダッシュボード", icon: "▦" },
+  { href: "/admin/members", label: "会員管理", icon: "◉" },
+  { href: "/admin/ensembles", label: "アンサンブル管理", icon: "▤" },
+  { href: "/admin/spots", label: "宿泊施設管理", icon: "⌂" },
+  { href: "/admin/facilities", label: "施設審査", icon: "□" },
 ];
 
+function activePath(pathname: string, href: string) {
+  if (href === "/admin") return pathname === "/admin";
+  return pathname.startsWith(href);
+}
+
+function NavLinks({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+  return (
+    <nav className="space-y-1" aria-label="管理メニュー">
+      {NAV_ITEMS.map((item) => {
+        const active = activePath(pathname, item.href);
+        return (
+          <a
+            key={item.href}
+            href={item.href}
+            onClick={onNavigate}
+            className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors"
+            style={{
+              backgroundColor: active ? "#E8EEF5" : "transparent",
+              border: active ? "1px solid #D7DEE8" : "1px solid transparent",
+              color: active ? "#0F172A" : "#475569",
+            }}
+          >
+            <span className="inline-flex h-5 w-5 items-center justify-center text-xs" aria-hidden="true">
+              {item.icon}
+            </span>
+            {item.label}
+          </a>
+        );
+      })}
+    </nav>
+  );
+}
+
 export function AdminHeader() {
-  const { signOut } = useAuth();
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 h-14 border-b"
-      style={{ backgroundColor: "rgba(255,255,255,0.97)", backdropFilter: "blur(8px)", borderColor: "rgba(0,95,2,0.15)" }}
-    >
-      <div className="max-w-[1200px] mx-auto px-5 lg:px-10 h-full flex items-center justify-between">
+    <>
+      <aside
+        className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r md:flex md:flex-col"
+        style={{ backgroundColor: "#FFFFFF", borderColor: "#DCE3EA" }}
+      >
+        <div className="flex h-16 items-center border-b px-5" style={{ borderColor: "#E5EAF0" }}>
+          <a href="/admin" className="min-w-0">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em]" style={{ color: "#64748B" }}>
+              Admin Console
+            </p>
+            <p className="truncate text-base font-semibold" style={{ color: "#0F172A" }}>
+              食べられる森
+            </p>
+          </a>
+        </div>
 
-        {/* 左：管理画面ラベル */}
-        <a href="/admin" className="flex items-center gap-2">
-          <span
-            className="text-sm font-bold px-3 py-1 rounded-full"
-            style={{ backgroundColor: "#3C6B4F", color: "white" }}
+        <div className="flex-1 overflow-y-auto px-3 py-4">
+          <NavLinks pathname={pathname} />
+        </div>
+
+        <div className="border-t p-3" style={{ borderColor: "#E5EAF0" }}>
+          <a
+            href="/"
+            className="mb-2 flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-slate-100"
+            style={{ color: "#475569" }}
           >
-            管理画面
-          </span>
-        </a>
-
-        {/* 右：デスクトップナビ */}
-        <div className="hidden md:flex items-center gap-5">
-          {NAV.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="text-xs font-medium transition-colors hover:text-[#3C6B4F]"
-              style={{ color: pathname.startsWith(item.href) && item.href !== "/" ? "#3C6B4F" : "#1A2B1E" }}
-            >
-              {item.label}
-            </a>
-          ))}
+            <span className="inline-flex h-5 w-5 items-center justify-center text-xs" aria-hidden="true">
+              ↗
+            </span>
+            サイトを見る
+          </a>
           <button
             type="button"
-            onClick={signOut}
-            className="text-xs px-4 py-1.5 rounded-full border transition-all hover:bg-[#3C6B4F] hover:text-white hover:border-[#3C6B4F]"
-            style={{ borderColor: "rgba(0,95,2,0.15)", color: "#1A2B1E" }}
+            onClick={() => signOut({ callbackUrl: "/admin/login" })}
+            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-left text-sm font-medium transition-colors hover:bg-slate-100"
+            style={{ color: "#B42318" }}
           >
+            <span className="inline-flex h-5 w-5 items-center justify-center text-xs" aria-hidden="true">
+              ⌁
+            </span>
             ログアウト
           </button>
         </div>
+      </aside>
 
-        {/* 右：モバイル ハンバーガー */}
+      <header
+        className="sticky top-0 z-40 flex h-14 items-center justify-between border-b px-4 md:hidden"
+        style={{ backgroundColor: "#FFFFFF", borderColor: "#DCE3EA" }}
+      >
+        <a href="/admin">
+          <p className="text-sm font-semibold" style={{ color: "#0F172A" }}>Admin Console</p>
+        </a>
         <button
           type="button"
-          className="md:hidden flex flex-col justify-center gap-1.5 p-2"
           onClick={() => setOpen((v) => !v)}
-          aria-label="メニュー"
+          className="rounded-md border px-3 py-1.5 text-sm font-medium"
+          style={{ borderColor: "#CBD5E1", color: "#0F172A" }}
+          aria-label="管理メニュー"
           aria-expanded={open}
         >
-          <span className={`block w-5 h-0.5 bg-[#3C6B4F] transition-all ${open ? "rotate-45 translate-y-2" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-[#3C6B4F] transition-all ${open ? "opacity-0" : ""}`} />
-          <span className={`block w-5 h-0.5 bg-[#3C6B4F] transition-all ${open ? "-rotate-45 -translate-y-2" : ""}`} />
+          Menu
         </button>
-      </div>
+      </header>
 
-      {/* モバイルドロップダウン */}
       {open && (
         <div
-          className="md:hidden absolute top-14 left-0 right-0 border-b shadow-sm"
-          style={{ backgroundColor: "#FFFFFF", borderColor: "rgba(0,95,2,0.1)" }}
+          className="fixed inset-x-0 top-14 z-50 border-b p-3 shadow-sm md:hidden"
+          style={{ backgroundColor: "#FFFFFF", borderColor: "#DCE3EA" }}
         >
-          <div className="max-w-[1200px] mx-auto px-5 py-3 flex flex-col gap-1">
-            {NAV.map((item) => (
-              <a
-                key={item.href}
-                href={item.href}
-                onClick={() => setOpen(false)}
-                className="py-3 text-sm font-medium border-b last:border-none transition-colors hover:text-[#3C6B4F]"
-                style={{ color: "#1A2B1E", borderColor: "rgba(0,95,2,0.08)" }}
-              >
-                {item.label}
-              </a>
-            ))}
+          <NavLinks pathname={pathname} onNavigate={() => setOpen(false)} />
+          <div className="mt-3 border-t pt-3" style={{ borderColor: "#E5EAF0" }}>
+            <a href="/" className="block rounded-md px-3 py-2 text-sm font-medium" style={{ color: "#475569" }}>
+              サイトを見る
+            </a>
             <button
               type="button"
-              onClick={signOut}
-              className="py-3 text-sm font-medium text-left transition-colors hover:text-[#3C6B4F]"
-              style={{ color: "#1A2B1E" }}
+              onClick={() => signOut({ callbackUrl: "/admin/login" })}
+              className="block w-full rounded-md px-3 py-2 text-left text-sm font-medium"
+              style={{ color: "#B42318" }}
             >
               ログアウト
             </button>
           </div>
         </div>
       )}
-    </header>
+    </>
   );
 }
