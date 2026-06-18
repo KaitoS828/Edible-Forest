@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
@@ -21,7 +21,39 @@ export default function ProfileSetupPage() {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [loadingProfile, setLoadingProfile] = useState(true);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    fetch("/api/member/profile")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data && data.lastName) {
+          setProfile({
+            registeredAs: data.memberType === "organizer" ? "organizer" : "participant",
+            lastName: data.lastName ?? "",
+            firstName: data.firstName ?? "",
+            lastNameKana: data.lastNameKana ?? "",
+            firstNameKana: data.firstNameKana ?? "",
+            noKana: !data.lastNameKana && !data.firstNameKana,
+            country: data.country || "日本",
+            address: data.address ?? "",
+            contactEmail: data.contactEmail ?? "",
+            sameAsLogin: false,
+            phone: data.phone ?? "",
+            interests: Array.isArray(data.interests) ? data.interests : [],
+            occupation: data.occupation ?? "",
+            comment: data.comment ?? "",
+            referrer: data.referrer ?? "",
+            operatingBodyName: data.operatingBodyName ?? "",
+            facilities: [{ name: "", address: "", region: "" }],
+          });
+          if (data.avatarUrl) setAvatarUrl(data.avatarUrl);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setLoadingProfile(false));
+  }, []);
 
   // アバター画像をFirebase Storageにアップロード
   const handleFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -68,6 +100,7 @@ export default function ProfileSetupPage() {
           interests: profile.interests,
           occupation: profile.occupation,
           comment: profile.comment,
+          referrer: profile.referrer,
           operatingBodyName: profile.registeredAs === "organizer" ? profile.operatingBodyName : "",
           facilities: profile.registeredAs === "organizer" ? profile.facilities : [],
         }),
@@ -102,6 +135,10 @@ export default function ProfileSetupPage() {
               </p>
             </div>
 
+            {loadingProfile ? (
+              <div className="text-center py-16 text-sm" style={{ color: "#3C6B4F" }}>読み込み中...</div>
+            ) : (
+            <>
             {error && (
               <p className="text-sm text-center mb-4 py-2 px-3 rounded-xl bg-red-50 text-red-600">{error}</p>
             )}
@@ -145,6 +182,8 @@ export default function ProfileSetupPage() {
                 {saving ? "保存中..." : "プロフィールを保存してはじめる"}
               </button>
             </form>
+            </>
+            )}
           </div>
         </section>
       </main>

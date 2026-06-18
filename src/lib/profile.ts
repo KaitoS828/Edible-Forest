@@ -15,6 +15,7 @@ export type ProfilePayload = {
   interests?: string[];
   occupation?: string;
   comment?: string;
+  referrer?: string;
   operatingBodyName?: string;
   facilities?: { name?: string; address?: string; region?: string }[];
 };
@@ -31,6 +32,7 @@ const STRING_FIELDS = [
   "phone",
   "occupation",
   "comment",
+  "referrer",
   "operatingBodyName",
 ] as const;
 

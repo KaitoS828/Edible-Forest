@@ -1,75 +1,96 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 
-interface Props {
-  displayName: string;
-  email: string;
-  uid: string;
-}
+const NAV = [
+  { href: "/member/dashboard", label: "マイページ" },
+  { href: "/events", label: "イベント" },
+  { href: "/spots", label: "スポット" },
+];
 
-export default function MemberNav({ displayName, email }: Props) {
+export default function MemberNav() {
   const { signOut } = useAuth();
+  const pathname = usePathname();
 
   return (
     <header
       className="sticky top-0 z-50 border-b"
-      style={{ backgroundColor: "white", borderColor: "rgba(0,95,2,0.15)" }}
+      style={{ backgroundColor: "#FFFFFF", borderColor: "rgba(0,95,2,0.12)" }}
     >
-      <div className="max-w-5xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 h-[72px] flex items-center gap-4 sm:gap-6">
+
         {/* ロゴ */}
-        <a href="/" className="flex items-center gap-2">
+        <a href="/" className="flex-shrink-0 flex flex-col leading-tight">
           <span
-            className="text-sm font-bold"
+            className="text-base font-bold tracking-wide"
             style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
           >
-            食べられる森 アンサンブル倶楽部
+            食べられる森
+          </span>
+          <span className="text-[11px]" style={{ color: "#1A2B1E", opacity: 0.6 }}>
+            アンサンブル倶楽部
           </span>
         </a>
 
-        {/* ナビ */}
-        <nav className="flex items-center gap-4">
+        {/* 区切り */}
+        <div className="hidden sm:block h-6 w-px flex-shrink-0" style={{ backgroundColor: "rgba(60,107,79,0.2)" }} />
+
+        {/* メインナビ */}
+        <nav className="hidden sm:flex items-end gap-5 flex-1 h-full">
+          {NAV.map((item) => {
+            const active = pathname.startsWith(item.href);
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                className="flex flex-col justify-center h-full text-sm transition-opacity hover:opacity-70"
+                style={{
+                  color: active ? "#3C6B4F" : "#555555",
+                  fontWeight: active ? 700 : 500,
+                  borderBottom: active ? "2px solid #3C6B4F" : "2px solid transparent",
+                  marginBottom: "-1px",
+                }}
+              >
+                {item.label}
+              </a>
+            );
+          })}
+        </nav>
+
+        {/* ユーザーエリア */}
+        <div className="flex items-center gap-2 sm:gap-3 ml-auto">
+
+          {/* プロフィール編集ボタン */}
           <a
-            href="/member/dashboard"
-            className="text-xs font-medium hover:opacity-70 transition-opacity"
-            style={{ color: "#555555" }}
+            href="/member/setup"
+            className="hidden sm:inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full border transition-all hover:opacity-70"
+            style={{ borderColor: "rgba(60,107,79,0.3)", color: "#3C6B4F" }}
           >
-            マイページ
-          </a>
-          <a
-            href="/member/new"
-            className="text-xs font-medium px-4 py-1.5 rounded-full text-white hover:opacity-90 transition-opacity"
-            style={{ backgroundColor: "#3C6B4F" }}
-          >
-            + 新規投稿
+            <PencilIcon />
+            プロフィール編集
           </a>
 
-          {/* ユーザーメニュー */}
-          <div className="flex items-center gap-2">
-            <div
-              className="w-7 h-7 rounded-full flex items-center justify-center text-white text-xs font-bold"
-              style={{ backgroundColor: "#3C6B4F" }}
-            >
-              {displayName.charAt(0).toUpperCase()}
-            </div>
-            <div className="hidden sm:block">
-              <p className="text-xs font-medium" style={{ color: "#3C6B4F" }}>
-                {displayName}
-              </p>
-              <p className="text-[10px]" style={{ color: "#1A2B1E" }}>
-                {email}
-              </p>
-            </div>
-            <button
-              onClick={signOut}
-              className="ml-2 text-xs hover:opacity-70 transition-opacity"
-              style={{ color: "#1A2B1E" }}
-            >
-              ログアウト
-            </button>
-          </div>
-        </nav>
+          {/* ログアウト */}
+          <button
+            type="button"
+            onClick={signOut}
+            className="text-xs px-3 py-1.5 rounded-full border transition-opacity hover:opacity-70"
+            style={{ borderColor: "rgba(0,0,0,0.12)", color: "#777777" }}
+          >
+            ログアウト
+          </button>
+        </div>
       </div>
     </header>
+  );
+}
+
+function PencilIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+    </svg>
   );
 }

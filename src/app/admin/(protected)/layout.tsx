@@ -1,83 +1,32 @@
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth, signOut } from "@/auth";
-import { Logo } from "@/components/Logo";
+import { adminAuth } from "@/lib/firebase-admin";
+import { AdminHeader } from "../AdminHeader";
 
 export default async function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
-  if (!session) redirect("/admin/login");
+  const cookieStore = await cookies();
+  const session = cookieStore.get("fb_session")?.value;
+
+  if (!session) {
+    redirect("/login?callbackUrl=/admin");
+  }
+
+  try {
+    const decoded = await adminAuth.verifySessionCookie(session, true);
+    if (!decoded.admin) {
+      redirect("/?error=no_admin_permission");
+    }
+  } catch {
+    redirect("/login?callbackUrl=/admin");
+  }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF" }}>
-      {/* 管理ヘッダー */}
-      <header
-        className="fixed top-0 left-0 right-0 z-50 border-b h-14"
-        style={{
-          backgroundColor: "rgba(255,255,255,0.97)",
-          backdropFilter: "blur(8px)",
-          borderColor: "rgba(0,95,2,0.15)",
-        }}
-      >
-        <div className="max-w-[1200px] mx-auto px-5 lg:px-10 h-full flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <a href="/admin">
-              <Logo size="sm" />
-            </a>
-            <span
-              className="text-xs font-medium px-3 py-1 rounded-full"
-              style={{ backgroundColor: "#3C6B4F", color: "white" }}
-            >
-              管理画面
-            </span>
-          </div>
-
-          <div className="flex items-center gap-4">
-            <span className="hidden md:block text-xs" style={{ color: "#1A2B1E" }}>
-              {session.user?.email}
-            </span>
-            <a
-              href="/admin/members"
-              className="text-xs transition-colors hover:text-[#3C6B4F]"
-              style={{ color: "#1A2B1E" }}
-            >
-              会員管理
-            </a>
-            <a
-              href="/admin/facilities"
-              className="text-xs transition-colors hover:text-[#3C6B4F]"
-              style={{ color: "#1A2B1E" }}
-            >
-              施設審査
-            </a>
-            <a
-              href="/"
-              className="text-xs transition-colors hover:text-[#3C6B4F]"
-              style={{ color: "#1A2B1E" }}
-            >
-              サイトを見る
-            </a>
-            <form
-              action={async () => {
-                "use server";
-                await signOut({ redirectTo: "/admin/login" });
-              }}
-            >
-              <button
-                type="submit"
-                className="text-xs px-4 py-1.5 rounded-full border transition-all hover:bg-[#3C6B4F] hover:text-white"
-                style={{ borderColor: "rgba(0,95,2,0.15)", color: "#1A2B1E" }}
-              >
-                ログアウト
-              </button>
-            </form>
-          </div>
-        </div>
-      </header>
-
-      {/* メインコンテンツ */}
+      <AdminHeader />
       <main className="pt-14 max-w-[1200px] mx-auto px-5 lg:px-10 py-10">
         {children}
       </main>

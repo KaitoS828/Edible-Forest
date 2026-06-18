@@ -30,14 +30,17 @@ export async function POST(req: NextRequest) {
     const profileCompleted = existing?.profileCompleted ?? false;
     const displayName = decoded.name ?? decoded.email?.split("@")[0] ?? "メンバー";
 
-    // 基本情報の upsert（memberType はプロフィール確定時に設定するため、ここでは入れない）
+    // 基本情報の upsert
+    // 新規は既定で「参加会員」。開催会員はこの後の applyProfile が organizer で上書きする。
+    // 既存で種別未設定のアカウントも参加会員にバックフィル（旧データ/種別未選択のGoogleログイン対策）。
     await upsertUser(decoded.uid, {
       uid:         decoded.uid,
       email:       decoded.email ?? "",
       displayName,
       photoURL:    decoded.picture ?? "",
       role:        "member",
-      ...(!existing ? { profileCompleted: false } : {}),
+      ...(!existing ? { profileCompleted: false, memberType: "participant" as const } : {}),
+      ...(existing && !existing.memberType ? { memberType: "participant" as const } : {}),
     });
 
     // 新規登録（メール/パスワード）でプロフィールが同時に送られてきた場合は確定処理

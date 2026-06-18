@@ -4,6 +4,18 @@ import { adminAuth } from "@/lib/firebase-admin";
 import { upsertUser, getUser, createFacility } from "@/lib/firestore";
 import { applyProfile, type ProfilePayload } from "@/lib/profile";
 
+export async function GET() {
+  try {
+    const cookieStore = await cookies();
+    const session = cookieStore.get("fb_session")?.value ?? "";
+    const decoded = await adminAuth.verifySessionCookie(session, true);
+    const user = await getUser(decoded.uid);
+    return NextResponse.json(user ?? {});
+  } catch {
+    return NextResponse.json({}, { status: 401 });
+  }
+}
+
 export async function PATCH(req: NextRequest) {
   try {
     const cookieStore = await cookies();

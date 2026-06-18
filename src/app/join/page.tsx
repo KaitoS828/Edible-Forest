@@ -69,6 +69,7 @@ export default function JoinPage() {
             interests: profile.interests,
             occupation: profile.occupation,
             comment: profile.comment,
+            referrer: profile.referrer,
             operatingBodyName: profile.registeredAs === "organizer" ? profile.operatingBodyName : "",
             facilities: profile.registeredAs === "organizer" ? profile.facilities : [],
           },

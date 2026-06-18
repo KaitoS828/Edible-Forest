@@ -15,21 +15,15 @@ export default async function ManagedLayout({
     redirect("/login?callbackUrl=/member/dashboard");
   }
 
-  let displayName = "";
-  let email = "";
-  let uid = "";
   try {
-    const decoded = await adminAuth.verifySessionCookie(sessionCookie, true);
-    uid = decoded.uid;
-    displayName = decoded.name ?? decoded.email?.split("@")[0] ?? "メンバー";
-    email = decoded.email ?? "";
+    await adminAuth.verifySessionCookie(sessionCookie, true);
   } catch {
     redirect("/login?callbackUrl=/member/dashboard");
   }
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: "#FFFFFF" }}>
-      <MemberNav displayName={displayName} email={email} uid={uid} />
+      <MemberNav />
       <main className="max-w-5xl mx-auto px-4 py-8">{children}</main>
     </div>
   );

@@ -4,7 +4,13 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 /** Googleで続けるボタン。成功時に遷移先（プロフィール未設定なら /member/setup）へ移動 */
-export function GoogleButton({ callbackUrl = "/member/dashboard" }: { callbackUrl?: string }) {
+export function GoogleButton({
+  callbackUrl = "/member/dashboard",
+  label = "Googleで続ける",
+}: {
+  callbackUrl?: string;
+  label?: string;
+}) {
   const { signInWithGoogle } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -37,7 +43,7 @@ export function GoogleButton({ callbackUrl = "/member/dashboard" }: { callbackUr
         style={{ backgroundColor: "#FFFFFF", color: "#1A2B1E", border: "1px solid rgba(60,107,79,0.3)" }}
       >
         <GoogleLogo />
-        {loading ? "接続中..." : "Googleで続ける"}
+        {loading ? "接続中..." : label}
       </button>
       {error && (
         <p className="text-xs mt-2 text-center" style={{ color: "#ef4444" }}>{error}</p>

@@ -19,6 +19,7 @@ export type ProfileFormState = {
   interests: string[];
   occupation: string;
   comment: string;
+  referrer: string;
   operatingBodyName: string;
   facilities: FacilityInput[];
 };
@@ -38,6 +39,7 @@ export const emptyProfileForm: ProfileFormState = {
   interests: [],
   occupation: "",
   comment: "",
+  referrer: "",
   operatingBodyName: "",
   facilities: [{ name: "", address: "", region: "" }],
 };
@@ -194,6 +196,13 @@ export function MemberProfileFields({ form, setForm, loginEmail }: Props) {
         )}
         <Field label="電話番号（任意・携帯推奨）">
           <input type="tel" value={form.phone} onChange={(e) => set("phone", e.target.value)} placeholder="090-0000-0000" className={ic} />
+        </Field>
+      </FormSection>
+
+      {/* 紹介者 */}
+      <FormSection title="紹介者">
+        <Field label="紹介者のお名前">
+          <input value={form.referrer} onChange={(e) => set("referrer", e.target.value)} placeholder="紹介してくれた方のお名前（任意）" className={ic} />
         </Field>
       </FormSection>
 

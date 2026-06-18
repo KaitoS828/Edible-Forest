@@ -671,3 +671,184 @@ stripe trigger checkout.session.completed
 ```bash
 gsutil cors set cors.json gs://your-project.firebasestorage.app
 ```
+
+---
+
+## 2026-06-18 現在の実装状況
+
+この章は、既存READMEの追補です。会員サイト化の実装が進んだため、現在のコードベースで動いている主要機能と、古い説明との差分をまとめています。
+
+### 現在のプロジェクト概要
+
+本プロジェクトは、食べられる森アンサンブル倶楽部の公開サイト兼会員サイトです。公開ページはmicroCMSを中心に表示し、会員登録・ログイン・イベント参加・開催会員によるイベント作成・施設審査・管理者向け会員管理までをNext.js App Router上で扱います。
+
+主な役割は次の通りです。
+
+| 領域 | 現在の実装 |
+|---|---|
+| 公開サイト | トップ、コンセプト、アンサンブル、宿泊拠点、活動レポート、イベント一覧 |
+| CMS | microCMSの`pages`、`ensembles`、`reports`を参照。未設定時は安全に空値/フォールバック |
+| 会員認証 | Firebase Authのメール/パスワード + Googleログイン、`fb_session` Cookie |
+| 会員種別 | `participant`、`organizer`、`inner` の3種別。管理者はNextAuth側の別軸 |
+| イベント | Firestore `events` に保存。開催会員以上が作成、会員は参加可能 |
+| 施設 | 開催会員が登録し、管理者が `pending / approved / rejected` を審査 |
+| 管理 | NextAuth保護の管理画面。会員一覧、会員CSV、施設審査 |
+| メルマガ | Benchmark Email新API + Firestore `mailSubscribers` に記録 |
+| 決済 | Stripe Checkout/Webhook の既存実装あり |
+
+### 現在のサイト構成
+
+```text
+/                         トップ。CMSスライド + 更新履歴 + ForestTypes + アンサンブル参加導線
+/concept                  コンセプト。microCMS pages の concept を反映
+/ensembles                アンサンブル一覧。microCMS ensembles type=ensemble
+/ensembles/[id]           アンサンブル詳細。microCMS詳細 + 参加導線
+/spots                    宿泊拠点一覧。microCMS ensembles type=spot
+/spots/[id]               宿泊拠点詳細。予約URLまたは問い合わせ導線
+/reports                  活動レポート一覧。microCMS reports
+/reports/[id]             レポート詳細。未ログインはティーザー + ログインゲート
+/events                   Firestore events の公開イベント一覧
+/events/[id]              イベント詳細。参加済み判定、会員限定ゲート、参加API連携
+/join                     会員登録。プロフィール項目、施設登録、メルマガ任意購読
+/login                    メール/パスワード + Googleログイン
+/signup                   登録ページ互換ルート
+/member                   会員トップ
+/member/dashboard         会員ダッシュボード。プロフィール、権限別導線、イベント履歴
+/member/setup             初回/再編集プロフィール
+/member/new-event         開催会員以上のイベント作成
+/admin                    管理ダッシュボード
+/admin/members            会員一覧、CSVエクスポート
+/admin/facilities         開催会員が登録した施設の審査
+```
+
+### 会員種別と権限
+
+会員種別は `src/lib/access.ts` に集約されています。
+
+| 種別 | 表示名 | 主な権限 |
+|---|---|---|
+| `participant` | 参加会員 | イベント参加 |
+| `organizer` | 開催会員 | イベント参加、イベント作成、施設登録 |
+| `inner` | 森の奥 | 開催会員権限 + 他メンバー閲覧 |
+
+`inner` は自己登録では選べず、管理側で付与する想定です。管理者はNextAuth + Firebase Custom Claim `admin: true` の別系統で扱います。
+
+### 会員登録・プロフィール
+
+登録フォームは `MemberProfileFields` を使い、次の項目を扱います。
+
+- 会員種別: 参加会員 / 開催会員
+- 姓名、フリガナ、外国人向けフリガナ省略
+- 居住国、住所
+- 連絡用メール、ログインメールと同じチェック
+- 電話番号、紹介者
+- 興味分野の複数選択
+- 職業、コメント
+- 開催会員のみ: 運営母体名、宿泊施設名、施設住所、地域
+
+プロフィール保存は `src/lib/profile.ts` の `applyProfile()` でサニタイズします。開催会員が施設を入力した場合は、`facilities` コレクションに `pending` 状態で作成し、管理画面で承認します。
+
+### イベント機能
+
+イベントは Firestore `events` コレクションに保存されます。
+
+主な項目:
+
+- `organizerId`, `organizerName`
+- `organizerFacilityId`, `organizerBodyName`
+- `title`, `summary`
+- `startAt`, `endAt`
+- `venueFacilityId`
+- `format`: `onsite / online / both`
+- `image`
+- `terms`
+- `memberOnly`
+- `status`: `draft / published`
+- `participants`
+
+開催会員以上は `/member/new-event` からイベントを作成できます。会場は承認済みの自施設から選択します。イベント規約はブラウザのlocalStorageにテンプレートとして保存/読込できます。
+
+参加は `/api/member/event/[id]/join` で行い、`participants` にUIDを追加します。会員限定イベントは未ログイン時に登録/ログイン導線へ誘導します。
+
+### 施設審査
+
+開催会員が登録した施設は Firestore `facilities` に保存されます。
+
+```text
+facilities/{id}
+  ownerId
+  ownerName
+  name
+  operatingBody
+  region
+  address
+  status: pending | approved | rejected
+  createdAt
+  updatedAt
+```
+
+管理画面 `/admin/facilities` で施設を確認し、`/api/admin/facilities/[id]` からステータスを更新します。イベント会場として選べるのは、承認済みの自施設のみです。
+
+### メルマガ連携
+
+Benchmark Emailは旧APIではなく、新REST APIを使います。
+
+```text
+Base URL: BENCHMARK_API_BASE
+Auth: X-API-Key: BENCHMARK_API_KEY
+POST: /api/contact
+```
+
+アプリ側の入口は `/api/newsletter` です。Benchmark連携に成功した場合は `mailSubscribers/{email}` を `subscribed`、未設定や失敗時は `pending` として保存します。会員登録時のメルマガ購読チェックはデフォルトONですが、購読失敗で登録フローは止めません。
+
+追加の環境変数:
+
+```env
+BENCHMARK_API_BASE=
+BENCHMARK_API_KEY=
+BENCHMARK_LIST_ID=
+BENCHMARK_CONTACT_STRUCTURE_ID=
+BENCHMARK_FIELD_FIRSTNAME_ID=
+BENCHMARK_FIELD_LASTNAME_ID=
+```
+
+### microCMS連携
+
+`src/lib/microcms.ts` がmicroCMSの境界です。
+
+| microCMS API | 用途 |
+|---|---|
+| `pages` | トップ、コンセプトなどページ文言 |
+| `ensembles` | `type=ensemble` でアンサンブル、`type=spot` で宿泊拠点 |
+| `reports` | 活動レポート |
+
+`/api/revalidate` はmicroCMS Webhook用のOn-Demand ISRエンドポイントです。現在はWebhook secret検証がTODOのため、本番公開前に `?secret=` または署名検証を追加してください。
+
+### 管理画面
+
+管理画面はNextAuthで保護されています。
+
+- `/admin`: 管理トップ
+- `/admin/members`: 会員一覧、種別・プロフィール状況確認、CSVエクスポート
+- `/admin/facilities`: 開催会員が登録した施設の審査
+- `/admin/edit/[id]`: 既存のアンサンブル編集
+
+会員CSVには、氏名、フリガナ、ログインメール、連絡メール、電話番号、住所、会員種別、職業、興味分野、コメント、紹介者、団体名、プロフィール完了、登録日が含まれます。
+
+### 主要API追補
+
+| メソッド | パス | 認証 | 説明 |
+|---|---|---|---|
+| POST | `/api/newsletter` | 不要 | Benchmarkメルマガ登録 + Firestore保存 |
+| POST | `/api/revalidate` | 現状なし | microCMS更新後のISR再生成 |
+| POST | `/api/member/event` | `fb_session` | 開催会員以上のイベント作成 |
+| POST | `/api/member/event/[id]/join` | `fb_session` | イベント参加 |
+| PATCH | `/api/admin/facilities/[id]` | Admin Session | 施設審査ステータス更新 |
+| GET | `/api/admin/members/export` | Admin Cookie | 会員CSVダウンロード |
+
+### 注意点
+
+- README本文の一部には、旧仕様の `free / member / supporter / organizer / staff` や、トップページにLC/活動レポートセクションがある前提の説明が残っています。現コードの会員種別は `participant / organizer / inner` です。
+- `/api/revalidate` は本番前にsecret検証を追加してください。
+- Benchmark APIキーなどのシークレットは `.env.local` とVercel環境変数で管理し、ログやREADMEに実値を書かないでください。
+- GitHub URL: https://github.com/KaitoS828/Edible-Forest

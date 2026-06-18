@@ -74,7 +74,7 @@ export function Header() {
                     ログイン
                   </a>
                   <a
-                    href="/join"
+                    href="/signup"
                     className="text-sm font-bold px-5 py-2.5 rounded-full text-white transition-opacity hover:opacity-90"
                     style={{ backgroundColor: "#3C6B4F" }}
                   >
@@ -149,7 +149,7 @@ export function Header() {
                     ログイン
                   </a>
                   <a
-                    href="/join"
+                    href="/signup"
                     onClick={closeAll}
                     className="flex-1 text-center px-4 py-3 rounded-full text-sm font-bold text-white"
                     style={{ backgroundColor: "#3C6B4F" }}

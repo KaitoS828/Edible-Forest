@@ -38,6 +38,7 @@ export type UserDoc = {
   interests?: string[];       // 興味分野（複数）
   occupation?: string;        // 職業
   comment?: string;           // コメント（自己紹介）
+  referrer?: string;          // 紹介者
   operatingBodyName?: string; // 登録施設の運営母体名（開催会員）
   facilityIds?: string[];     // 登録した宿泊施設ID
   fieldUpdatedAt?: Record<string, number>; // 各項目の最終更新日（unix ms）
@@ -107,8 +108,13 @@ export async function upsertUser(uid: string, data: Partial<UserDoc>) {
 }
 
 export async function getAllUsers(): Promise<UserDoc[]> {
-  const snap = await adminDb.collection("users").orderBy("createdAt", "desc").get();
-  return snap.docs.map((d) => ({ uid: d.id, ...d.data() }) as UserDoc);
+  const snap = await adminDb.collection("users").get();
+  const docs = snap.docs.map((d) => ({ uid: d.id, ...d.data() }) as UserDoc);
+  return docs.sort((a, b) => {
+    const aMs = typeof a.createdAt?.toMillis === "function" ? a.createdAt.toMillis() : 0;
+    const bMs = typeof b.createdAt?.toMillis === "function" ? b.createdAt.toMillis() : 0;
+    return bMs - aMs;
+  });
 }
 
 export async function updateUserMemberType(

@@ -242,7 +242,7 @@ function LoginForm() {
 
             <p className="text-center text-xs mt-6" style={{ color: "#1A2B1E" }}>
               アカウントをお持ちでない方は{" "}
-              <a href="/join" className="underline font-medium transition-opacity hover:opacity-70" style={{ color: "#3C6B4F" }}>
+              <a href="/signup" className="underline font-medium transition-opacity hover:opacity-70" style={{ color: "#3C6B4F" }}>
                 無料登録
               </a>
             </p>
