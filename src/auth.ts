@@ -2,6 +2,8 @@ import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { adminAuth } from "@/lib/firebase-admin";
 
+const ADMIN_SESSION_MAX_AGE_SECONDS = 60 * 60 * 8;
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Credentials({
@@ -37,7 +39,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   pages: { signIn: "/admin/login" },
-  session: { strategy: "jwt" },
+  session: {
+    strategy: "jwt",
+    maxAge: ADMIN_SESSION_MAX_AGE_SECONDS,
+  },
+  jwt: {
+    maxAge: ADMIN_SESSION_MAX_AGE_SECONDS,
+  },
   callbacks: {
     async jwt({ token, user }) {
       if (user) token.isAdmin = true;

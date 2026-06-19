@@ -1,6 +1,5 @@
 import { StaticDocPage } from "@/components/StaticDocPage";
-import { getPage } from "@/lib/cms";
-import { LEGAL_DEFAULTS } from "@/data/legalContent";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const metadata = {
   title: "利用規約 | アンサンブル倶楽部～食べられる森を目指して～",
@@ -8,12 +7,10 @@ export const metadata = {
 
 export const revalidate = 60;
 
-export default async function TermsPage() {
-  const page = await getPage("terms").catch(() => null);
-  return (
-    <StaticDocPage
-      title={page?.heroTitle || LEGAL_DEFAULTS.terms.title}
-      bodyHtml={page?.body || LEGAL_DEFAULTS.terms.body}
-    />
-  );
+export default async function TermsPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+  const { lang } = await searchParams;
+  const locale = lang === "en" ? "en" : "ja";
+  const settings = await getSiteSettings(locale).catch(() => null);
+  const doc = settings?.legal.terms;
+  return <StaticDocPage title={doc?.title || "利用規約"} bodyHtml={doc?.body || ""} />;
 }

@@ -3,6 +3,8 @@
 import { useActionState } from "react";
 import { loginWithCredentials } from "@/actions/auth";
 
+const ADMIN_ACTIVITY_STORAGE_KEY = "admin:lastActivityAt";
+
 export default function CredentialsForm() {
   const [error, action, isPending] = useActionState(loginWithCredentials, null);
 
@@ -15,7 +17,13 @@ export default function CredentialsForm() {
   };
 
   return (
-    <form action={action} className="flex flex-col gap-4">
+    <form
+      action={action}
+      className="flex flex-col gap-4"
+      onSubmit={() => {
+        window.localStorage.setItem(ADMIN_ACTIVITY_STORAGE_KEY, String(Date.now()));
+      }}
+    >
       <div>
         <label
           htmlFor="email"

@@ -14,6 +14,7 @@ export default async function AdminLoginPage({
 
   const params = searchParams ? await searchParams : {};
   const noPermission = params.error === "no_admin_permission";
+  const sessionTimeout = params.error === "session_timeout";
 
   return (
     <main className="min-h-screen bg-[#F5F7FA] text-[#111827]">
@@ -51,6 +52,11 @@ export default async function AdminLoginPage({
               {noPermission && (
                 <p className="mb-4 rounded-md border px-3 py-2 text-xs" style={{ backgroundColor: "#FEF2F2", borderColor: "#FECACA", color: "#B42318" }}>
                   このアカウントには管理権限がありません。
+                </p>
+              )}
+              {sessionTimeout && (
+                <p className="mb-4 rounded-md border px-3 py-2 text-xs" style={{ backgroundColor: "#FFFBEB", borderColor: "#FDE68A", color: "#92400E" }}>
+                  一定時間操作がなかったためログアウトしました。もう一度ログインしてください。
                 </p>
               )}
 

@@ -1,4 +1,6 @@
-import { getNews, getPageByLocale, getReports } from "@/lib/cms";
+import { getNews, getReports } from "@/lib/cms";
+import { getSiteSettings } from "@/lib/site-settings";
+import { SITE_SETTINGS_DEFAULT, SITE_SETTINGS_EN_DEFAULT } from "@/data/siteSettings";
 import HomeClient, { type SlideView, type NewsView } from "./HomeClient";
 
 export const revalidate = 60;
@@ -6,20 +8,20 @@ export const revalidate = 60;
 export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   const { lang } = await searchParams;
   const locale = lang === "en" ? "en" : "ja";
-  const [top, newsItems, reports] = await Promise.all([
-    getPageByLocale("top", locale).catch(() => null),
+  const [settings, newsItems, reports] = await Promise.all([
+    getSiteSettings(locale).catch(() => (locale === "en" ? SITE_SETTINGS_EN_DEFAULT : SITE_SETTINGS_DEFAULT)),
     getNews(locale).catch(() => []),
     getReports(locale).catch(() => []),
   ]);
 
-  // Hero スライド：CMS の pages.top.slides があればそれ、無ければ HomeClient のデフォルト
-  const slides: SlideView[] | undefined = top?.slides?.length
-    ? top.slides.map((s) => ({
-        img: s.image?.url ?? "",
-        label: s.label ?? "",
-        title: s.title ?? "",
-        link: s.link ?? "/",
-        linkLabel: s.linkLabel ?? "詳しくみる",
+  // Hero スライド：サイト設定の home.slides（未設定時は HomeClient のデフォルト）
+  const slides: SlideView[] | undefined = settings.home.slides?.length
+    ? settings.home.slides.map((s) => ({
+        img: s.img,
+        label: s.label,
+        title: s.title,
+        link: s.link || "/",
+        linkLabel: s.linkLabel || "詳しくみる",
       }))
     : undefined;
 
@@ -40,18 +42,19 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
       }))
       : undefined;
 
-  const concept =
-    top?.conceptTag || top?.conceptTitle || top?.conceptLinkLabel
-      ? { tag: top?.conceptTag, title: top?.conceptTitle, linkLabel: top?.conceptLinkLabel }
-      : undefined;
+  const concept = {
+    tag: settings.home.conceptTag,
+    title: settings.home.conceptTitle,
+    linkLabel: settings.home.conceptLinkLabel,
+  };
 
   return (
     <HomeClient
       slides={slides}
       news={news}
       concept={concept}
-      forestSectionTitle={top?.forestSectionTitle}
-      ensembleSectionTitle={top?.ensembleSectionTitle}
+      forestSectionTitle={settings.home.forestSectionTitle}
+      ensembleSectionTitle={settings.home.ensembleSectionTitle}
     />
   );
 }

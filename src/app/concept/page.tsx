@@ -1,6 +1,5 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getPageByLocale } from "@/lib/cms";
 import { getSiteSettings } from "@/lib/site-settings";
 import type { SiteLocale } from "@/data/siteSettings";
 
@@ -10,23 +9,14 @@ export const metadata = {
 
 export const revalidate = 60;
 
-// CMS 未設定／空のときのフォールバック本文
-const BODY_DEFAULT = `<p>食べられる森とは、産業が生まれる以前から続く「食べていくための森」のことです。効率よく何かを大量生産する畑や養殖場とは違い、自然界の仕組みのなかで、人が暮らし、食べていける環境そのものを指します。</p><p>たとえば昆布漁。海で昆布を一生懸命に育てている人は、昆布だけを見ているわけではありません。魚や貝、ほかの海藻が共に育つ海の生態系を整えている——つまり「海の森」を育てているのです。</p><p>エビの養殖だけがうまくいけばいいと考え、まわりの海が死んでいくような営みは、食べられる森にはなりません。隣にあるものと一緒に豊かになっていく。それが、食べられる森の本来の姿です。</p><p>私たちは、各地の暮らしをこの同じ切り口で捉え直しています。地域だけで完結させるのではなく、海の森も、砂丘の森も、都市の小さな庭も、同じ「食べられる森」として並べて発信していく。そうすることで、これまでとは違う旅の形、人やものの移動が生まれてくると考えています。</p>`;
-
 export default async function ConceptPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   const { lang } = await searchParams;
   const locale: SiteLocale = lang === "en" ? "en" : "ja";
-  const [page, settings] = await Promise.all([
-    getPageByLocale("concept", locale).catch(() => null),
-    getSiteSettings(locale).catch(() => null),
-  ]);
+  const settings = await getSiteSettings(locale).catch(() => null);
 
-  const title = page?.heroTitle || "食べられる森とは";
-  const bodyHtml = page?.body || BODY_DEFAULT;
   const conceptSettings = settings?.concept;
-  const galleryImages = (page?.slides ?? [])
-    .map((s) => s.image)
-    .filter((img): img is NonNullable<typeof img> => Boolean(img));
+  const title = conceptSettings?.title || "食べられる森とは";
+  const bodyHtml = conceptSettings?.body || "";
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -46,20 +36,6 @@ export default async function ConceptPage({ searchParams }: { searchParams: Prom
               style={{ color: "#1A2B1E" }}
               dangerouslySetInnerHTML={{ __html: bodyHtml }}
             />
-
-            {galleryImages.length > 0 && (
-              <div className="mt-10 grid grid-cols-2 gap-3">
-                {galleryImages.map((img, i) => (
-                  <div
-                    key={i}
-                    className="overflow-hidden rounded-2xl"
-                    style={{ height: i === 0 && galleryImages.length > 1 ? "280px" : "200px", gridColumn: i === 0 && galleryImages.length > 1 ? "1 / -1" : undefined }}
-                  >
-                    <img src={img.url} alt="" className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-                  </div>
-                ))}
-              </div>
-            )}
 
             <h2 className="text-2xl md:text-3xl font-bold mt-14 mb-8" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
               さまざまな食べられる森

@@ -1,6 +1,5 @@
 import { StaticDocPage } from "@/components/StaticDocPage";
-import { getPage } from "@/lib/cms";
-import { LEGAL_DEFAULTS } from "@/data/legalContent";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const metadata = {
   title: "プライバシーポリシー | アンサンブル倶楽部～食べられる森を目指して～",
@@ -8,12 +7,10 @@ export const metadata = {
 
 export const revalidate = 60;
 
-export default async function PrivacyPage() {
-  const page = await getPage("privacy").catch(() => null);
-  return (
-    <StaticDocPage
-      title={page?.heroTitle || LEGAL_DEFAULTS.privacy.title}
-      bodyHtml={page?.body || LEGAL_DEFAULTS.privacy.body}
-    />
-  );
+export default async function PrivacyPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+  const { lang } = await searchParams;
+  const locale = lang === "en" ? "en" : "ja";
+  const settings = await getSiteSettings(locale).catch(() => null);
+  const doc = settings?.legal.privacy;
+  return <StaticDocPage title={doc?.title || "プライバシーポリシー"} bodyHtml={doc?.body || ""} />;
 }
