@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 import type {
   ConceptCardSetting,
   ExternalLinkSetting,
@@ -388,7 +389,7 @@ export default function SiteSettingsForm({ initialData, locale = "ja" }: { initi
               <div className="grid gap-3 md:grid-cols-2">
                 <Field label="小見出し"><TextInput value={item.sub} onChange={(e) => set(index, "sub", e.target.value)} /></Field>
                 <Field label="タイトル"><TextInput value={item.label} onChange={(e) => set(index, "label", e.target.value)} /></Field>
-                <Field label="画像URL"><TextInput value={item.img} onChange={(e) => set(index, "img", e.target.value)} /></Field>
+                <ImageUpload label="画像" value={item.img} onChange={(url) => set(index, "img", url)} />
                 <Field label="リンク先"><TextInput value={item.href} onChange={(e) => set(index, "href", e.target.value)} /></Field>
               </div>
             )}

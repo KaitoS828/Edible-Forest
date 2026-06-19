@@ -37,13 +37,13 @@ export default async function AdminNewsEditPage({ params, searchParams }: PagePr
         newsId={id}
         locale={locale}
         initialData={{
-          title: t?.title ?? news.title ?? "",
+          title: locale === "en" ? (t?.title ?? "") : (news.title ?? ""),
           date: t?.date ?? news.date ?? "",
-          label: t?.label ?? news.label ?? "",
+          label: locale === "en" ? (t?.label ?? news.label ?? "") : (news.label ?? ""),
           href: t?.href ?? news.href ?? "",
-          category: t?.category ?? news.category ?? "ニュース",
+          category: locale === "en" ? (t?.category ?? "News") : (news.category ?? "ニュース"),
           imageUrl: t?.image?.url ?? news.image?.url ?? "",
-          body: t?.body ?? news.body ?? "",
+          body: locale === "en" ? (t?.body ?? "") : (news.body ?? ""),
           status: news.status === "published" ? "published" : "draft",
           active: news.active !== false,
         }}

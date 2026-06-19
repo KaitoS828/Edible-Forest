@@ -236,6 +236,71 @@ export const SITE_SETTINGS_EN_DEFAULT: SiteSettings = {
       { label: "Terms", href: "/terms?lang=en" },
       { label: "Company", href: "/company?lang=en" },
     ],
+    copyright: "© 2024 Edible Forest Ensemble Club",
+  },
+  home: {
+    forestTypes: [
+      { emoji: "🌊", label: "Sea Forests", href: "/spots?type=sea&lang=en" },
+      { emoji: "🌵", label: "Dune Forests", href: "/spots?type=dune&lang=en" },
+      { emoji: "🏙️", label: "Urban Forests", href: "/spots?type=urban&lang=en" },
+      { emoji: "🐄", label: "Pasture Forests", href: "/spots?type=farm&lang=en" },
+    ],
+    ensembleCategories: [
+      {
+        sub: "With Agriculture",
+        label: "Join the Work",
+        img: "https://images.unsplash.com/photo-1464226184884-fa280b87c399?w=400&q=80",
+        href: "/join?type=farm&lang=en",
+      },
+      {
+        sub: "With Nature",
+        label: "Care for Living Landscapes",
+        img: "https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=80",
+        href: "/join?type=nature&lang=en",
+      },
+      {
+        sub: "With Many Bodies",
+        label: "Gather, Touch, and Taste",
+        img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=400&q=80",
+        href: "/join?type=gather&lang=en",
+      },
+      {
+        sub: "With Places",
+        label: "Make Use of Space and Ecology",
+        img: "https://images.unsplash.com/photo-1448630360428-65456885c650?w=400&q=80",
+        href: "/join?type=space&lang=en",
+      },
+    ],
+    ensembleActions: [
+      {
+        emoji: "🌿",
+        title: "Join an Ensemble",
+        desc: "Take part in programs hosted by edible forests across Japan. Start from a region that speaks to you.",
+        href: "/join?lang=en",
+      },
+      {
+        emoji: "🎪",
+        title: "Host an Ensemble",
+        desc: "For people who want to organize local programs. We can help shape the first plan together.",
+        href: "/contact?type=ensemble&lang=en",
+      },
+      {
+        emoji: "🏡",
+        title: "Register a Place",
+        desc: "For hosts who want to register or make use of lodging, gardens, farms, or local bases.",
+        href: "/contact?type=spot&lang=en",
+      },
+    ],
+  },
+  concept: {
+    examples: [
+      { emoji: "🌊", title: "Sea Forests", desc: "Growing kelp can also mean cultivating a sea forest: a living ecosystem where fish, shellfish, and seaweed thrive together." },
+      { emoji: "🏜️", title: "Dune Forests", desc: "Even sandy landscapes that seem empty can hold edible plants, local knowledge, and ways of living with the land." },
+      { emoji: "🏙️", title: "Urban Forests", desc: "Rooftops, alleys, small gardens, and shared yards can all become small edible forests within the city." },
+      { emoji: "🐄", title: "Pasture Forests", desc: "Raising animals can also be part of a local cycle. Behind every pasture is a landscape that supports life and food." },
+    ],
+    ctaLabel: "Explore Edible Forests",
+    ctaHref: "/ensembles?lang=en",
   },
   pages: {
     ensembles: {

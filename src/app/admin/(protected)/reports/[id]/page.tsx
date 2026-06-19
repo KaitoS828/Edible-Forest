@@ -37,11 +37,11 @@ export default async function AdminReportEditPage({ params, searchParams }: Page
         reportId={id}
         locale={locale}
         initialData={{
-          title: t?.title ?? report.title ?? "",
+          title: locale === "en" ? (t?.title ?? "") : (report.title ?? ""),
           date: t?.date ?? report.date ?? "",
-          category: t?.category ?? report.category ?? "",
+          category: locale === "en" ? (t?.category ?? "Report") : (report.category ?? ""),
           imageUrl: t?.image?.url ?? report.image?.url ?? "",
-          body: t?.body ?? report.body ?? "",
+          body: locale === "en" ? (t?.body ?? "") : (report.body ?? ""),
           status: report.status === "published" ? "published" : "draft",
           active: report.active !== false,
         }}

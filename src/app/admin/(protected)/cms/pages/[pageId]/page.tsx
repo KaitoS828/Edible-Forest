@@ -12,8 +12,8 @@ export default async function AdminCmsPageEdit({ params, searchParams }: PagePro
   const { lang } = await searchParams;
   const locale = lang === "en" ? "en" : "ja";
   const page = await getCmsPage(pageId);
-  const localeData = locale === "en" ? { ...page, ...page?.translations?.en } : page;
-  const initialData = buildPageInitialData(pageId, localeData ?? undefined);
+  const localeData = locale === "en" ? page?.translations?.en : page;
+  const initialData = buildPageInitialData(pageId, localeData ?? undefined, locale);
 
   return (
     <div>

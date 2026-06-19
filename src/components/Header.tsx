@@ -1,5 +1,6 @@
 "use client";
 import { useState, useCallback } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Logo } from "./Logo";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSiteSettings } from "@/hooks/useSiteSettings";
@@ -7,7 +8,6 @@ import { SITE_SETTINGS_DEFAULT, type ExternalLinkSetting, type LanguageLinkSetti
 
 const NOTE_URL = "https://note.com/exergy_foresters";
 const HEADER_BG = "#285C53";
-const HEADER_ACCENT = "#B8D95D";
 
 const EXTERNAL_LINKS_FALLBACK: ExternalLinkSetting[] = [
   { label: "note", href: NOTE_URL, icon: "note" },
@@ -16,8 +16,8 @@ const EXTERNAL_LINKS_FALLBACK: ExternalLinkSetting[] = [
 ];
 
 const LANGUAGE_LINKS_FALLBACK: LanguageLinkSetting[] = [
-  { label: "日本語", shortLabel: "JP", active: true },
-  { label: "English", shortLabel: "EN" },
+  { label: "日本語", shortLabel: "JP", href: "/?lang=ja", active: true },
+  { label: "English", shortLabel: "EN", href: "/?lang=en" },
 ];
 
 function NoteIcon() {
@@ -93,12 +93,9 @@ function LanguageMenu({ links }: { links: LanguageLinkSetting[] }) {
     <div className="relative group hidden sm:block">
       <button
         type="button"
-        className="inline-flex items-center gap-2 px-2 py-1 text-sm font-medium text-white/90 transition-colors group-hover:text-white"
+        className="inline-flex items-center gap-1.5 px-2 py-1 text-sm font-medium text-white/90 transition-colors group-hover:text-white"
         aria-label="言語を選択"
       >
-        <span className="inline-flex h-4 w-6 items-center justify-center bg-white">
-          <span className="h-2 w-2 rounded-full bg-[#D9262E]" />
-        </span>
         <span>{active?.shortLabel ?? "JP"}</span>
         <ChevronDown />
       </button>
@@ -125,10 +122,26 @@ function LanguageMenu({ links }: { links: LanguageLinkSetting[] }) {
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { user, loading, signOut } = useAuth();
   const { navigation } = useSiteSettings();
   const externalLinks = navigation.externalLinks ?? EXTERNAL_LINKS_FALLBACK;
-  const languageLinks = navigation.languageLinks ?? LANGUAGE_LINKS_FALLBACK;
+  const currentLang = searchParams.get("lang") === "en" ? "en" : "ja";
+  const makeLanguageHref = useCallback((lang: "ja" | "en") => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("lang", lang);
+    return `${pathname}?${params.toString()}`;
+  }, [pathname, searchParams]);
+  const configuredLanguageLinks = navigation.languageLinks?.length ? navigation.languageLinks : LANGUAGE_LINKS_FALLBACK;
+  const languageLinks: LanguageLinkSetting[] = configuredLanguageLinks.map((link) => {
+    const lang = link.shortLabel.toLowerCase() === "en" ? "en" : "ja";
+    return {
+      ...link,
+      href: makeLanguageHref(lang),
+      active: currentLang === lang,
+    };
+  });
   const headerItems = navigation.headerItems.length > 0 ? navigation.headerItems : SITE_SETTINGS_DEFAULT.navigation.headerItems;
 
   const closeAll = useCallback(() => setOpen(false), []);
@@ -151,12 +164,11 @@ export function Header() {
             className="hidden lg:flex h-9 items-center justify-end gap-3 xl:gap-4 flex-1 min-w-0"
             style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
           >
-            {headerItems.map((item, index) => (
+            {headerItems.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 className="inline-flex h-9 items-center text-[13px] font-medium leading-none tracking-wide text-white transition-colors whitespace-nowrap"
-                style={{ color: index === 0 ? HEADER_ACCENT : "#FFFFFF" }}
               >
                 {item.label}
               </a>
