@@ -1,11 +1,12 @@
-import { getPage, getReports } from "@/lib/cms";
+import { getNews, getPage, getReports } from "@/lib/cms";
 import HomeClient, { type SlideView, type NewsView } from "./HomeClient";
 
 export const revalidate = 60;
 
 export default async function Home() {
-  const [top, reports] = await Promise.all([
+  const [top, newsItems, reports] = await Promise.all([
     getPage("top").catch(() => null),
+    getNews().catch(() => []),
     getReports().catch(() => []),
   ]);
 
@@ -20,15 +21,35 @@ export default async function Home() {
       }))
     : undefined;
 
-  // 更新履歴：直近のレポートから生成（無ければ HomeClient のデフォルト）
-  const news: NewsView[] | undefined = reports.length
-    ? reports.slice(0, 4).map((r) => ({
+  // 更新履歴：Firestore の news を優先し、未登録時だけ既存レポートから補完
+  const news: NewsView[] | undefined = newsItems.length
+    ? newsItems.slice(0, 4).map((item) => ({
+        date: item.date ? item.date.replace(/-/g, ".").slice(0, 7) : "",
+        label: item.label ?? "",
+        text: item.title,
+        href: item.href || "/",
+      }))
+    : reports.length
+      ? reports.slice(0, 4).map((r) => ({
         date: r.date ? r.date.replace(/-/g, ".").slice(0, 7) : "",
         label: "",
         text: r.title,
         href: `/reports/${r.id}`,
       }))
-    : undefined;
+      : undefined;
 
-  return <HomeClient slides={slides} news={news} />;
+  const concept =
+    top?.conceptTag || top?.conceptTitle || top?.conceptLinkLabel
+      ? { tag: top?.conceptTag, title: top?.conceptTitle, linkLabel: top?.conceptLinkLabel }
+      : undefined;
+
+  return (
+    <HomeClient
+      slides={slides}
+      news={news}
+      concept={concept}
+      forestSectionTitle={top?.forestSectionTitle}
+      ensembleSectionTitle={top?.ensembleSectionTitle}
+    />
+  );
 }

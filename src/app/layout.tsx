@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { AuthProvider } from "@/contexts/AuthContext";
-import { LoadingScreen } from "@/components/LoadingScreen";
 
 export const metadata: Metadata = {
   title: "アンサンブル倶楽部～食べられる森を目指して～",
@@ -20,7 +19,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body>
-        <LoadingScreen />
         <AuthProvider>{children}</AuthProvider>
       </body>
     </html>

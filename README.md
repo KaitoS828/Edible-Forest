@@ -668,7 +668,7 @@ gsutil cors set cors.json gs://your-project.firebasestorage.app
 
 ---
 
-## 2026-06-18 現在の実装状況
+## 2026-06-19 現在の実装状況
 
 この章は、既存READMEの追補です。会員サイト化の実装が進んだため、現在のコードベースで動いている主要機能と、古い説明との差分をまとめています。
 
@@ -681,7 +681,7 @@ gsutil cors set cors.json gs://your-project.firebasestorage.app
 | 領域 | 現在の実装 |
 |---|---|
 | 公開サイト | トップ、コンセプト、アンサンブル、宿泊拠点、活動レポート、イベント一覧 |
-| CMS | Firestoreの`cmsPages`、`ensembles`、`spots`、`reports`を参照。管理画面から編集 |
+| CMS | Firestoreの`cmsPages`、`news`、`siteSettings`、`ensembles`、`spots`、`reports`を参照。管理画面から編集 |
 | 会員認証 | Firebase Authのメール/パスワード + Googleログイン、`fb_session` Cookie |
 | 会員種別 | `participant`、`organizer`、`inner` の3種別。管理者はNextAuth側の別軸 |
 | イベント | Firestore `events` に保存。開催会員以上が作成、会員は参加可能 |
@@ -693,7 +693,7 @@ gsutil cors set cors.json gs://your-project.firebasestorage.app
 ### 現在のサイト構成
 
 ```text
-/                         トップ。CMSスライド + 更新履歴 + ForestTypes + アンサンブル参加導線
+/                         トップ。CMSスライド + Firestore news 更新履歴 + ForestTypes + アンサンブル参加導線
 /concept                  コンセプト。Firestore cmsPages の concept を反映
 /ensembles                アンサンブル一覧。Firestore ensembles を反映
 /ensembles/[id]           アンサンブル詳細。Firestore詳細 + 参加導線
@@ -715,6 +715,8 @@ gsutil cors set cors.json gs://your-project.firebasestorage.app
 /admin/ensembles          アンサンブル管理
 /admin/spots              宿泊施設管理
 /admin/cms/pages          固定ページCMS
+/admin/news               ニュース管理。トップ更新履歴を作成・公開・編集
+/admin/site-settings      サイト共通文言・導線・トップ森タイプ・地図データのJSON編集
 /admin/reports            活動レポート管理
 /admin/facilities         開催会員が登録した施設の審査
 ```
@@ -817,11 +819,32 @@ BENCHMARK_FIELD_LASTNAME_ID=
 | Firestore collection | 用途 |
 |---|---|
 | `cmsPages` | トップ、コンセプトなどページ文言 |
+| `news` | トップページの更新履歴 |
+| `siteSettings` | ヘッダー、フッター、トップ森タイプ、コンセプト補助カード、主要ページ見出し/CTA、地図データ |
 | `ensembles` | アンサンブル |
 | `spots` | 宿泊拠点 |
 | `reports` | 活動レポート |
 
-`/api/revalidate` はCMS更新後のOn-Demand ISRエンドポイントです。現在はWebhook secret検証がTODOのため、本番公開前に `?secret=` または署名検証を追加してください。
+CMS更新の基本フロー:
+
+```text
+管理画面 (/admin/*)
+  → 内部API (/api/admin/*)
+  → Firebase Admin SDK
+  → Firestore更新
+  → revalidatePath() で対象ページを再生成
+  → Vercel本番にも反映
+```
+
+Vercel本番環境で変更を反映するには、`FIREBASE_ADMIN_PROJECT_ID`、`FIREBASE_ADMIN_CLIENT_EMAIL`、`FIREBASE_ADMIN_PRIVATE_KEY` が正しいFirebaseプロジェクトを指している必要があります。管理画面の保存処理はサーバー側APIで実行されるため、microCMSの管理画面やWebhookは不要です。
+
+ニュース管理は `news` と `reports` を同期します。管理画面 `/admin/news` で作成・編集・削除した内容は、トップページの更新履歴と `/reports` の記事一覧/詳細に反映されます。
+
+サイト全体の固定文言は `/admin/site-settings` から `siteSettings/general` を編集します。Firestoreに未保存の場合は `src/data/siteSettings.ts` のデフォルト値で表示されます。
+
+microCMSからの移行は `scripts/import-microcms-to-firestore.mjs` を使います。`news` エンドポイントがない場合は `reports` の既存データを `news` にも複製し、管理画面から以後の作成・編集・削除を行えます。
+
+リッチテキスト編集は `src/components/editor/RichTextEditor.tsx` のTipTapエディターを使います。管理者向け画像アップロードは `/api/admin/upload` でFirebase Storageへ保存し、本文HTMLに画像URLを挿入します。ドラッグ&ドロップ、ペースト、画像URL挿入にも対応しています。
 
 ### 管理画面
 
@@ -830,24 +853,45 @@ BENCHMARK_FIELD_LASTNAME_ID=
 - `/admin`: 管理トップ
 - `/admin/members`: 会員一覧、種別・プロフィール状況確認、CSVエクスポート
 - `/admin/facilities`: 開催会員が登録した施設の審査
+- `/admin/ensembles`: アンサンブル管理
+- `/admin/spots`: 宿泊施設管理
+- `/admin/cms/pages`: 固定ページCMS
+- `/admin/news`: ニュース管理
+- `/admin/site-settings`: サイト共通設定管理
+- `/admin/reports`: 活動レポート管理
 - `/admin/edit/[id]`: 既存のアンサンブル編集
 
 会員CSVには、氏名、フリガナ、ログインメール、連絡メール、電話番号、住所、会員種別、職業、興味分野、コメント、紹介者、団体名、プロフィール完了、登録日が含まれます。
+
+管理画面ログインはメールアドレスとパスワードのみです。Googleログインは管理画面では使いません。Firebase Authで認証後、Firebase Custom Claim `admin: true` を持つアカウントだけがNextAuthセッションを発行できます。
+
+### UI/表示まわりの現在仕様
+
+- ヘッダーは `siteSettings.navigation` の文言を使い、外部リンクとしてnoteへの導線を追加しています。
+- トップのカルーセルは自動切り替えを維持しています。
+- トップのスクロール出現アニメーションとローディングアニメーションは削除し、初期表示を軽くしています。
+- トップの森タイプアイコン列は横幅いっぱいに散らさず、中央寄せのまとまった幅で表示します。
+- ヘッダー/フッター、トップ森タイプ、コンセプト補助カード、主要ページ見出し/CTA、地図データは `siteSettings/general` へ切り出しています。
 
 ### 主要API追補
 
 | メソッド | パス | 認証 | 説明 |
 |---|---|---|---|
 | POST | `/api/newsletter` | 不要 | Benchmarkメルマガ登録 + Firestore保存 |
+| GET | `/api/public/site-settings` | 不要 | サイト共通設定取得 |
 | POST | `/api/revalidate` | 現状なし | CMS更新後のISR再生成 |
 | POST | `/api/member/event` | `fb_session` | 開催会員以上のイベント作成 |
 | POST | `/api/member/event/[id]/join` | `fb_session` | イベント参加 |
+| GET/POST | `/api/admin/news` | Admin Session | ニュース一覧取得・作成 |
+| GET/PATCH/DELETE | `/api/admin/news/[id]` | Admin Session | ニュース詳細取得・更新・削除 |
+| GET/PATCH | `/api/admin/site-settings` | Admin Session | サイト共通設定取得・更新 |
+| POST | `/api/admin/upload` | Admin Session | 管理者向け画像アップロード |
 | PATCH | `/api/admin/facilities/[id]` | Admin Session | 施設審査ステータス更新 |
 | GET | `/api/admin/members/export` | Admin Cookie | 会員CSVダウンロード |
 
 ### 注意点
 
 - README本文の一部には、旧仕様の `free / member / supporter / organizer / staff` や、トップページにLC/活動レポートセクションがある前提の説明が残っています。現コードの会員種別は `participant / organizer / inner` です。
-- `/api/revalidate` は本番前にsecret検証を追加してください。
 - Benchmark APIキーなどのシークレットは `.env.local` とVercel環境変数で管理し、ログやREADMEに実値を書かないでください。
+- `MICROCMS_*` は移行スクリプト用に残せますが、公開表示と管理画面更新はFirestoreベースの自作CMSへ移行しています。
 - GitHub URL: https://github.com/KaitoS828/Edible-Forest

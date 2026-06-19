@@ -1,10 +1,10 @@
-const UTILITY_LINKS = [
-  { label: "プライバシーポリシー", href: "/privacy" },
-  { label: "利用規約", href: "/terms" },
-  { label: "運営会社", href: "/company" },
-];
+"use client";
+
+import { useSiteSettings } from "@/hooks/useSiteSettings";
 
 export function Footer() {
+  const { footer } = useSiteSettings();
+
   return (
     <footer
       className="py-8"
@@ -14,7 +14,7 @@ export function Footer() {
         className="max-w-[1400px] mx-auto px-5 lg:px-12 flex flex-wrap items-center gap-3 text-sm"
         style={{ color: "rgba(26,43,30,0.55)", fontFamily: "'Noto Sans JP', sans-serif" }}
       >
-        {UTILITY_LINKS.map((link, i) => (
+        {footer.links.map((link, i) => (
           <span key={link.href} className="flex items-center gap-3">
             {i > 0 && <span aria-hidden style={{ color: "rgba(0,0,0,0.2)" }}>|</span>}
             <a href={link.href} className="hover:text-[#3C6B4F] transition-colors">
@@ -23,7 +23,7 @@ export function Footer() {
           </span>
         ))}
         <span className="w-full sm:w-auto sm:ml-auto pt-2 sm:pt-0">
-          © 2024 アンサンブル倶楽部～食べられる森を目指して～
+          {footer.copyright}
         </span>
       </div>
     </footer>

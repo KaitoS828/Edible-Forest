@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { type Report } from "@/lib/cms";
+import type { PageTextSetting } from "@/data/siteSettings";
 
 const CATEGORY_COLORS: Record<string, string> = {
   "北海道・十勝":      "#4A7C59",
@@ -66,7 +67,7 @@ function ReportCard({ report }: { report: Report }) {
   );
 }
 
-export default function ReportsClient({ reports }: { reports: Report[] }) {
+export default function ReportsClient({ reports, pageText }: { reports: Report[]; pageText?: PageTextSetting }) {
   const categories = Array.from(new Set(reports.map((r) => r.category).filter(Boolean) as string[]));
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const filtered = activeFilter ? reports.filter((r) => r.category === activeFilter) : reports;
@@ -85,16 +86,16 @@ export default function ReportsClient({ reports }: { reports: Report[] }) {
             </p>
             <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
               <div>
-                <p className="text-sm font-medium tracking-widest mb-3" style={{ color: "#4A7C59" }}>REPORTS</p>
+                <p className="text-sm font-medium tracking-widest mb-3" style={{ color: "#4A7C59" }}>{pageText?.eyebrow ?? "REPORTS"}</p>
                 <h1
                   className="text-4xl md:text-5xl font-bold"
                   style={{ fontFamily: "'Noto Serif JP', serif", color: "#2C3A2E" }}
                 >
-                  活動レポート
+                  {pageText?.title ?? "活動レポート"}
                 </h1>
               </div>
               <p className="text-base max-w-sm md:text-right leading-relaxed" style={{ color: "#5C6B55" }}>
-                各拠点での活動や、インターローカルな交流イベントの記録をテーマ別にご覧いただけます。
+                {pageText?.description ?? "各拠点での活動や、インターローカルな交流イベントの記録をテーマ別にご覧いただけます。"}
               </p>
             </div>
           </div>

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 
 const RichTextEditor = dynamic(
   () => import("@/components/editor/RichTextEditor"),
@@ -196,24 +197,7 @@ export default function EnsembleEditForm({
           </div>
 
           <div className="mt-4">
-            <label className={labelClass} style={{ color: "#1A2B1E" }}>メイン画像URL</label>
-            <div className="flex gap-3 items-start">
-              <input
-                className={`${inputClass} flex-1`}
-                style={inputStyle}
-                value={form.img}
-                onChange={(e) => set("img", e.target.value)}
-                placeholder="https://..."
-              />
-              {form.img && (
-                <div
-                  className="flex-shrink-0 rounded-xl overflow-hidden"
-                  style={{ width: "64px", height: "64px", border: "1px solid rgba(0,95,2,0.15)" }}
-                >
-                  <img src={form.img} alt="" className="w-full h-full object-cover" />
-                </div>
-              )}
-            </div>
+            <ImageUpload label="メイン画像" value={form.img} onChange={(url) => set("img", url)} />
           </div>
         </section>
 

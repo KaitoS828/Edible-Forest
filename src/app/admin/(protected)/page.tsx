@@ -57,7 +57,9 @@ export default async function AdminDashboard() {
           { href: "/admin/ensembles", title: "アンサンブル管理", desc: "拠点コンテンツの公開・編集" },
           { href: "/admin/spots", title: "宿泊施設管理", desc: "宿泊施設ページの公開・編集" },
           { href: "/admin/cms/pages", title: "固定ページCMS", desc: "トップ・コンセプトページの編集" },
+          { href: "/admin/news", title: "ニュース管理", desc: "トップ更新履歴の作成・公開・編集" },
           { href: "/admin/reports", title: "活動レポート管理", desc: "記事の作成・公開・編集" },
+          { href: "/admin/site-settings", title: "サイト設定", desc: "ナビ・フッター・主要ページ文言の編集" },
           { href: "/admin/facilities", title: "施設審査", desc: "登録施設の承認・却下" },
         ].map(({ href, title, desc }) => (
           <a

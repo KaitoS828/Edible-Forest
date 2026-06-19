@@ -1,6 +1,7 @@
 import { getApps, initializeApp, cert, App } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { getFirestore } from "firebase-admin/firestore";
+import { getStorage } from "firebase-admin/storage";
 
 function getAdminApp(): App {
   if (getApps().length > 0) return getApps()[0];
@@ -35,3 +36,7 @@ function lazyProxy<T extends object>(factory: () => T): T {
 
 export const adminAuth = lazyProxy(() => getAuth(getAdminApp()));
 export const adminDb   = lazyProxy(() => getFirestore(getAdminApp()));
+
+export function getAdminBucket() {
+  return getStorage(getAdminApp()).bucket(process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET);
+}

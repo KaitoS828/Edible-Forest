@@ -45,49 +45,14 @@ body {
   --duration-slow: 0.9s;
 }
 
-/* ── アニメーション ── */
-@keyframes pageFadeIn {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
+/* ── 軽量な補助アニメーション ── */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-@keyframes heroTextIn {
-  from { opacity: 0; transform: translateY(32px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-body > * {
-  animation: pageFadeIn var(--duration-base) var(--ease-out) both;
-}
-
-.page-enter {
-  animation: pageFadeIn var(--duration-base) var(--ease-out) both;
-}
 .card-enter {
   animation: fadeInUp var(--duration-fast) var(--ease-out) both;
 }
-
-/* ── ヒーローテキスト入場アニメーション ── */
-.hero-label {
-  animation: heroTextIn var(--duration-base) var(--ease-out) 0.2s both;
-}
-.hero-title {
-  animation: heroTextIn var(--duration-slow) var(--ease-out) 0.35s both;
-}
-.hero-caption {
-  animation: heroTextIn var(--duration-base) var(--ease-out) 0.5s both;
-}
-.hero-divider {
-  animation: heroTextIn var(--duration-base) var(--ease-out) 0.6s both;
-}
-.hero-cta {
-  animation: heroTextIn var(--duration-base) var(--ease-out) 0.75s both;
-}
-
-/* ── スクロール連動 Reveal（GSAP ScrollTrigger で制御） ── */
 
 /* ── カードホバー ── */
 .card-lift {
@@ -114,6 +79,23 @@ body > * {
 }
 .news-scroll::-webkit-scrollbar {
   display: none;
+}
+
+.ProseMirror .cms-editor-image,
+.ProseMirror img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem auto;
+  border-radius: 10px;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  color: #94a3b8;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 
 /* ── ボタン・リンク共通 ── */

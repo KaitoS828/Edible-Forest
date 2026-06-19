@@ -1,12 +1,17 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getEnsembles } from "@/lib/cms";
+import { getSiteSettings } from "@/lib/site-settings";
 import EnsembleList from "./EnsembleList";
 
 export const revalidate = 60;
 
 export default async function EnsemblesPage() {
-  const ensembles = await getEnsembles().catch(() => []);
+  const [ensembles, settings] = await Promise.all([
+    getEnsembles().catch(() => []),
+    getSiteSettings().catch(() => null),
+  ]);
+  const pageText = settings?.pages.ensembles;
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -21,13 +26,13 @@ export default async function EnsemblesPage() {
               <span>アンサンブル一覧</span>
             </div>
             <span className="inline-block text-sm font-medium px-3 mb-3" style={{ height: "23px", lineHeight: "23px", borderRadius: "11.5px", backgroundColor: "#3C6B4F", color: "white" }}>
-              イベント
+              {pageText?.eyebrow ?? "イベント"}
             </span>
             <h1 className="text-3xl md:text-4xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-              アンサンブル一覧
+              {pageText?.title ?? "アンサンブル一覧"}
             </h1>
             <p className="text-base" style={{ color: "#1A2B1E" }}>
-              全国各地のローカルコミュニティ（LC）をご紹介します。
+              {pageText?.description ?? "全国各地のローカルコミュニティ（LC）をご紹介します。"}
             </p>
           </div>
         </section>
@@ -44,11 +49,11 @@ export default async function EnsemblesPage() {
               月会費 ¥1,000 で、全国の拠点・イベントへアクセスできます。
             </p>
             <a
-              href="/join"
+              href={pageText?.ctaHref ?? "/join"}
               className="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-base font-medium text-white transition-opacity hover:opacity-90"
               style={{ backgroundColor: "#3C6B4F" }}
             >
-              倶楽部に参加する →
+              {pageText?.ctaLabel ?? "倶楽部に参加する →"}
             </a>
           </div>
         </section>

@@ -9,7 +9,7 @@ interface PageProps {
 export default async function AdminCmsPageEdit({ params }: PageProps) {
   const { pageId } = await params;
   const page = await getCmsPage(pageId);
-  const initialData = buildPageInitialData(page ?? undefined);
+  const initialData = buildPageInitialData(pageId, page ?? undefined);
 
   return (
     <div>

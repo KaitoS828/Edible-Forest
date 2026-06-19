@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import type { CmsPageFormData, SlideForm } from "./formData";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 
 const RichTextEditor = dynamic(
   () => import("@/components/editor/RichTextEditor"),
@@ -22,6 +23,8 @@ export default function CmsPageForm({
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const isTop = pageId === "top";
 
   function set<K extends keyof CmsPageFormData>(key: K, value: CmsPageFormData[K]) {
     setForm((current) => ({ ...current, [key]: value }));
@@ -74,26 +77,53 @@ export default function CmsPageForm({
         </div>
       )}
 
-      <Section title="基本情報">
-        <Field label="ヒーロータイトル">
-          <input className={inputClass} style={inputStyle} value={form.heroTitle} onChange={(e) => set("heroTitle", e.target.value)} />
-        </Field>
-        <Field label="ヒーロー補足">
-          <input className={inputClass} style={inputStyle} value={form.heroCaption} onChange={(e) => set("heroCaption", e.target.value)} />
-        </Field>
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <Field label="コンセプトタグ">
-            <input className={inputClass} style={inputStyle} value={form.conceptTag} onChange={(e) => set("conceptTag", e.target.value)} />
-          </Field>
-          <Field label="コンセプトリンクラベル">
-            <input className={inputClass} style={inputStyle} value={form.conceptLinkLabel} onChange={(e) => set("conceptLinkLabel", e.target.value)} />
-          </Field>
-        </div>
-      </Section>
+      {isTop ? (
+        <>
+          <Section title="コンセプト訴求（トップ右カラム）">
+            <Field label="小見出し">
+              <input className={inputClass} style={inputStyle} value={form.conceptTag} onChange={(e) => set("conceptTag", e.target.value)} />
+            </Field>
+            <Field label="タイトル（改行で改行されます）">
+              <textarea rows={2} className={inputClass} style={inputStyle} value={form.conceptTitle} onChange={(e) => set("conceptTitle", e.target.value)} />
+            </Field>
+            <Field label="リンクラベル">
+              <input className={inputClass} style={inputStyle} value={form.conceptLinkLabel} onChange={(e) => set("conceptLinkLabel", e.target.value)} />
+            </Field>
+          </Section>
 
-      <Section title="本文">
-        <RichTextEditor content={form.body} onChange={(html) => set("body", html)} placeholder="ページ本文を入力してください" />
-      </Section>
+          <Section title="セクション見出し">
+            <Field label="「旅に出よう」セクション見出し">
+              <input className={inputClass} style={inputStyle} value={form.forestSectionTitle} onChange={(e) => set("forestSectionTitle", e.target.value)} />
+            </Field>
+            <Field label="「アンサンブル」セクション見出し">
+              <input className={inputClass} style={inputStyle} value={form.ensembleSectionTitle} onChange={(e) => set("ensembleSectionTitle", e.target.value)} />
+            </Field>
+          </Section>
+        </>
+      ) : (
+        <>
+          <Section title="基本情報">
+            <Field label="ヒーロータイトル">
+              <input className={inputClass} style={inputStyle} value={form.heroTitle} onChange={(e) => set("heroTitle", e.target.value)} />
+            </Field>
+            <Field label="ヒーロー補足">
+              <input className={inputClass} style={inputStyle} value={form.heroCaption} onChange={(e) => set("heroCaption", e.target.value)} />
+            </Field>
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <Field label="コンセプトタグ">
+                <input className={inputClass} style={inputStyle} value={form.conceptTag} onChange={(e) => set("conceptTag", e.target.value)} />
+              </Field>
+              <Field label="コンセプトリンクラベル">
+                <input className={inputClass} style={inputStyle} value={form.conceptLinkLabel} onChange={(e) => set("conceptLinkLabel", e.target.value)} />
+              </Field>
+            </div>
+          </Section>
+
+          <Section title="本文">
+            <RichTextEditor content={form.body} onChange={(html) => set("body", html)} placeholder="ページ本文を入力してください" />
+          </Section>
+        </>
+      )}
 
       <Section title="スライド/ギャラリー">
         <div className="space-y-4">
@@ -104,9 +134,7 @@ export default function CmsPageForm({
                 <button type="button" onClick={() => removeSlide(index)} className="text-xs font-medium" style={{ color: "#B42318" }}>削除</button>
               </div>
               <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                <Field label="画像URL">
-                  <input className={inputClass} style={inputStyle} value={slide.imageUrl} onChange={(e) => setSlide(index, "imageUrl", e.target.value)} />
-                </Field>
+                <ImageUpload label="画像" value={slide.imageUrl} onChange={(url) => setSlide(index, "imageUrl", url)} />
                 <Field label="ラベル">
                   <input className={inputClass} style={inputStyle} value={slide.label} onChange={(e) => setSlide(index, "label", e.target.value)} />
                 </Field>

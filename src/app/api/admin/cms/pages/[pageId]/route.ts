@@ -47,7 +47,10 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     heroCaption: stringValue(body, "heroCaption"),
     body: stringValue(body, "body"),
     conceptTag: stringValue(body, "conceptTag"),
+    conceptTitle: stringValue(body, "conceptTitle"),
     conceptLinkLabel: stringValue(body, "conceptLinkLabel"),
+    forestSectionTitle: stringValue(body, "forestSectionTitle"),
+    ensembleSectionTitle: stringValue(body, "ensembleSectionTitle"),
     slides: slidesValue(body),
     active: body.active !== false,
   });

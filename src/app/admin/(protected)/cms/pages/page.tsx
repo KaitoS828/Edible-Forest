@@ -3,6 +3,9 @@ import { getAllCmsPages } from "@/lib/firestore";
 const KNOWN_PAGES = [
   { pageId: "top", title: "トップページ", desc: "ヒーロースライドと更新履歴周辺の文言" },
   { pageId: "concept", title: "コンセプトページ", desc: "食べられる森とは、本文とギャラリー" },
+  { pageId: "privacy", title: "プライバシーポリシー", desc: "個人情報の取り扱い方針" },
+  { pageId: "terms", title: "利用規約", desc: "サービス利用上のルール" },
+  { pageId: "company", title: "運営会社", desc: "運営者・会社情報" },
 ];
 
 export default async function AdminCmsPagesPage() {

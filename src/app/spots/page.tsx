@@ -1,11 +1,16 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getSpots } from "@/lib/cms";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const revalidate = 60;
 
 export default async function SpotsPage() {
-  const spots = await getSpots().catch(() => []);
+  const [spots, settings] = await Promise.all([
+    getSpots().catch(() => []),
+    getSiteSettings().catch(() => null),
+  ]);
+  const pageText = settings?.pages.spots;
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -18,16 +23,16 @@ export default async function SpotsPage() {
               className="inline-block text-sm font-medium px-4 mb-5"
               style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}
             >
-              拠点
+              {pageText?.eyebrow ?? "拠点"}
             </span>
             <h1
               className="text-4xl md:text-5xl font-bold mb-4"
               style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}
             >
-              全国の宿泊施設・拠点
+              {pageText?.title ?? "全国の宿泊施設・拠点"}
             </h1>
             <p className="text-base max-w-xl" style={{ color: "#1A2B1E", lineHeight: "1.9" }}>
-              アンサンブル倶楽部～食べられる森を目指して～の会員が運営する、全国各地の宿泊施設・拠点を紹介します。
+              {pageText?.description ?? "アンサンブル倶楽部～食べられる森を目指して～の会員が運営する、全国各地の宿泊施設・拠点を紹介します。"}
             </p>
           </div>
         </section>

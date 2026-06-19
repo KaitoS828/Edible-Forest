@@ -144,6 +144,19 @@ async function fetchList(endpoint, queries = {}) {
   return all;
 }
 
+async function fetchOptionalList(endpoint, queries = {}) {
+  try {
+    return await fetchList(endpoint, queries);
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    if (message.includes("404")) {
+      console.warn(`Skip optional microCMS endpoint: ${endpoint}`);
+      return [];
+    }
+    throw err;
+  }
+}
+
 function mapPage(content) {
   return {
     pageId: content.pageId,
@@ -151,6 +164,7 @@ function mapPage(content) {
     heroCaption: content.heroCaption ?? "",
     body: content.body ?? "",
     conceptTag: content.conceptTag ?? "",
+    conceptTitle: content.conceptTitle ?? "",
     conceptLinkLabel: content.conceptLinkLabel ?? "",
     slides: Array.isArray(content.slides)
       ? content.slides.map((slide, index) => ({
@@ -232,6 +246,38 @@ function mapReport(content) {
   };
 }
 
+function mapNewsFromReport(content) {
+  return {
+    title: content.title ?? "",
+    date: content.date ?? "",
+    label: content.label ?? "",
+    href: `/reports/${content.id}`,
+    category: content.category ?? "ニュース",
+    image: content.image?.url ? { url: content.image.url } : undefined,
+    body: content.body ?? "",
+    status: "published",
+    active: true,
+    publishedAt: timestamp(content.publishedAt),
+    ...commonTimestamps(content),
+  };
+}
+
+function mapNews(content) {
+  return {
+    title: content.title ?? content.text ?? "",
+    date: content.date ?? "",
+    label: content.label ?? "",
+    href: content.href ?? content.link ?? `/reports/${content.id}`,
+    category: content.category ?? "ニュース",
+    image: content.image?.url ? { url: content.image.url } : undefined,
+    body: content.body ?? "",
+    status: "published",
+    active: true,
+    publishedAt: timestamp(content.publishedAt),
+    ...commonTimestamps(content),
+  };
+}
+
 function stripUndefined(value) {
   if (Array.isArray(value)) {
     return value.map(stripUndefined).filter((item) => item !== undefined);
@@ -254,16 +300,18 @@ async function setDoc(collection, id, data) {
 async function main() {
   console.log(dryRun ? "Dry run: Firestoreには書き込みません" : "Write mode: Firestoreへ書き込みます");
 
-  const [pages, ensembleEntries, reports] = await Promise.all([
+  const [pages, ensembleEntries, reports, newsEntries] = await Promise.all([
     fetchList("pages"),
     fetchList("ensembles"),
     fetchList("reports", { orders: "-publishedAt" }),
+    fetchOptionalList("news", { orders: "-publishedAt" }),
   ]);
 
   let pageCount = 0;
   let ensembleCount = 0;
   let spotCount = 0;
   let reportCount = 0;
+  let newsCount = 0;
 
   for (const page of pages) {
     if (!page.pageId) {
@@ -289,8 +337,33 @@ async function main() {
 
   for (const report of reports) {
     await setDoc("reports", report.id, mapReport(report));
+    if (newsEntries.length === 0) {
+      await setDoc("news", report.id, mapNewsFromReport(report));
+      newsCount += 1;
+      console.log(`news/${report.id}`);
+    }
     reportCount += 1;
     console.log(`reports/${report.id}`);
+  }
+
+  for (const news of newsEntries) {
+    const mapped = mapNews(news);
+    await setDoc("news", news.id, mapped);
+    await setDoc("reports", news.id, {
+      title: mapped.title,
+      date: mapped.date,
+      category: mapped.category,
+      image: mapped.image,
+      body: mapped.body,
+      status: mapped.status,
+      active: mapped.active,
+      publishedAt: mapped.publishedAt,
+      createdAt: mapped.createdAt,
+      updatedAt: mapped.updatedAt,
+    });
+    newsCount += 1;
+    console.log(`news/${news.id}`);
+    console.log(`reports/${news.id}`);
   }
 
   console.log("");
@@ -299,6 +372,7 @@ async function main() {
   console.log(`- ensembles: ${ensembleCount}`);
   console.log(`- spots: ${spotCount}`);
   console.log(`- reports: ${reportCount}`);
+  console.log(`- news: ${newsCount}`);
 }
 
 main().catch((err) => {

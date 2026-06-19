@@ -1,5 +1,5 @@
 import { adminDb } from "./firebase-admin";
-import { getPublishedEnsembles, getPublishedSpots } from "./firestore";
+import { getPublishedCmsNews, getPublishedEnsembles, getPublishedSpots } from "./firestore";
 import { REPORTS as STATIC_REPORTS } from "@/data/reports";
 
 export type CmsImage = { url: string; height?: number; width?: number };
@@ -51,7 +51,10 @@ export type Page = {
   heroCaption?: string;
   body?: string;
   conceptTag?: string;
+  conceptTitle?: string;
   conceptLinkLabel?: string;
+  forestSectionTitle?: string;
+  ensembleSectionTitle?: string;
   slides?: Slide[];
   createdAt: string;
   updatedAt: string;
@@ -70,6 +73,20 @@ export type Report = {
   publishedAt: string;
 };
 
+export type News = {
+  id: string;
+  title: string;
+  date?: string;
+  label?: string;
+  href?: string;
+  category?: string;
+  image?: CmsImage;
+  body?: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+};
+
 type CmsPageDoc = Omit<Page, "id" | "createdAt" | "updatedAt" | "publishedAt"> & {
   active?: boolean;
   createdAt?: FirebaseFirestore.Timestamp;
@@ -78,6 +95,14 @@ type CmsPageDoc = Omit<Page, "id" | "createdAt" | "updatedAt" | "publishedAt"> &
 };
 
 type CmsReportDoc = Omit<Report, "id" | "createdAt" | "updatedAt" | "publishedAt"> & {
+  active?: boolean;
+  status?: "draft" | "published";
+  createdAt?: FirebaseFirestore.Timestamp;
+  updatedAt?: FirebaseFirestore.Timestamp;
+  publishedAt?: FirebaseFirestore.Timestamp;
+};
+
+type CmsNewsDoc = Omit<News, "id" | "createdAt" | "updatedAt" | "publishedAt"> & {
   active?: boolean;
   status?: "draft" | "published";
   createdAt?: FirebaseFirestore.Timestamp;
@@ -177,7 +202,10 @@ export async function getPage(pageId: string): Promise<Page | null> {
     heroCaption: data.heroCaption,
     body: data.body,
     conceptTag: data.conceptTag,
+    conceptTitle: data.conceptTitle,
     conceptLinkLabel: data.conceptLinkLabel,
+    forestSectionTitle: data.forestSectionTitle,
+    ensembleSectionTitle: data.ensembleSectionTitle,
     slides: data.slides ?? [],
     createdAt: ts(data.createdAt),
     updatedAt: ts(data.updatedAt),
@@ -220,6 +248,23 @@ export async function getReports(): Promise<Report[]> {
     createdAt: new Date(0).toISOString(),
     updatedAt: new Date(0).toISOString(),
     publishedAt: item.date.replace(/\//g, "-"),
+  }));
+}
+
+export async function getNews(): Promise<News[]> {
+  const docs = await getPublishedCmsNews();
+  return docs.map((data: CmsNewsDoc & { id: string }) => ({
+    id: data.id,
+    title: data.title,
+    date: data.date,
+    label: data.label,
+    href: data.href,
+    category: data.category,
+    image: data.image,
+    body: data.body,
+    createdAt: ts(data.createdAt),
+    updatedAt: ts(data.updatedAt),
+    publishedAt: ts(data.publishedAt ?? data.updatedAt),
   }));
 }
 

@@ -1,6 +1,7 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { getPublishedEvents } from "@/lib/firestore";
+import { getSiteSettings } from "@/lib/site-settings";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,8 @@ export default async function EventsPage() {
   } catch {
     // Firestore 未設定時は空配列で表示
   }
+  const settings = await getSiteSettings().catch(() => null);
+  const pageText = settings?.pages.events;
 
   return (
     <div style={{ backgroundColor: "#FFFFFF" }}>
@@ -33,13 +36,13 @@ export default async function EventsPage() {
               className="inline-block text-sm font-medium px-4 mb-4"
               style={{ height: "24px", lineHeight: "24px", borderRadius: "12px", backgroundColor: "#3C6B4F", color: "white" }}
             >
-              イベント
+              {pageText?.eyebrow ?? "イベント"}
             </span>
             <h1 className="text-4xl md:text-5xl font-bold mb-3" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-              開催中のイベント
+              {pageText?.title ?? "開催中のイベント"}
             </h1>
             <p className="text-base" style={{ color: "#1A2B1E", lineHeight: "1.8" }}>
-              全国の食べられる森で開催されるイベントの一覧です。
+              {pageText?.description ?? "全国の食べられる森で開催されるイベントの一覧です。"}
             </p>
           </div>
         </section>

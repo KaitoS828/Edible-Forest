@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 
 const RichTextEditor = dynamic(
   () => import("@/components/editor/RichTextEditor"),
@@ -130,9 +131,7 @@ export default function SpotAdminForm({
               <input className={inputClass} style={inputStyle} value={form.regionColor} onChange={(e) => set("regionColor", e.target.value)} />
             </div>
           </Field>
-          <Field label="カバー画像URL" labelClass={labelClass}>
-            <input className={inputClass} style={inputStyle} value={form.img} onChange={(e) => set("img", e.target.value)} placeholder="https://..." />
-          </Field>
+          <ImageUpload label="カバー画像" value={form.img} onChange={(url) => set("img", url)} />
         </div>
         <Field label="概要" labelClass={labelClass}>
           <textarea className={`${inputClass} min-h-24 resize-y`} style={inputStyle} value={form.desc} onChange={(e) => set("desc", e.target.value)} />

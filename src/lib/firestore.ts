@@ -375,7 +375,10 @@ export type CmsPageDoc = {
   heroCaption?: string;
   body?: string;
   conceptTag?: string;
+  conceptTitle?: string;
   conceptLinkLabel?: string;
+  forestSectionTitle?: string;
+  ensembleSectionTitle?: string;
   slides?: CmsSlide[];
   active: boolean;
   createdAt?: FirebaseFirestore.Timestamp;
@@ -393,6 +396,24 @@ export type CmsReportDoc = {
   image?: { url: string };
   body?: string;
   status: CmsReportStatus;
+  active: boolean;
+  createdAt?: FirebaseFirestore.Timestamp;
+  updatedAt?: FirebaseFirestore.Timestamp;
+  publishedAt?: FirebaseFirestore.Timestamp;
+};
+
+export type CmsNewsStatus = "draft" | "published";
+
+export type CmsNewsDoc = {
+  id: string;
+  title: string;
+  date?: string;
+  label?: string;
+  href?: string;
+  category?: string;
+  image?: { url: string };
+  body?: string;
+  status: CmsNewsStatus;
   active: boolean;
   createdAt?: FirebaseFirestore.Timestamp;
   updatedAt?: FirebaseFirestore.Timestamp;
@@ -459,6 +480,51 @@ export async function upsertCmsReport(
 
 export async function deleteCmsReport(id: string) {
   await adminDb.collection("reports").doc(id).delete();
+}
+
+export async function getCmsNews(id: string): Promise<CmsNewsDoc | null> {
+  const snap = await adminDb.collection("news").doc(id).get();
+  if (!snap.exists) return null;
+  return { id: snap.id, ...snap.data() } as CmsNewsDoc;
+}
+
+export async function getAllCmsNews(): Promise<CmsNewsDoc[]> {
+  const snap = await adminDb.collection("news").get();
+  const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as CmsNewsDoc);
+  return docs.sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
+}
+
+export async function getPublishedCmsNews(): Promise<CmsNewsDoc[]> {
+  const snap = await adminDb
+    .collection("news")
+    .where("status", "==", "published")
+    .where("active", "==", true)
+    .get();
+  const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as CmsNewsDoc);
+  return docs.sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
+}
+
+export async function upsertCmsNews(
+  id: string,
+  data: Partial<Omit<CmsNewsDoc, "id" | "createdAt" | "updatedAt">>
+) {
+  const ref = adminDb.collection("news").doc(id);
+  const exists = (await ref.get()).exists;
+  await ref.set(
+    {
+      active: data.active ?? true,
+      status: data.status ?? "draft",
+      ...data,
+      ...(exists ? {} : { createdAt: FieldValue.serverTimestamp() }),
+      updatedAt: FieldValue.serverTimestamp(),
+      ...(data.status === "published" ? { publishedAt: FieldValue.serverTimestamp() } : {}),
+    },
+    { merge: true }
+  );
+}
+
+export async function deleteCmsNews(id: string) {
+  await adminDb.collection("news").doc(id).delete();
 }
 
 // ─────────────────────────────────────────

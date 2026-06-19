@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import { ImageUpload } from "@/components/admin/ImageUpload";
 
 const RichTextEditor = dynamic(
   () => import("@/components/editor/RichTextEditor"),
@@ -111,9 +112,7 @@ export default function ReportForm({
             <input className={inputClass} style={inputStyle} value={form.category} onChange={(e) => set("category", e.target.value)} />
           </Field>
         </div>
-        <Field label="カバー画像URL">
-          <input className={inputClass} style={inputStyle} value={form.imageUrl} onChange={(e) => set("imageUrl", e.target.value)} placeholder="https://..." />
-        </Field>
+        <ImageUpload label="カバー画像" value={form.imageUrl} onChange={(url) => set("imageUrl", url)} />
       </Section>
 
       <Section title="本文">
