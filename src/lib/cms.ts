@@ -61,6 +61,8 @@ export type Page = {
   publishedAt: string;
 };
 
+type Locale = "ja" | "en";
+
 export type Report = {
   id: string;
   title: string;
@@ -89,6 +91,9 @@ export type News = {
 
 type CmsPageDoc = Omit<Page, "id" | "createdAt" | "updatedAt" | "publishedAt"> & {
   active?: boolean;
+  translations?: {
+    en?: Partial<Omit<Page, "id" | "createdAt" | "updatedAt" | "publishedAt">>;
+  };
   createdAt?: FirebaseFirestore.Timestamp;
   updatedAt?: FirebaseFirestore.Timestamp;
   publishedAt?: FirebaseFirestore.Timestamp;
@@ -97,6 +102,9 @@ type CmsPageDoc = Omit<Page, "id" | "createdAt" | "updatedAt" | "publishedAt"> &
 type CmsReportDoc = Omit<Report, "id" | "createdAt" | "updatedAt" | "publishedAt"> & {
   active?: boolean;
   status?: "draft" | "published";
+  translations?: {
+    en?: Partial<Omit<Report, "id" | "createdAt" | "updatedAt" | "publishedAt">>;
+  };
   createdAt?: FirebaseFirestore.Timestamp;
   updatedAt?: FirebaseFirestore.Timestamp;
   publishedAt?: FirebaseFirestore.Timestamp;
@@ -105,6 +113,9 @@ type CmsReportDoc = Omit<Report, "id" | "createdAt" | "updatedAt" | "publishedAt
 type CmsNewsDoc = Omit<News, "id" | "createdAt" | "updatedAt" | "publishedAt"> & {
   active?: boolean;
   status?: "draft" | "published";
+  translations?: {
+    en?: Partial<Omit<News, "id" | "createdAt" | "updatedAt" | "publishedAt">>;
+  };
   createdAt?: FirebaseFirestore.Timestamp;
   updatedAt?: FirebaseFirestore.Timestamp;
   publishedAt?: FirebaseFirestore.Timestamp;
@@ -126,94 +137,105 @@ function compact<T>(items: Array<T | null | undefined>): T[] {
   return items.filter((item): item is T => Boolean(item));
 }
 
-export async function getEnsembles(): Promise<Ensemble[]> {
+export async function getEnsembles(locale: "en" | "ja" = "ja"): Promise<Ensemble[]> {
   const docs = await getPublishedEnsembles();
-  return docs.map((doc) => ({
-    id: doc.id,
-    type: "ensemble",
-    title: doc.name,
-    sub: doc.sub || doc.region,
-    forestType: doc.forestType,
-    heroImage: image(doc.img),
-    philosophy: doc.philosophy,
-    caution: doc.notes?.join("\n"),
-    travelConditions: doc.travelConditions,
-    stats: doc.stats?.map((item) => ({ fieldId: item.label, ...item })) ?? [],
-    activity: doc.activities?.map((item, index) => ({
-      fieldId: String(index),
-      title: item.title,
-      name: item.title,
-      desc: item.desc,
-      description: item.desc,
-      icon: item.icon,
-      image: item.img ? [{ url: item.img }] : undefined,
-    })) ?? [],
-    gallery: doc.gallery?.map((url) => ({ url })) ?? [],
-    createdAt: ts(doc.createdAt),
-    updatedAt: ts(doc.updatedAt),
-    publishedAt: ts(doc.updatedAt),
-  }));
+  return docs.map((doc) => {
+    const t = doc.translations?.en;
+    return {
+      id: doc.id,
+      type: "ensemble",
+      title: locale === "en" ? (t?.name ?? doc.name) : doc.name,
+      sub: locale === "en" ? (t?.sub ?? doc.sub ?? doc.region) : (doc.sub ?? doc.region),
+      forestType: doc.forestType,
+      heroImage: image(doc.img),
+      philosophy: locale === "en" ? (t?.philosophy ?? doc.philosophy) : doc.philosophy,
+      caution: doc.notes?.join("\n"),
+      travelConditions: locale === "en" ? (t?.travelConditions ?? doc.travelConditions) : doc.travelConditions,
+      stats: doc.stats?.map((item) => ({ fieldId: item.label, ...item })) ?? [],
+      activity: doc.activities?.map((item, index) => ({
+        fieldId: String(index),
+        title: item.title,
+        name: item.title,
+        desc: item.desc,
+        description: item.desc,
+        icon: item.icon,
+        image: item.img ? [{ url: item.img }] : undefined,
+      })) ?? [],
+      gallery: doc.gallery?.map((url) => ({ url })) ?? [],
+      createdAt: ts(doc.createdAt),
+      updatedAt: ts(doc.updatedAt),
+      publishedAt: ts(doc.updatedAt),
+    };
+  });
 }
 
-export async function getEnsemble(id: string): Promise<Ensemble | null> {
-  const ensembles = await getEnsembles();
+export async function getEnsemble(id: string, locale: "en" | "ja" = "ja"): Promise<Ensemble | null> {
+  const ensembles = await getEnsembles(locale);
   const ensemble = ensembles.find((item) => item.id === id);
   if (ensemble) return ensemble;
 
-  const spots = await getSpots();
+  const spots = await getSpots(locale);
   return spots.find((item) => item.id === id) ?? null;
 }
 
-export async function getSpots(): Promise<Ensemble[]> {
+export async function getSpots(locale: "en" | "ja" = "ja"): Promise<Ensemble[]> {
   const docs = await getPublishedSpots();
-  return docs.map((doc) => ({
-    id: doc.id,
-    type: "spot",
-    title: doc.name,
-    sub: doc.sub || doc.region,
-    forestType: doc.forestType,
-    heroImage: image(doc.img),
-    philosophy: doc.content,
-    caution: doc.desc,
-    stats: compact([
-      stat("住所", doc.address),
-      stat("定員", doc.capacity),
-      stat("料金", doc.price),
-      stat("アクセス", doc.access),
-    ]),
-    bookingUrl: doc.bookingUrl,
-    gallery: doc.img ? [{ url: doc.img }] : [],
-    createdAt: ts(doc.createdAt),
-    updatedAt: ts(doc.updatedAt),
-    publishedAt: ts(doc.updatedAt),
-  }));
+  return docs.map((doc) => {
+    const t = doc.translations?.en;
+    return {
+      id: doc.id,
+      type: "spot",
+      title: locale === "en" ? (t?.name ?? doc.name) : doc.name,
+      sub: locale === "en" ? (t?.sub ?? doc.sub ?? doc.region) : (doc.sub ?? doc.region),
+      forestType: doc.forestType,
+      heroImage: image(doc.img),
+      philosophy: locale === "en" ? (t?.content ?? doc.content) : doc.content,
+      caution: locale === "en" ? (t?.desc ?? doc.desc) : doc.desc,
+      stats: compact([
+        stat(locale === "en" ? "Address" : "住所", locale === "en" ? (t?.address ?? doc.address) : doc.address),
+        stat(locale === "en" ? "Capacity" : "定員", locale === "en" ? (t?.capacity ?? doc.capacity) : doc.capacity),
+        stat(locale === "en" ? "Price" : "料金", locale === "en" ? (t?.price ?? doc.price) : doc.price),
+        stat(locale === "en" ? "Access" : "アクセス", locale === "en" ? (t?.access ?? doc.access) : doc.access),
+      ]),
+      bookingUrl: doc.bookingUrl,
+      gallery: doc.img ? [{ url: doc.img }] : [],
+      createdAt: ts(doc.createdAt),
+      updatedAt: ts(doc.updatedAt),
+      publishedAt: ts(doc.updatedAt),
+    };
+  });
 }
 
 export async function getPage(pageId: string): Promise<Page | null> {
+  return getPageByLocale(pageId, "ja");
+}
+
+export async function getPageByLocale(pageId: string, locale: Locale = "ja"): Promise<Page | null> {
   const snap = await adminDb.collection("cmsPages").doc(pageId).get();
   if (!snap.exists) return null;
   const data = snap.data() as CmsPageDoc;
   if (data.active === false) return null;
+  const view = locale === "en" ? { ...data, ...data.translations?.en } : data;
 
   return {
     id: snap.id,
-    pageId: data.pageId ?? pageId,
-    heroTitle: data.heroTitle,
-    heroCaption: data.heroCaption,
-    body: data.body,
-    conceptTag: data.conceptTag,
-    conceptTitle: data.conceptTitle,
-    conceptLinkLabel: data.conceptLinkLabel,
-    forestSectionTitle: data.forestSectionTitle,
-    ensembleSectionTitle: data.ensembleSectionTitle,
-    slides: data.slides ?? [],
+    pageId: view.pageId ?? pageId,
+    heroTitle: view.heroTitle,
+    heroCaption: view.heroCaption,
+    body: view.body,
+    conceptTag: view.conceptTag,
+    conceptTitle: view.conceptTitle,
+    conceptLinkLabel: view.conceptLinkLabel,
+    forestSectionTitle: view.forestSectionTitle,
+    ensembleSectionTitle: view.ensembleSectionTitle,
+    slides: view.slides ?? [],
     createdAt: ts(data.createdAt),
     updatedAt: ts(data.updatedAt),
     publishedAt: ts(data.publishedAt ?? data.updatedAt),
   };
 }
 
-export async function getReports(): Promise<Report[]> {
+export async function getReports(locale: Locale = "ja"): Promise<Report[]> {
   const snap = await adminDb
     .collection("reports")
     .where("status", "==", "published")
@@ -221,13 +243,14 @@ export async function getReports(): Promise<Report[]> {
     .get();
   const reports = snap.docs.map((doc) => {
     const data = doc.data() as CmsReportDoc;
+    const view = locale === "en" ? { ...data, ...data.translations?.en } : data;
     return {
       id: doc.id,
-      title: data.title,
-      date: data.date,
-      category: data.category,
-      image: data.image,
-      body: data.body,
+      title: view.title,
+      date: view.date,
+      category: view.category,
+      image: view.image,
+      body: view.body,
       createdAt: ts(data.createdAt),
       updatedAt: ts(data.updatedAt),
       publishedAt: ts(data.publishedAt ?? data.updatedAt),
@@ -251,21 +274,24 @@ export async function getReports(): Promise<Report[]> {
   }));
 }
 
-export async function getNews(): Promise<News[]> {
+export async function getNews(locale: Locale = "ja"): Promise<News[]> {
   const docs = await getPublishedCmsNews();
-  return docs.map((data: CmsNewsDoc & { id: string }) => ({
-    id: data.id,
-    title: data.title,
-    date: data.date,
-    label: data.label,
-    href: data.href,
-    category: data.category,
-    image: data.image,
-    body: data.body,
-    createdAt: ts(data.createdAt),
-    updatedAt: ts(data.updatedAt),
-    publishedAt: ts(data.publishedAt ?? data.updatedAt),
-  }));
+  return docs.map((data: CmsNewsDoc & { id: string }) => {
+    const view = locale === "en" ? { ...data, ...data.translations?.en } : data;
+    return {
+      id: data.id,
+      title: view.title,
+      date: view.date,
+      label: view.label,
+      href: view.href,
+      category: view.category,
+      image: view.image,
+      body: view.body,
+      createdAt: ts(data.createdAt),
+      updatedAt: ts(data.updatedAt),
+      publishedAt: ts(data.publishedAt ?? data.updatedAt),
+    };
+  });
 }
 
 export async function getReport(id: string): Promise<Report | null> {

@@ -4,12 +4,16 @@ import ReportForm from "../ReportForm";
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }
 
-export default async function AdminReportEditPage({ params }: PageProps) {
+export default async function AdminReportEditPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  const { lang } = await searchParams;
+  const locale = lang === "en" ? "en" : "ja";
   const report = await getCmsReport(id);
   if (!report) notFound();
+  const t = locale === "en" ? report.translations?.en : undefined;
 
   return (
     <div>
@@ -31,12 +35,13 @@ export default async function AdminReportEditPage({ params }: PageProps) {
       <ReportForm
         mode="edit"
         reportId={id}
+        locale={locale}
         initialData={{
-          title: report.title ?? "",
-          date: report.date ?? "",
-          category: report.category ?? "",
-          imageUrl: report.image?.url ?? "",
-          body: report.body ?? "",
+          title: t?.title ?? report.title ?? "",
+          date: t?.date ?? report.date ?? "",
+          category: t?.category ?? report.category ?? "",
+          imageUrl: t?.image?.url ?? report.image?.url ?? "",
+          body: t?.body ?? report.body ?? "",
           status: report.status === "published" ? "published" : "draft",
           active: report.active !== false,
         }}

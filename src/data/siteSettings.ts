@@ -6,6 +6,21 @@ export type NavItemSetting = {
   href: string;
 };
 
+export type SiteLocale = "ja" | "en";
+
+export type ExternalLinkSetting = {
+  label: string;
+  href?: string;
+  icon?: "note" | "facebook" | "x" | "link";
+};
+
+export type LanguageLinkSetting = {
+  label: string;
+  shortLabel: string;
+  href?: string;
+  active?: boolean;
+};
+
 export type FooterLinkSetting = {
   label: string;
   href: string;
@@ -34,6 +49,8 @@ export type PageTextSetting = {
 export type SiteSettings = {
   navigation: {
     headerItems: NavItemSetting[];
+    externalLinks?: ExternalLinkSetting[];
+    languageLinks?: LanguageLinkSetting[];
     joinLabel: string;
     loginLabel: string;
     myPageLabel: string;
@@ -79,6 +96,15 @@ export const SITE_SETTINGS_DEFAULT: SiteSettings = {
     headerItems: [
       { label: "●旅に出よう「様々な食べられる森をさがしに」", href: "/spots" },
       { label: "●「アンサンブル」イベントへの参加を選ぼう", href: "/ensembles" },
+    ],
+    externalLinks: [
+      { label: "note", href: "https://note.com/exergy_foresters", icon: "note" },
+      { label: "Facebook", icon: "facebook" },
+      { label: "X", icon: "x" },
+    ],
+    languageLinks: [
+      { label: "日本語", shortLabel: "JP", href: "/?lang=ja", active: true },
+      { label: "English", shortLabel: "EN", href: "/?lang=en" },
     ],
     joinLabel: "参加する",
     loginLabel: "ログイン",
@@ -183,5 +209,56 @@ export const SITE_SETTINGS_DEFAULT: SiteSettings = {
   },
   map: {
     regions: REGIONS,
+  },
+};
+
+export const SITE_SETTINGS_EN_DEFAULT: SiteSettings = {
+  ...SITE_SETTINGS_DEFAULT,
+  navigation: {
+    ...SITE_SETTINGS_DEFAULT.navigation,
+    headerItems: [
+      { label: "Find Edible Forests", href: "/spots?lang=en" },
+      { label: "Join Ensemble Events", href: "/ensembles?lang=en" },
+    ],
+    languageLinks: [
+      { label: "Japanese", shortLabel: "JP", href: "/?lang=ja" },
+      { label: "English", shortLabel: "EN", href: "/?lang=en", active: true },
+    ],
+    joinLabel: "Join",
+    loginLabel: "Login",
+    myPageLabel: "My Page",
+    logoutLabel: "Logout",
+  },
+  footer: {
+    ...SITE_SETTINGS_DEFAULT.footer,
+    links: [
+      { label: "Privacy Policy", href: "/privacy?lang=en" },
+      { label: "Terms", href: "/terms?lang=en" },
+      { label: "Company", href: "/company?lang=en" },
+    ],
+  },
+  pages: {
+    ensembles: {
+      eyebrow: "Events",
+      title: "Ensembles",
+      description: "Explore local communities and ensemble programs across Japan.",
+      ctaLabel: "Join the Club",
+      ctaHref: "/join?lang=en",
+    },
+    spots: {
+      eyebrow: "Places",
+      title: "Places to Stay",
+      description: "Lodging facilities and local bases operated by members of the Edible Forest Ensemble Club.",
+    },
+    reports: {
+      eyebrow: "Reports",
+      title: "Activity Reports",
+      description: "Read stories from local bases, exchanges, and experiments across the network.",
+    },
+    events: {
+      eyebrow: "Events",
+      title: "Upcoming Events",
+      description: "A list of events hosted across edible forests and local communities.",
+    },
   },
 };

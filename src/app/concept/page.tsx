@@ -1,7 +1,8 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { getPage } from "@/lib/cms";
+import { getPageByLocale } from "@/lib/cms";
 import { getSiteSettings } from "@/lib/site-settings";
+import type { SiteLocale } from "@/data/siteSettings";
 
 export const metadata = {
   title: "食べられる森とは | アンサンブル倶楽部～食べられる森を目指して～",
@@ -12,10 +13,12 @@ export const revalidate = 60;
 // CMS 未設定／空のときのフォールバック本文
 const BODY_DEFAULT = `<p>食べられる森とは、産業が生まれる以前から続く「食べていくための森」のことです。効率よく何かを大量生産する畑や養殖場とは違い、自然界の仕組みのなかで、人が暮らし、食べていける環境そのものを指します。</p><p>たとえば昆布漁。海で昆布を一生懸命に育てている人は、昆布だけを見ているわけではありません。魚や貝、ほかの海藻が共に育つ海の生態系を整えている——つまり「海の森」を育てているのです。</p><p>エビの養殖だけがうまくいけばいいと考え、まわりの海が死んでいくような営みは、食べられる森にはなりません。隣にあるものと一緒に豊かになっていく。それが、食べられる森の本来の姿です。</p><p>私たちは、各地の暮らしをこの同じ切り口で捉え直しています。地域だけで完結させるのではなく、海の森も、砂丘の森も、都市の小さな庭も、同じ「食べられる森」として並べて発信していく。そうすることで、これまでとは違う旅の形、人やものの移動が生まれてくると考えています。</p>`;
 
-export default async function ConceptPage() {
+export default async function ConceptPage({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+  const { lang } = await searchParams;
+  const locale: SiteLocale = lang === "en" ? "en" : "ja";
   const [page, settings] = await Promise.all([
-    getPage("concept").catch(() => null),
-    getSiteSettings().catch(() => null),
+    getPageByLocale("concept", locale).catch(() => null),
+    getSiteSettings(locale).catch(() => null),
   ]);
 
   const title = page?.heroTitle || "食べられる森とは";

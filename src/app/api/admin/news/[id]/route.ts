@@ -19,8 +19,9 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
 
   const { id } = await params;
   const body = (await req.json()) as Record<string, unknown>;
+  const locale = req.nextUrl.searchParams.get("lang") === "en" ? "en" : "ja";
 
-  await upsertCmsNews(id, {
+  const newsData = {
     title: typeof body.title === "string" ? body.title : "",
     date: typeof body.date === "string" ? body.date : "",
     label: typeof body.label === "string" ? body.label : "",
@@ -30,9 +31,9 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     body: typeof body.body === "string" ? body.body : "",
     status: body.status === "published" ? "published" : "draft",
     active: body.active !== false,
-  });
+  } as const;
 
-  await upsertCmsReport(id, {
+  const reportData = {
     title: typeof body.title === "string" ? body.title : "",
     date: typeof body.date === "string" ? body.date : "",
     category: typeof body.category === "string" && body.category ? body.category : "ニュース",
@@ -40,7 +41,23 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     body: typeof body.body === "string" ? body.body : "",
     status: body.status === "published" ? "published" : "draft",
     active: body.active !== false,
-  });
+  } as const;
+
+  if (locale === "en") {
+    await upsertCmsNews(id, {
+      active: body.active !== false,
+      status: body.status === "published" ? "published" : "draft",
+      translations: { en: newsData },
+    });
+    await upsertCmsReport(id, {
+      active: body.active !== false,
+      status: body.status === "published" ? "published" : "draft",
+      translations: { en: reportData },
+    });
+  } else {
+    await upsertCmsNews(id, newsData);
+    await upsertCmsReport(id, reportData);
+  }
 
   revalidatePath("/");
   revalidatePath("/reports");

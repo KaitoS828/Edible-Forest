@@ -40,8 +40,9 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
 
   const { pageId } = await params;
   const body = (await req.json()) as Record<string, unknown>;
+  const locale = req.nextUrl.searchParams.get("lang") === "en" ? "en" : "ja";
 
-  await upsertCmsPage(pageId, {
+  const pageData = {
     pageId,
     heroTitle: stringValue(body, "heroTitle"),
     heroCaption: stringValue(body, "heroCaption"),
@@ -53,7 +54,17 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     ensembleSectionTitle: stringValue(body, "ensembleSectionTitle"),
     slides: slidesValue(body),
     active: body.active !== false,
-  });
+  };
+
+  await upsertCmsPage(
+    pageId,
+    locale === "en"
+      ? {
+          active: body.active !== false,
+          translations: { en: pageData },
+        }
+      : pageData
+  );
 
   return NextResponse.json({ ok: true });
 }

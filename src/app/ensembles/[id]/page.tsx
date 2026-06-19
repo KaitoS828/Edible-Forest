@@ -8,15 +8,18 @@ export const revalidate = 60;
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }
 
-export default async function EnsembleDetailPage({ params }: PageProps) {
+export default async function EnsembleDetailPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  const { lang: langParam } = await searchParams;
+  const locale = langParam === "en" ? "en" : "ja";
 
-  const ensemble = await getEnsemble(id).catch(() => null);
+  const ensemble = await getEnsemble(id, locale).catch(() => null);
   if (!ensemble) notFound();
 
-  const allEnsembles = await getEnsembles().catch(() => []);
+  const allEnsembles = await getEnsembles(locale).catch(() => []);
   const related = allEnsembles.filter((e) => e.id !== id).slice(0, 3);
   const galleryUrls = ensemble.gallery?.map((g) => g.url) ?? [];
 

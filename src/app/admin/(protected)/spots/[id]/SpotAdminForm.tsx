@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
+import type { SiteLocale } from "@/data/siteSettings";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 
 const RichTextEditor = dynamic(
@@ -35,9 +36,11 @@ const FOREST_TYPES = ["海の森", "川と森", "山の森", "砂丘の森", "�
 export default function SpotAdminForm({
   id,
   initialData,
+  locale = "ja",
 }: {
   id: string;
   initialData: SpotAdminFormData;
+  locale?: SiteLocale;
 }) {
   const router = useRouter();
   const [form, setForm] = useState<SpotAdminFormData>(initialData);
@@ -57,7 +60,7 @@ export default function SpotAdminForm({
     setError(null);
 
     try {
-      const res = await fetch(`/api/admin/spots/${id}`, {
+      const res = await fetch(`/api/admin/spots/${id}${locale === "en" ? "?lang=en" : ""}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

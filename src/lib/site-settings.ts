@@ -1,5 +1,10 @@
 import { adminDb } from "./firebase-admin";
-import { SITE_SETTINGS_DEFAULT, type SiteSettings } from "@/data/siteSettings";
+import {
+  SITE_SETTINGS_DEFAULT,
+  SITE_SETTINGS_EN_DEFAULT,
+  type SiteLocale,
+  type SiteSettings,
+} from "@/data/siteSettings";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -21,12 +26,21 @@ function mergeDeep<T>(base: T, override: unknown): T {
   return next as T;
 }
 
-export async function getSiteSettings(): Promise<SiteSettings> {
-  const snap = await adminDb.collection("siteSettings").doc("general").get();
-  if (!snap.exists) return SITE_SETTINGS_DEFAULT;
-  return mergeDeep(SITE_SETTINGS_DEFAULT, snap.data());
+function settingsDocId(locale: SiteLocale) {
+  return locale === "en" ? "general_en" : "general";
 }
 
-export async function upsertSiteSettings(data: Partial<SiteSettings>) {
-  await adminDb.collection("siteSettings").doc("general").set(data, { merge: true });
+function defaultSettings(locale: SiteLocale) {
+  return locale === "en" ? SITE_SETTINGS_EN_DEFAULT : SITE_SETTINGS_DEFAULT;
+}
+
+export async function getSiteSettings(locale: SiteLocale = "ja"): Promise<SiteSettings> {
+  const fallback = defaultSettings(locale);
+  const snap = await adminDb.collection("siteSettings").doc(settingsDocId(locale)).get();
+  if (!snap.exists) return fallback;
+  return mergeDeep(fallback, snap.data());
+}
+
+export async function upsertSiteSettings(data: Partial<SiteSettings>, locale: SiteLocale = "ja") {
+  await adminDb.collection("siteSettings").doc(settingsDocId(locale)).set(data, { merge: true });
 }

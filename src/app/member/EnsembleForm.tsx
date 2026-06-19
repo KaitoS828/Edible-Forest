@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef } from "react";
 import dynamic from "next/dynamic";
 import type { EnsembleDoc } from "@/lib/firestore";
+import type { SiteLocale } from "@/data/siteSettings";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "@/lib/firebase";
 
@@ -17,12 +18,13 @@ interface Props {
   authorId: string;
   authorName: string;
   initialData?: EnsembleDoc;
+  locale?: SiteLocale;
 }
 
 const REGIONS = ["北海道", "東北", "関東", "中部", "近畿", "中国", "四国", "九州・沖縄"];
 const FOREST_TYPES = ["里山の森", "海の森", "川の森", "農の森", "都市の森", "その他"];
 
-export default function EnsembleForm({ mode, ensembleId, authorId, authorName, initialData }: Props) {
+export default function EnsembleForm({ mode, ensembleId, authorId, authorName, initialData, locale = "ja" }: Props) {
   const d = initialData;
 
   // 基本情報
@@ -152,7 +154,7 @@ export default function EnsembleForm({ mode, ensembleId, authorId, authorName, i
     };
 
     try {
-      const url    = mode === "new" ? "/api/member/ensemble" : `/api/member/ensemble/${ensembleId}`;
+      const url = mode === "new" ? "/api/member/ensemble" : `/api/member/ensemble/${ensembleId}${locale === "en" ? "?lang=en" : ""}`;
       const method = mode === "new" ? "POST" : "PATCH";
       const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       if (!res.ok) throw new Error();
@@ -435,14 +437,14 @@ export default function EnsembleForm({ mode, ensembleId, authorId, authorName, i
           className="flex-1 py-3 rounded-full text-sm font-medium text-white hover:opacity-90 disabled:opacity-60 transition-opacity"
           style={{ backgroundColor: "#3C6B4F" }}
         >
-          {saving ? "保存中..." : mode === "new" ? "作成する" : "更新する"}
+          {saving ? "保存中..." : locale === "en" ? (mode === "new" ? "Create" : "Update") : (mode === "new" ? "作成する" : "更新する")}
         </button>
         <a
           href="/member"
           className="px-6 py-3 rounded-full text-sm font-medium border hover:opacity-70 transition-opacity"
           style={{ color: "#555", borderColor: "rgba(0,95,2,0.15)" }}
         >
-          キャンセル
+          {locale === "en" ? "Cancel" : "キャンセル"}
         </a>
       </div>
     </form>

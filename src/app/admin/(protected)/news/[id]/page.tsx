@@ -4,12 +4,16 @@ import NewsForm from "../NewsForm";
 
 interface PageProps {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }
 
-export default async function AdminNewsEditPage({ params }: PageProps) {
+export default async function AdminNewsEditPage({ params, searchParams }: PageProps) {
   const { id } = await params;
+  const { lang } = await searchParams;
+  const locale = lang === "en" ? "en" : "ja";
   const news = await getCmsNews(id);
   if (!news) notFound();
+  const t = locale === "en" ? news.translations?.en : undefined;
 
   return (
     <div>
@@ -31,14 +35,15 @@ export default async function AdminNewsEditPage({ params }: PageProps) {
       <NewsForm
         mode="edit"
         newsId={id}
+        locale={locale}
         initialData={{
-          title: news.title ?? "",
-          date: news.date ?? "",
-          label: news.label ?? "",
-          href: news.href ?? "",
-          category: news.category ?? "ニュース",
-          imageUrl: news.image?.url ?? "",
-          body: news.body ?? "",
+          title: t?.title ?? news.title ?? "",
+          date: t?.date ?? news.date ?? "",
+          label: t?.label ?? news.label ?? "",
+          href: t?.href ?? news.href ?? "",
+          category: t?.category ?? news.category ?? "ニュース",
+          imageUrl: t?.image?.url ?? news.image?.url ?? "",
+          body: t?.body ?? news.body ?? "",
           status: news.status === "published" ? "published" : "draft",
           active: news.active !== false,
         }}

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { ImageUpload } from "@/components/admin/ImageUpload";
+import type { SiteLocale } from "@/data/siteSettings";
 
 const RichTextEditor = dynamic(
   () => import("@/components/editor/RichTextEditor"),
@@ -28,9 +29,11 @@ type FormData = {
 export default function EnsembleEditForm({
   id,
   initialData,
+  locale = "ja",
 }: {
   id: string;
   initialData: FormData;
+  locale?: SiteLocale;
 }) {
   const [form, setForm] = useState<FormData>(initialData);
   const [saving, setSaving] = useState(false);
@@ -72,7 +75,7 @@ export default function EnsembleEditForm({
     setSaving(true);
     setError(null);
     try {
-      const res = await fetch(`/api/ensemble/${id}`, {
+      const res = await fetch(`/api/ensemble/${id}${locale === "en" ? "?lang=en" : ""}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

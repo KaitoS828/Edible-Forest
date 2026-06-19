@@ -8,7 +8,8 @@ export function useSiteSettings(): SiteSettings {
 
   useEffect(() => {
     let ignore = false;
-    fetch("/api/public/site-settings", { cache: "no-store" })
+    const lang = new URLSearchParams(window.location.search).get("lang") === "en" ? "en" : "ja";
+    fetch(`/api/public/site-settings?lang=${lang}`, { cache: "no-store" })
       .then((res) => (res.ok ? res.json() : null))
       .then((data: SiteSettings | null) => {
         if (!ignore && data) setSettings(data);

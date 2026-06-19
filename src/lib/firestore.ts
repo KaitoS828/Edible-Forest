@@ -65,6 +65,15 @@ export type PendingSubscriptionDoc = {
 
 export type EnsembleStatus = "draft" | "published";
 
+export type EnsembleTranslation = {
+  name: string;
+  sub: string;
+  desc: string;
+  tagline: string;
+  philosophy: string;
+  travelConditions?: string;
+};
+
 export type EnsembleDoc = {
   id: string;
   authorId: string;
@@ -84,6 +93,9 @@ export type EnsembleDoc = {
   gallery:    string[];
   notes?:     string[];
   travelConditions?: string;
+  translations?: {
+    en?: Partial<EnsembleTranslation>;
+  };
   active: boolean;
   status: EnsembleStatus;
   isOfficial: boolean;
@@ -266,6 +278,17 @@ export async function deleteEnsemble(id: string) {
 // ─────────────────────────────────────────
 // Spots（拠点・宿泊施設）
 // ─────────────────────────────────────────
+export type SpotTranslation = {
+  name: string;
+  sub: string;
+  desc: string;
+  content: string;
+  address: string;
+  capacity: string;
+  price: string;
+  access: string;
+};
+
 export type SpotDoc = {
   id: string;
   authorId: string;
@@ -283,6 +306,9 @@ export type SpotDoc = {
   price: string;       // 料金
   access: string;      // アクセス
   bookingUrl?: string; // 外部予約URL
+  translations?: {
+    en?: Partial<SpotTranslation>;
+  };
   active: boolean;
   status: "draft" | "published";
   isOfficial: boolean;
@@ -380,10 +406,26 @@ export type CmsPageDoc = {
   forestSectionTitle?: string;
   ensembleSectionTitle?: string;
   slides?: CmsSlide[];
+  translations?: {
+    en?: Partial<CmsPageTranslation>;
+  };
   active: boolean;
   createdAt?: FirebaseFirestore.Timestamp;
   updatedAt?: FirebaseFirestore.Timestamp;
   publishedAt?: FirebaseFirestore.Timestamp;
+};
+
+export type CmsPageTranslation = {
+  pageId: string;
+  heroTitle?: string;
+  heroCaption?: string;
+  body?: string;
+  conceptTag?: string;
+  conceptTitle?: string;
+  conceptLinkLabel?: string;
+  forestSectionTitle?: string;
+  ensembleSectionTitle?: string;
+  slides?: CmsSlide[];
 };
 
 export type CmsReportStatus = "draft" | "published";
@@ -395,11 +437,22 @@ export type CmsReportDoc = {
   category?: string;
   image?: { url: string };
   body?: string;
+  translations?: {
+    en?: Partial<CmsReportTranslation>;
+  };
   status: CmsReportStatus;
   active: boolean;
   createdAt?: FirebaseFirestore.Timestamp;
   updatedAt?: FirebaseFirestore.Timestamp;
   publishedAt?: FirebaseFirestore.Timestamp;
+};
+
+export type CmsReportTranslation = {
+  title: string;
+  date?: string;
+  category?: string;
+  image?: { url: string };
+  body?: string;
 };
 
 export type CmsNewsStatus = "draft" | "published";
@@ -413,11 +466,24 @@ export type CmsNewsDoc = {
   category?: string;
   image?: { url: string };
   body?: string;
+  translations?: {
+    en?: Partial<CmsNewsTranslation>;
+  };
   status: CmsNewsStatus;
   active: boolean;
   createdAt?: FirebaseFirestore.Timestamp;
   updatedAt?: FirebaseFirestore.Timestamp;
   publishedAt?: FirebaseFirestore.Timestamp;
+};
+
+export type CmsNewsTranslation = {
+  title: string;
+  date?: string;
+  label?: string;
+  href?: string;
+  category?: string;
+  image?: { url: string };
+  body?: string;
 };
 
 export async function getCmsPage(pageId: string): Promise<CmsPageDoc | null> {

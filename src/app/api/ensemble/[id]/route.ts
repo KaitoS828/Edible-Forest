@@ -16,9 +16,27 @@ export async function PATCH(
 
   const { id } = await params;
   const body = await req.json();
+  const locale = req.nextUrl.searchParams.get("lang") === "en" ? "en" : "ja";
+
+  const str = (v: unknown) => (typeof v === "string" ? v : "");
 
   try {
-    await updateEnsemble(id, body);
+    if (locale === "en") {
+      // 英語版は同じコンテンツIDの translations.en にのみ保存（構造的な値は共有）
+      await updateEnsemble(id, {
+        translations: {
+          en: {
+            name: str(body.name),
+            sub: str(body.sub),
+            desc: str(body.desc),
+            tagline: str(body.tagline),
+            philosophy: str(body.philosophy),
+          },
+        },
+      });
+    } else {
+      await updateEnsemble(id, body);
+    }
   } catch {
     return NextResponse.json({ error: "Failed to update" }, { status: 500 });
   }

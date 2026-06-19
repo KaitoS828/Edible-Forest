@@ -1,13 +1,15 @@
-import { getNews, getPage, getReports } from "@/lib/cms";
+import { getNews, getPageByLocale, getReports } from "@/lib/cms";
 import HomeClient, { type SlideView, type NewsView } from "./HomeClient";
 
 export const revalidate = 60;
 
-export default async function Home() {
+export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
+  const { lang } = await searchParams;
+  const locale = lang === "en" ? "en" : "ja";
   const [top, newsItems, reports] = await Promise.all([
-    getPage("top").catch(() => null),
-    getNews().catch(() => []),
-    getReports().catch(() => []),
+    getPageByLocale("top", locale).catch(() => null),
+    getNews(locale).catch(() => []),
+    getReports(locale).catch(() => []),
   ]);
 
   // Hero スライド：CMS の pages.top.slides があればそれ、無ければ HomeClient のデフォルト

@@ -4,12 +4,16 @@ import { buildPageInitialData } from "./formData";
 
 interface PageProps {
   params: Promise<{ pageId: string }>;
+  searchParams: Promise<{ lang?: string }>;
 }
 
-export default async function AdminCmsPageEdit({ params }: PageProps) {
+export default async function AdminCmsPageEdit({ params, searchParams }: PageProps) {
   const { pageId } = await params;
+  const { lang } = await searchParams;
+  const locale = lang === "en" ? "en" : "ja";
   const page = await getCmsPage(pageId);
-  const initialData = buildPageInitialData(pageId, page ?? undefined);
+  const localeData = locale === "en" ? { ...page, ...page?.translations?.en } : page;
+  const initialData = buildPageInitialData(pageId, localeData ?? undefined);
 
   return (
     <div>
@@ -28,7 +32,7 @@ export default async function AdminCmsPageEdit({ params }: PageProps) {
         </h1>
       </div>
 
-      <CmsPageForm pageId={pageId} initialData={initialData} />
+      <CmsPageForm pageId={pageId} initialData={initialData} locale={locale} />
     </div>
   );
 }

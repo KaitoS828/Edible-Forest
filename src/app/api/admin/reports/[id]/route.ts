@@ -18,8 +18,9 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
 
   const { id } = await params;
   const body = (await req.json()) as Record<string, unknown>;
+  const locale = req.nextUrl.searchParams.get("lang") === "en" ? "en" : "ja";
 
-  await upsertCmsReport(id, {
+  const reportData = {
     title: typeof body.title === "string" ? body.title : "",
     date: typeof body.date === "string" ? body.date : "",
     category: typeof body.category === "string" ? body.category : "",
@@ -27,7 +28,18 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     body: typeof body.body === "string" ? body.body : "",
     status: body.status === "published" ? "published" : "draft",
     active: body.active !== false,
-  });
+  } as const;
+
+  await upsertCmsReport(
+    id,
+    locale === "en"
+      ? {
+          active: body.active !== false,
+          status: body.status === "published" ? "published" : "draft",
+          translations: { en: reportData },
+        }
+      : reportData
+  );
 
   return NextResponse.json({ ok: true });
 }

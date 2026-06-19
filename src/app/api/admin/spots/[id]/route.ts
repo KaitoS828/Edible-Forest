@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/auth";
-import { deleteSpot, updateSpot } from "@/lib/firestore";
+import { deleteSpot, updateSpot, type SpotDoc } from "@/lib/firestore";
 
 interface Ctx {
   params: Promise<{ id: string }>;
@@ -29,26 +29,48 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
 
   const { id } = await params;
   const body = (await req.json()) as Record<string, unknown>;
-  const status = body.status === "published" ? "published" : "draft";
+  const locale = req.nextUrl.searchParams.get("lang") === "en" ? "en" : "ja";
+  const status: SpotDoc["status"] = body.status === "published" ? "published" : "draft";
 
-  await updateSpot(id, {
-    name: getOptionalString(body, "name") ?? "",
-    sub: getOptionalString(body, "sub") ?? "",
-    region: getOptionalString(body, "region") ?? "",
-    regionColor: getOptionalString(body, "regionColor") ?? "#3C6B4F",
-    forestType: getOptionalString(body, "forestType") ?? "",
-    desc: getOptionalString(body, "desc") ?? "",
-    content: getOptionalString(body, "content") ?? "",
-    img: getOptionalString(body, "img") ?? "",
-    address: getOptionalString(body, "address") ?? "",
-    capacity: getOptionalString(body, "capacity") ?? "",
-    price: getOptionalString(body, "price") ?? "",
-    access: getOptionalString(body, "access") ?? "",
-    bookingUrl: getOptionalString(body, "bookingUrl") ?? "",
-    active: getOptionalBoolean(body, "active") ?? false,
-    status,
-    isOfficial: getOptionalBoolean(body, "isOfficial") ?? false,
-  });
+  // lang=en の場合は translations.en にのみ保存
+  const updateData = locale === "en"
+    ? {
+        translations: {
+          en: {
+            name: getOptionalString(body, "name") ?? "",
+            sub: getOptionalString(body, "sub") ?? "",
+            desc: getOptionalString(body, "desc") ?? "",
+            content: getOptionalString(body, "content") ?? "",
+            address: getOptionalString(body, "address") ?? "",
+            capacity: getOptionalString(body, "capacity") ?? "",
+            price: getOptionalString(body, "price") ?? "",
+            access: getOptionalString(body, "access") ?? "",
+          },
+        },
+        active: getOptionalBoolean(body, "active") ?? false,
+        status,
+        isOfficial: getOptionalBoolean(body, "isOfficial") ?? false,
+      }
+    : {
+        name: getOptionalString(body, "name") ?? "",
+        sub: getOptionalString(body, "sub") ?? "",
+        region: getOptionalString(body, "region") ?? "",
+        regionColor: getOptionalString(body, "regionColor") ?? "#3C6B4F",
+        forestType: getOptionalString(body, "forestType") ?? "",
+        desc: getOptionalString(body, "desc") ?? "",
+        content: getOptionalString(body, "content") ?? "",
+        img: getOptionalString(body, "img") ?? "",
+        address: getOptionalString(body, "address") ?? "",
+        capacity: getOptionalString(body, "capacity") ?? "",
+        price: getOptionalString(body, "price") ?? "",
+        access: getOptionalString(body, "access") ?? "",
+        bookingUrl: getOptionalString(body, "bookingUrl") ?? "",
+        active: getOptionalBoolean(body, "active") ?? false,
+        status,
+        isOfficial: getOptionalBoolean(body, "isOfficial") ?? false,
+      };
+
+  await updateSpot(id, updateData);
 
   return NextResponse.json({ ok: true });
 }

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ImageUpload } from "@/components/admin/ImageUpload";
+import type { SiteLocale } from "@/data/siteSettings";
 
 const RichTextEditor = dynamic(
   () => import("@/components/editor/RichTextEditor"),
@@ -25,10 +26,12 @@ export default function ReportForm({
   mode,
   reportId,
   initialData,
+  locale = "ja",
 }: {
   mode: "new" | "edit";
   reportId?: string;
   initialData: ReportFormData;
+  locale?: SiteLocale;
 }) {
   const router = useRouter();
   const [form, setForm] = useState(initialData);
@@ -48,7 +51,7 @@ export default function ReportForm({
     setError(null);
 
     try {
-      const res = await fetch(mode === "new" ? "/api/admin/reports" : `/api/admin/reports/${reportId}`, {
+      const res = await fetch(mode === "new" ? "/api/admin/reports" : `/api/admin/reports/${reportId}?lang=${locale}`, {
         method: mode === "new" ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -93,6 +96,10 @@ export default function ReportForm({
         <div className="rounded-md border px-4 py-3 text-sm" style={{ borderColor: error ? "#FECACA" : "#BBF7D0", backgroundColor: error ? "#FEF2F2" : "#F0FDF4", color: error ? "#B42318" : "#166534" }}>
           {error ?? "保存しました"}
         </div>
+      )}
+
+      {mode === "edit" && reportId && (
+        <LanguageTabs baseHref={`/admin/reports/${reportId}`} locale={locale} />
       )}
 
       <Section title="基本情報">
@@ -143,11 +150,40 @@ export default function ReportForm({
         <div className="flex gap-3">
           <a href="/admin/reports" className="rounded-md border px-4 py-2 text-sm font-medium" style={{ borderColor: "#CBD5E1", color: "#334155", backgroundColor: "#FFFFFF" }}>戻る</a>
           <button type="submit" disabled={saving || deleting} className="rounded-md px-5 py-2 text-sm font-medium text-white disabled:opacity-50" style={{ backgroundColor: "#0F172A" }}>
-            {saving ? "保存中..." : "保存"}
+            {saving ? "保存中..." : locale === "en" ? "英語版を保存" : "日本語版を保存"}
           </button>
         </div>
       </div>
     </form>
+  );
+}
+
+function LanguageTabs({ baseHref, locale }: { baseHref: string; locale: SiteLocale }) {
+  const tabs = [
+    { locale: "ja" as const, label: "日本語", href: baseHref },
+    { locale: "en" as const, label: "English", href: `${baseHref}?lang=en` },
+  ];
+
+  return (
+    <div className="flex flex-wrap gap-2 rounded-md border bg-white p-2" style={{ borderColor: "#DCE3EA" }}>
+      {tabs.map((tab) => {
+        const active = tab.locale === locale;
+        return (
+          <a
+            key={tab.locale}
+            href={tab.href}
+            className="rounded-md px-3 py-2 text-sm font-medium"
+            style={{
+              backgroundColor: active ? "#0F172A" : "#FFFFFF",
+              border: `1px solid ${active ? "#0F172A" : "#CBD5E1"}`,
+              color: active ? "#FFFFFF" : "#334155",
+            }}
+          >
+            {tab.label}
+          </a>
+        );
+      })}
+    </div>
   );
 }
 

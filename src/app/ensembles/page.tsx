@@ -6,9 +6,16 @@ import EnsembleList from "./EnsembleList";
 
 export const revalidate = 60;
 
-export default async function EnsemblesPage() {
+interface Props {
+  searchParams: Promise<{ lang?: string }>;
+}
+
+export default async function EnsemblesPage({ searchParams }: Props) {
+  const { lang: langParam } = await searchParams;
+  const locale = langParam === "en" ? "en" : "ja";
+
   const [ensembles, settings] = await Promise.all([
-    getEnsembles().catch(() => []),
+    getEnsembles(locale).catch(() => []),
     getSiteSettings().catch(() => null),
   ]);
   const pageText = settings?.pages.ensembles;

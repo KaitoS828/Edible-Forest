@@ -26,9 +26,28 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
   if (doc.authorId !== uid) return NextResponse.json({ error: "Forbidden" }, { status: 403 });
 
   const body = await req.json();
+  const locale = req.nextUrl.searchParams.get("lang") === "en" ? "en" : "ja";
+
   // authorId の上書きは禁止
   const { authorId: _, ...safe } = body;
-  await updateEnsemble(id, safe);
+
+  // lang=en の場合は translations.en にのみ保存
+  const updateData = locale === "en"
+    ? {
+        translations: {
+          en: {
+            name: typeof safe.name === "string" ? safe.name : "",
+            sub: typeof safe.sub === "string" ? safe.sub : "",
+            desc: typeof safe.desc === "string" ? safe.desc : "",
+            tagline: typeof safe.tagline === "string" ? safe.tagline : "",
+            philosophy: typeof safe.philosophy === "string" ? safe.philosophy : "",
+            travelConditions: typeof safe.travelConditions === "string" ? safe.travelConditions : undefined,
+          },
+        },
+      }
+    : safe;
+
+  await updateEnsemble(id, updateData);
 
   return NextResponse.json({ ok: true });
 }

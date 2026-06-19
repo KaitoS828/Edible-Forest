@@ -249,7 +249,7 @@ function ForestTypesSection({ heading }: { heading?: string }) {
       <div className="max-w-[1400px] mx-auto px-6 lg:px-12 py-8 flex flex-col items-center gap-6">
         <p
           className="text-base font-medium text-center"
-          style={{ color: "#1A2B1E", fontFamily: "'Noto Sans JP', sans-serif" }}
+          style={{ color: "#FFFFFF", fontFamily: "'Noto Sans JP', sans-serif" }}
         >
           {heading || FOREST_SECTION_TITLE_DEFAULT}
         </p>
