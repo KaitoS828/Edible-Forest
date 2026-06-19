@@ -315,12 +315,13 @@ function EnsembleSection() {
     <section className="py-16 bg-white">
       <div className="max-w-[1100px] mx-auto px-6 lg:px-12">
         <RevealOnScroll>
-          <p
-            className="text-base font-medium mb-10 text-center"
+          <a
+            href="/ensembles"
+            className="block text-base font-medium mb-10 text-center transition-colors hover:text-[#3C6B4F]"
             style={{ color: "#1A2B1E", fontFamily: "'Noto Sans JP', sans-serif" }}
           >
             ●「アンサンブル」イベントへの参加を選ぼう
-          </p>
+          </a>
         </RevealOnScroll>
 
         {/* 4カテゴリカード */}
