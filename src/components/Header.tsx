@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const NAV_ITEMS = [
   { label: "●旅に出よう「様々な食べられる森をさがしに」", href: "/spots" },
-  { label: "●「アンサンブル」イベントへの参加を選ぼう", href: "/join" },
+  { label: "●「アンサンブル」イベントへの参加を選ぼう", href: "/ensembles" },
 ];
 
 export function Header() {
