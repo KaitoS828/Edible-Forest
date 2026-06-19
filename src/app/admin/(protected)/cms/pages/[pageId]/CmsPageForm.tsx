@@ -3,62 +3,12 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
-import type { CmsSlide } from "@/lib/firestore";
+import type { CmsPageFormData, SlideForm } from "./formData";
 
 const RichTextEditor = dynamic(
   () => import("@/components/editor/RichTextEditor"),
   { ssr: false, loading: () => <div className="h-40 rounded-md bg-white" /> }
 );
-
-type SlideForm = {
-  fieldId: string;
-  imageUrl: string;
-  label: string;
-  title: string;
-  link: string;
-  linkLabel: string;
-};
-
-export type CmsPageFormData = {
-  heroTitle: string;
-  heroCaption: string;
-  body: string;
-  conceptTag: string;
-  conceptLinkLabel: string;
-  slides: SlideForm[];
-  active: boolean;
-};
-
-function toSlideForm(slide: CmsSlide, index: number): SlideForm {
-  return {
-    fieldId: slide.fieldId || String(index),
-    imageUrl: slide.image?.url ?? "",
-    label: slide.label ?? "",
-    title: slide.title ?? "",
-    link: slide.link ?? "",
-    linkLabel: slide.linkLabel ?? "",
-  };
-}
-
-export function buildPageInitialData(data?: {
-  heroTitle?: string;
-  heroCaption?: string;
-  body?: string;
-  conceptTag?: string;
-  conceptLinkLabel?: string;
-  slides?: CmsSlide[];
-  active?: boolean;
-}): CmsPageFormData {
-  return {
-    heroTitle: data?.heroTitle ?? "",
-    heroCaption: data?.heroCaption ?? "",
-    body: data?.body ?? "",
-    conceptTag: data?.conceptTag ?? "",
-    conceptLinkLabel: data?.conceptLinkLabel ?? "",
-    slides: data?.slides?.map(toSlideForm) ?? [],
-    active: data?.active ?? true,
-  };
-}
 
 export default function CmsPageForm({
   pageId,

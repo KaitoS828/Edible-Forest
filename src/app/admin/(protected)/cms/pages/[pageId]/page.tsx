@@ -1,5 +1,6 @@
 import { getCmsPage } from "@/lib/firestore";
-import CmsPageForm, { buildPageInitialData } from "./CmsPageForm";
+import CmsPageForm from "./CmsPageForm";
+import { buildPageInitialData } from "./formData";
 
 interface PageProps {
   params: Promise<{ pageId: string }>;
