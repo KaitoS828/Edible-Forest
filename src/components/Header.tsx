@@ -161,7 +161,7 @@ export function Header() {
           </div>
 
           <nav
-            className="hidden lg:flex h-9 items-center justify-end gap-3 xl:gap-4 flex-1 min-w-0"
+            className="hidden min-[1200px]:flex h-9 items-center justify-end gap-3 xl:gap-4 flex-1 min-w-0"
             style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
           >
             {headerItems.map((item) => (
@@ -178,7 +178,7 @@ export function Header() {
 
           {!loading && (
             <div
-              className="hidden lg:flex h-9 items-center gap-3 shrink-0"
+              className="hidden min-[1200px]:flex h-9 items-center gap-3 shrink-0"
               style={{ fontFamily: "'Noto Sans JP', sans-serif" }}
             >
               {user ? (
@@ -219,7 +219,7 @@ export function Header() {
           {/* モバイルハンバーガー */}
           <button
             type="button"
-            className="lg:hidden flex flex-col gap-1.5 p-2 ml-auto"
+            className="min-[1200px]:hidden flex flex-col gap-1.5 p-2 ml-auto"
             onClick={() => setOpen(!open)}
             aria-label="メニュー"
             aria-expanded={open}
@@ -234,7 +234,7 @@ export function Header() {
       {/* モバイルメニュー */}
       {open && (
         <div
-          className="lg:hidden border-b"
+          className="min-[1200px]:hidden border-b"
           style={{ backgroundColor: "#214D46", borderColor: "rgba(255,255,255,0.18)" }}
         >
           <div className="px-5 py-6" style={{ fontFamily: "'Noto Sans JP', sans-serif" }}>
