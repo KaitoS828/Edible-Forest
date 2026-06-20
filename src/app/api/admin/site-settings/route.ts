@@ -17,7 +17,7 @@ export async function PATCH(req: NextRequest) {
   const locale: SiteLocale = req.nextUrl.searchParams.get("lang") === "en" ? "en" : "ja";
   const body = await req.json();
   await upsertSiteSettings(body, locale);
-  ["/", "/concept", "/ensembles", "/spots", "/reports", "/events"].forEach((path) => {
+  ["/", "/concept", "/ensembles", "/spots", "/reports", "/events", "/privacy", "/terms", "/company"].forEach((path) => {
     revalidatePath(path);
   });
   return NextResponse.json({ ok: true });

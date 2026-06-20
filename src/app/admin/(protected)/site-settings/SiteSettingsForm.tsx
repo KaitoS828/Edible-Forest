@@ -2,12 +2,14 @@
 
 import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+import dynamic from "next/dynamic";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import type {
   ConceptCardSetting,
   ExternalLinkSetting,
   FooterLinkSetting,
   ForestTypeSetting,
+  HeroSlideSetting,
   LanguageLinkSetting,
   NavItemSetting,
   PageTextSetting,
@@ -15,13 +17,19 @@ import type {
   SiteSettings,
 } from "@/data/siteSettings";
 
-type TabKey = "navigation" | "home" | "pages" | "concept" | "footer" | "advanced";
+const RichTextEditor = dynamic(
+  () => import("@/components/editor/RichTextEditor"),
+  { ssr: false, loading: () => <div className="h-40 rounded-md bg-white" /> }
+);
+
+type TabKey = "navigation" | "home" | "pages" | "concept" | "legal" | "footer" | "advanced";
 
 const TABS: Array<{ key: TabKey; label: string; desc: string }> = [
   { key: "navigation", label: "ヘッダー", desc: "メニュー、各種リンク、言語切替" },
-  { key: "home", label: "トップ", desc: "森タイプ、参加カード、導線" },
+  { key: "home", label: "トップ", desc: "スライド、見出し、森タイプ、カード" },
   { key: "pages", label: "ページ文言", desc: "一覧ページの見出しとCTA" },
-  { key: "concept", label: "コンセプト", desc: "補助カードとCTA" },
+  { key: "concept", label: "コンセプト", desc: "本文、補助カードとCTA" },
+  { key: "legal", label: "規約・会社", desc: "プライバシー、利用規約、運営会社" },
   { key: "footer", label: "フッター", desc: "リンクとコピーライト" },
   { key: "advanced", label: "上級設定", desc: "地図データなど" },
 ];
@@ -31,6 +39,12 @@ const PAGE_LABELS: Record<keyof SiteSettings["pages"], string> = {
   spots: "宿泊施設一覧",
   reports: "活動レポート",
   events: "イベント一覧",
+};
+
+const LEGAL_LABELS: Record<keyof SiteSettings["legal"], string> = {
+  privacy: "プライバシーポリシー",
+  terms: "利用規約",
+  company: "運営会社",
 };
 
 const ICON_OPTIONS: Array<{ value: NonNullable<ExternalLinkSetting["icon"]>; label: string }> = [
@@ -362,6 +376,46 @@ export default function SiteSettingsForm({ initialData, locale = "ja" }: { initi
 
       {activeTab === "home" && (
         <div className="space-y-5">
+          <Card title="見出し・コンセプト訴求">
+            <div className="grid gap-4 md:grid-cols-2">
+              <Field label="コンセプト小見出し">
+                <TextInput value={settings.home.conceptTag} onChange={(e) => update((draft) => { draft.home.conceptTag = e.target.value; })} />
+              </Field>
+              <Field label="コンセプトCTAリンク文言">
+                <TextInput value={settings.home.conceptLinkLabel} onChange={(e) => update((draft) => { draft.home.conceptLinkLabel = e.target.value; })} />
+              </Field>
+            </div>
+            <Field label="コンセプトタイトル（改行可）">
+              <TextArea rows={2} value={settings.home.conceptTitle} onChange={(e) => update((draft) => { draft.home.conceptTitle = e.target.value; })} />
+            </Field>
+            <Field label="「旅に出よう」セクション見出し">
+              <TextInput value={settings.home.forestSectionTitle} onChange={(e) => update((draft) => { draft.home.forestSectionTitle = e.target.value; })} />
+            </Field>
+            <Field label="「アンサンブル」セクション見出し">
+              <TextInput value={settings.home.ensembleSectionTitle} onChange={(e) => update((draft) => { draft.home.ensembleSectionTitle = e.target.value; })} />
+            </Field>
+          </Card>
+
+          <EditableList<HeroSlideSetting>
+            title="ヒーロースライド"
+            items={settings.home.slides}
+            addLabel="スライドを追加"
+            createItem={() => ({ img: "", label: "", title: "", link: "/", linkLabel: "詳しくみる" })}
+            update={update}
+            path={(draft) => draft.home.slides}
+            render={(item, index, set) => (
+              <div className="grid gap-3 md:grid-cols-2">
+                <ImageUpload label="画像" value={item.img} onChange={(url) => set(index, "img", url)} />
+                <Field label="ラベル"><TextInput value={item.label} onChange={(e) => set(index, "label", e.target.value)} /></Field>
+                <div className="md:col-span-2">
+                  <Field label="タイトル"><TextInput value={item.title} onChange={(e) => set(index, "title", e.target.value)} /></Field>
+                </div>
+                <Field label="リンク先"><TextInput value={item.link} onChange={(e) => set(index, "link", e.target.value)} /></Field>
+                <Field label="リンク文言"><TextInput value={item.linkLabel} onChange={(e) => set(index, "linkLabel", e.target.value)} /></Field>
+              </div>
+            )}
+          />
+
           <EditableList<ForestTypeSetting>
             title="トップの森タイプ"
             items={settings.home.forestTypes}
@@ -428,6 +482,14 @@ export default function SiteSettingsForm({ initialData, locale = "ja" }: { initi
 
       {activeTab === "concept" && (
         <div className="space-y-5">
+          <Card title="コンセプト本文">
+            <Field label="タイトル">
+              <TextInput value={settings.concept.title} onChange={(e) => update((draft) => { draft.concept.title = e.target.value; })} />
+            </Field>
+            <Field label="本文">
+              <RichTextEditor content={settings.concept.body} onChange={(html) => update((draft) => { draft.concept.body = html; })} placeholder="コンセプト本文を入力してください" />
+            </Field>
+          </Card>
           <Card title="コンセプトCTA">
             <div className="grid gap-4 md:grid-cols-2">
               <Field label="ボタン文言">
@@ -455,6 +517,21 @@ export default function SiteSettingsForm({ initialData, locale = "ja" }: { initi
               </div>
             )}
           />
+        </div>
+      )}
+
+      {activeTab === "legal" && (
+        <div className="space-y-5">
+          {(["privacy", "terms", "company"] as const).map((key) => (
+            <Card key={key} title={LEGAL_LABELS[key]}>
+              <Field label="タイトル">
+                <TextInput value={settings.legal[key].title} onChange={(e) => update((draft) => { draft.legal[key].title = e.target.value; })} />
+              </Field>
+              <Field label="本文">
+                <RichTextEditor content={settings.legal[key].body} onChange={(html) => update((draft) => { draft.legal[key].body = html; })} placeholder="本文を入力してください" />
+              </Field>
+            </Card>
+          ))}
         </div>
       )}
 
