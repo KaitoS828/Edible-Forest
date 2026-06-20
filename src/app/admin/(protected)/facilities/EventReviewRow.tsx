@@ -20,6 +20,7 @@ const FORMAT_LABELS: Record<EventFormat, string> = {
 };
 
 const STATUS_BADGE: Record<EventStatus, { label: string; bg: string; color: string }> = {
+  draft: { label: "下書き", bg: "#F1F5F9", color: "#64748B" },
   pending: { label: "審査中", bg: "#FEF3C7", color: "#92400E" },
   published: { label: "公開中", bg: "#DCFCE7", color: "#166534" },
   rejected: { label: "却下", bg: "#F1F5F9", color: "#64748B" },

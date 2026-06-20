@@ -217,14 +217,14 @@ export default async function DashboardPage() {
             style={{ border: BORDER }}
           >
             <p className="text-sm" style={{ color: TEXT, lineHeight: "1.9" }}>
-              新しいイベントを登録・公開できます。
+              新しいイベントの開催を申請できます。
             </p>
             <a
               href="/member/new-event"
               className="shrink-0 inline-block text-sm font-medium px-6 py-2.5 rounded-full text-white hover:opacity-90 transition-opacity"
               style={{ backgroundColor: PRIMARY }}
             >
-              イベントを登録する →
+              イベントの開催を申請する →
             </a>
           </div>
         </section>

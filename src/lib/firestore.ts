@@ -709,7 +709,7 @@ export async function deleteFacility(id: string) {
 // Events（開催会員以上が登録するイベント）
 // ─────────────────────────────────────────
 export type EventFormat = "onsite" | "online" | "both"; // 現地/オンライン/両方
-export type EventStatus = "pending" | "published" | "rejected";
+export type EventStatus = "draft" | "pending" | "published" | "rejected";
 
 export type EventDoc = {
   id: string;
