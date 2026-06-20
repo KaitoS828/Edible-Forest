@@ -1,4 +1,4 @@
-import { getNews, getReports } from "@/lib/cms";
+import { getReports } from "@/lib/cms";
 import { getSiteSettings } from "@/lib/site-settings";
 import { SITE_SETTINGS_DEFAULT, SITE_SETTINGS_EN_DEFAULT } from "@/data/siteSettings";
 import HomeClient, { type SlideView, type NewsView } from "./HomeClient";
@@ -8,9 +8,8 @@ export const revalidate = 60;
 export default async function Home({ searchParams }: { searchParams: Promise<{ lang?: string }> }) {
   const { lang } = await searchParams;
   const locale = lang === "en" ? "en" : "ja";
-  const [settings, newsItems, reports] = await Promise.all([
+  const [settings, reports] = await Promise.all([
     getSiteSettings(locale).catch(() => (locale === "en" ? SITE_SETTINGS_EN_DEFAULT : SITE_SETTINGS_DEFAULT)),
-    getNews(locale).catch(() => []),
     getReports(locale).catch(() => []),
   ]);
 
@@ -25,22 +24,18 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ l
       }))
     : undefined;
 
-  // 更新履歴：Firestore の news を優先し、未登録時だけ既存レポートから補完
-  const news: NewsView[] | undefined = newsItems.length
-    ? newsItems.slice(0, 4).map((item) => ({
-        date: item.date ? item.date.replace(/-/g, ".").slice(0, 7) : "",
-        label: item.label ?? "",
-        text: item.title,
-        href: item.href || "/",
-      }))
-    : reports.length
-      ? reports.slice(0, 4).map((r) => ({
-        date: r.date ? r.date.replace(/-/g, ".").slice(0, 7) : "",
-        label: "",
-        text: r.title,
-        href: `/reports/${r.id}`,
-      }))
-      : undefined;
+  // 更新履歴：活動レポートを日付の新しい順に表示
+  const news: NewsView[] | undefined = reports.length
+    ? [...reports]
+        .sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""))
+        .slice(0, 4)
+        .map((r) => ({
+          date: r.date ? r.date.replace(/-/g, ".").slice(0, 7) : "",
+          label: "",
+          text: r.title,
+          href: `/reports/${r.id}`,
+        }))
+    : undefined;
 
   const concept = {
     tag: settings.home.conceptTag,
