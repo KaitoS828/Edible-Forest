@@ -13,7 +13,7 @@ export function StaticDocPage({ title, bodyHtml }: { title: string; bodyHtml: st
               {title}
             </h1>
             <div
-              className="text-base leading-[2] [&_p]:mb-5 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:mt-10 [&_h2]:mb-3 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-5 [&_li]:mb-1.5"
+              className="text-base leading-[1.8] [&_p]:mb-4 [&_h2]:text-lg [&_h2]:font-bold [&_h2]:mt-8 [&_h2]:mb-2.5 [&_ul]:list-disc [&_ul]:pl-6 [&_ul]:mb-4 [&_li]:mb-1"
               style={{ color: "#1A2B1E" }}
               dangerouslySetInnerHTML={{ __html: bodyHtml }}
             />

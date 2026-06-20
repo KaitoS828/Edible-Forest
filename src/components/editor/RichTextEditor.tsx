@@ -271,7 +271,13 @@ export default function RichTextEditor({
     },
     editorProps: {
       attributes: {
-        class: "outline-none min-h-[380px] prose prose-sm max-w-none p-5 focus:outline-none",
+        // ワード風に行間・段落間を詰める（prose-sm の広い余白を上書き）
+        class:
+          "outline-none min-h-[380px] prose prose-sm max-w-none p-5 focus:outline-none " +
+          "[&_p]:my-1.5 [&_p]:leading-normal " +
+          "[&_h2]:mt-4 [&_h2]:mb-1.5 [&_h2]:leading-snug [&_h3]:mt-3 [&_h3]:mb-1 [&_h3]:leading-snug " +
+          "[&_ul]:my-1.5 [&_ol]:my-1.5 [&_li]:my-0.5 [&_li]:leading-normal [&_li_p]:my-0 " +
+          "[&_blockquote]:my-2",
       },
       handlePaste(view, event) {
         const files = Array.from(event.clipboardData?.files ?? []).filter((file) => file.type.startsWith("image/"));
