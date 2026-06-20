@@ -10,11 +10,12 @@ async function requireAdmin() {
 
 function slugify(value: string) {
   const slug = value
+    .normalize("NFKD")
     .trim()
     .toLowerCase()
-    .replace(/[^a-z0-9\u3040-\u30ff\u3400-\u9fff]+/g, "-")
+    .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-  return slug || `news-${Date.now()}`;
+  return slug && /[a-z]/.test(slug) ? slug : `news-${Date.now()}`;
 }
 
 function imageData(value: unknown) {

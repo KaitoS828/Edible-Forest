@@ -67,7 +67,7 @@ export default async function AdminNewsPage() {
                     </span>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <a href={`/admin/news/${item.id}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>
+                    <a href={`/admin/news/${encodeURIComponent(item.id)}`} className="rounded-md border px-3 py-1.5 text-xs font-medium" style={{ borderColor: "#CBD5E1", color: "#334155" }}>
                       編集
                     </a>
                   </td>

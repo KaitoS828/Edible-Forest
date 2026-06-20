@@ -51,9 +51,10 @@ export default function NewsForm({
     e.preventDefault();
     setSaving(true);
     setError(null);
+    const encodedNewsId = newsId ? encodeURIComponent(newsId) : "";
 
     try {
-      const res = await fetch(mode === "new" ? "/api/admin/news" : `/api/admin/news/${newsId}?lang=${locale}`, {
+      const res = await fetch(mode === "new" ? "/api/admin/news" : `/api/admin/news/${encodedNewsId}?lang=${locale}`, {
         method: mode === "new" ? "POST" : "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
@@ -61,7 +62,7 @@ export default function NewsForm({
       if (!res.ok) throw new Error("保存に失敗しました");
       const data = await res.json();
       if (mode === "new") {
-        router.push(`/admin/news/${data.id}`);
+        router.push(`/admin/news/${encodeURIComponent(data.id)}`);
       } else {
         setSaved(true);
         router.refresh();
@@ -79,7 +80,7 @@ export default function NewsForm({
     setError(null);
 
     try {
-      const res = await fetch(`/api/admin/news/${newsId}`, { method: "DELETE" });
+      const res = await fetch(`/api/admin/news/${encodeURIComponent(newsId)}`, { method: "DELETE" });
       if (!res.ok) throw new Error("削除に失敗しました");
       router.push("/admin/news");
       router.refresh();
@@ -101,7 +102,7 @@ export default function NewsForm({
       )}
 
       {mode === "edit" && newsId && (
-        <LanguageTabs baseHref={`/admin/news/${newsId}`} locale={locale} />
+        <LanguageTabs baseHref={`/admin/news/${encodeURIComponent(newsId)}`} locale={locale} />
       )}
 
       <Section title="基本情報">
