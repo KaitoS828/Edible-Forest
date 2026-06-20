@@ -8,7 +8,7 @@ import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import { Markdown } from "tiptap-markdown";
 
-const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+const MAX_UPLOAD_BYTES = 2 * 1024 * 1024;
 const MAX_IMAGE_EDGE = 1800;
 const IMAGE_QUALITY = 0.86;
 

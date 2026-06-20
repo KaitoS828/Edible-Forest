@@ -3,7 +3,7 @@ import { randomUUID } from "crypto";
 import { put } from "@vercel/blob";
 import { auth } from "@/auth";
 
-const MAX_BYTES = 4 * 1024 * 1024; // 4MB（Vercel のリクエストボディ上限 4.5MB 以下に収める）
+const MAX_BYTES = 2 * 1024 * 1024; // CMS画像は2MBまでに抑え、Blob無料枠を使いすぎないようにする。
 
 async function requireAdmin() {
   const session = await auth();
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "画像ファイルのみアップロードできます" }, { status: 400 });
     }
     if (file.size > MAX_BYTES) {
-      return NextResponse.json({ error: "画像サイズは4MBまでです" }, { status: 413 });
+      return NextResponse.json({ error: "画像サイズは2MBまでです" }, { status: 413 });
     }
 
     const ext = file.name.includes(".") ? file.name.split(".").pop() : "bin";

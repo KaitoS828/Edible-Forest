@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 
-const MAX_BYTES = 4 * 1024 * 1024; // 4MB
+const MAX_BYTES = 2 * 1024 * 1024; // 2MB
 
 export function ImageUpload({
   value,
@@ -24,7 +24,7 @@ export function ImageUpload({
       return;
     }
     if (file.size > MAX_BYTES) {
-      setError("画像サイズは4MBまでです");
+      setError("画像サイズは2MBまでです");
       return;
     }
     setUploading(true);
@@ -91,7 +91,7 @@ export function ImageUpload({
         </p>
       )}
       <p className="mt-1 text-[11px]" style={{ color: "#94A3B8" }}>
-        JPEG / PNG / WebP・4MBまで
+        JPEG / PNG / WebP・2MBまで
       </p>
     </div>
   );
