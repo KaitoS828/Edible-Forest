@@ -30,6 +30,9 @@ export default async function EditPage({ params, searchParams }: PageProps) {
     img: doc.img,
     activities: doc.activities ?? [],
     stats: doc.stats ?? [],
+    active: doc.active ?? true,
+    status: doc.status ?? "draft",
+    isOfficial: doc.isOfficial ?? false,
   };
 
   return (

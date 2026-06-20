@@ -16,6 +16,10 @@ function slugify(value: string) {
   return slug || `report-${Date.now()}`;
 }
 
+function imageData(value: unknown) {
+  return typeof value === "string" && value.trim() ? { image: { url: value.trim() } } : {};
+}
+
 export async function POST(req: NextRequest) {
   if (!(await requireAdmin())) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -29,7 +33,7 @@ export async function POST(req: NextRequest) {
     title,
     date: typeof body.date === "string" ? body.date : "",
     category: typeof body.category === "string" ? body.category : "",
-    image: typeof body.imageUrl === "string" && body.imageUrl ? { url: body.imageUrl } : undefined,
+    ...imageData(body.imageUrl),
     body: typeof body.body === "string" ? body.body : "",
     status: body.status === "published" ? "published" : "draft",
     active: body.active !== false,

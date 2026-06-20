@@ -7,8 +7,6 @@ import Placeholder from "@tiptap/extension-placeholder";
 import Link from "@tiptap/extension-link";
 import Image from "@tiptap/extension-image";
 import { Markdown } from "tiptap-markdown";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "@/lib/firebase";
 
 const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
 const MAX_IMAGE_EDGE = 1800;
@@ -80,12 +78,6 @@ async function uploadViaAdminApi(file: File): Promise<string> {
   return body.url;
 }
 
-async function uploadViaFirebaseClient(file: File): Promise<string> {
-  const storageRef = ref(storage, `editor/${Date.now()}_${safeFileName(file.name)}`);
-  await uploadBytes(storageRef, file);
-  return getDownloadURL(storageRef);
-}
-
 async function uploadImage(file: File): Promise<string> {
   if (!file.type.startsWith("image/")) {
     throw new Error("画像ファイルを選択してください");
@@ -96,15 +88,7 @@ async function uploadImage(file: File): Promise<string> {
     throw new Error(`画像サイズは${formatBytes(MAX_UPLOAD_BYTES)}までです。現在: ${formatBytes(prepared.size)}`);
   }
 
-  try {
-    return await uploadViaAdminApi(prepared);
-  } catch (adminErr) {
-    try {
-      return await uploadViaFirebaseClient(prepared);
-    } catch {
-      throw adminErr instanceof Error ? adminErr : new Error("画像のアップロードに失敗しました");
-    }
-  }
+  return uploadViaAdminApi(prepared);
 }
 
 function insertImage(editor: Editor, src: string) {

@@ -11,6 +11,10 @@ async function requireAdmin() {
   return Boolean(session?.user && (session.user as Record<string, unknown>).isAdmin);
 }
 
+function imageData(value: unknown) {
+  return typeof value === "string" && value.trim() ? { image: { url: value.trim() } } : {};
+}
+
 export async function PATCH(req: NextRequest, { params }: Ctx) {
   if (!(await requireAdmin())) {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
@@ -24,7 +28,7 @@ export async function PATCH(req: NextRequest, { params }: Ctx) {
     title: typeof body.title === "string" ? body.title : "",
     date: typeof body.date === "string" ? body.date : "",
     category: typeof body.category === "string" ? body.category : "",
-    image: typeof body.imageUrl === "string" && body.imageUrl ? { url: body.imageUrl } : undefined,
+    ...imageData(body.imageUrl),
     body: typeof body.body === "string" ? body.body : "",
     status: body.status === "published" ? "published" : "draft",
     active: body.active !== false,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import dynamic from "next/dynamic";
 import { ImageUpload } from "@/components/admin/ImageUpload";
 import type { SiteLocale } from "@/data/siteSettings";
@@ -24,6 +25,9 @@ type FormData = {
   img: string;
   activities: Activity[];
   stats: Stat[];
+  active: boolean;
+  status: "draft" | "published";
+  isOfficial: boolean;
 };
 
 export default function EnsembleEditForm({
@@ -35,10 +39,12 @@ export default function EnsembleEditForm({
   initialData: FormData;
   locale?: SiteLocale;
 }) {
+  const router = useRouter();
   const [form, setForm] = useState<FormData>(initialData);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
 
   function set<K extends keyof FormData>(key: K, val: FormData[K]) {
     setForm((f) => ({ ...f, [key]: val }));
@@ -82,10 +88,27 @@ export default function EnsembleEditForm({
       });
       if (!res.ok) throw new Error("保存に失敗しました");
       setSaved(true);
+      router.refresh();
     } catch (e) {
       setError(e instanceof Error ? e.message : "エラーが発生しました");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleDelete() {
+    if (!window.confirm("このアンサンブルを削除しますか？")) return;
+    setDeleting(true);
+    setError(null);
+
+    try {
+      const res = await fetch(`/api/ensemble/${id}`, { method: "DELETE" });
+      if (!res.ok) throw new Error("削除に失敗しました");
+      router.push("/admin/ensembles");
+      router.refresh();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "削除に失敗しました");
+      setDeleting(false);
     }
   }
 
@@ -113,7 +136,7 @@ export default function EnsembleEditForm({
         <div className="flex flex-col items-end gap-2">
           <button
             onClick={handleSave}
-            disabled={saving}
+            disabled={saving || deleting}
             className="px-6 py-2.5 rounded-full text-sm font-medium text-white transition-all disabled:opacity-50"
             style={{ backgroundColor: "#3C6B4F" }}
           >
@@ -335,24 +358,71 @@ export default function EnsembleEditForm({
           </div>
         </section>
 
+        {/* ── 公開設定 ── */}
+        <section className="bg-white rounded-2xl p-6" style={{ border: "1px solid rgba(0,95,2,0.15)" }}>
+          <h2 className="text-base font-bold mb-5" style={{ color: "#3C6B4F" }}>
+            公開設定
+          </h2>
+          <div className="flex flex-wrap gap-4">
+            {(["draft", "published"] as const).map((status) => (
+              <label key={status} className="flex items-center gap-2 text-sm" style={{ color: "#334155" }}>
+                <input
+                  type="radio"
+                  name="status"
+                  value={status}
+                  checked={form.status === status}
+                  onChange={() => set("status", status)}
+                />
+                {status === "draft" ? "下書き" : "公開"}
+              </label>
+            ))}
+            <label className="flex items-center gap-2 text-sm" style={{ color: "#334155" }}>
+              <input type="checkbox" checked={form.active} onChange={(e) => set("active", e.target.checked)} />
+              有効
+            </label>
+            <label className="flex items-center gap-2 text-sm" style={{ color: "#334155" }}>
+              <input type="checkbox" checked={form.isOfficial} onChange={(e) => set("isOfficial", e.target.checked)} />
+              公式掲載
+            </label>
+          </div>
+        </section>
+
         {/* ── プレビューリンク ── */}
-        <div className="flex justify-between items-center pb-4">
+        <div className="flex flex-col gap-3 border-t pt-5 pb-4 sm:flex-row sm:items-center sm:justify-between" style={{ borderColor: "#DCE3EA" }}>
           <a
-            href={`/ensembles/${id}`}
-            target="_blank"
-            className="text-xs hover:underline"
-            style={{ color: "#1A2B1E" }}
+            href="/admin/ensembles"
+            className="rounded-md border px-4 py-2 text-center text-sm font-medium"
+            style={{ borderColor: "#CBD5E1", color: "#334155", backgroundColor: "#FFFFFF" }}
           >
-            公開ページを見る →
+            戻る
           </a>
-          <button
-            onClick={handleSave}
-            disabled={saving}
-            className="px-8 py-3 rounded-full text-sm font-medium text-white transition-all disabled:opacity-50"
-            style={{ backgroundColor: "#3C6B4F" }}
-          >
-            {saving ? "保存中…" : "保存する"}
-          </button>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <button
+              type="button"
+              onClick={handleDelete}
+              disabled={deleting || saving}
+              className="rounded-md border px-4 py-2 text-sm font-medium disabled:opacity-50"
+              style={{ borderColor: "#FECACA", color: "#B42318", backgroundColor: "#FFFFFF" }}
+            >
+              {deleting ? "削除中..." : "削除"}
+            </button>
+            <a
+              href={`/ensembles/${id}`}
+              target="_blank"
+              className="rounded-md border px-4 py-2 text-center text-sm font-medium"
+              style={{ borderColor: "#CBD5E1", color: "#334155", backgroundColor: "#FFFFFF" }}
+            >
+              公開ページを見る
+            </a>
+            <button
+              onClick={handleSave}
+              disabled={saving || deleting}
+              className="rounded-md px-5 py-2 text-sm font-medium text-white transition-all disabled:opacity-50"
+              style={{ backgroundColor: "#0F172A" }}
+            >
+              {saving ? "保存中…" : "保存"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
