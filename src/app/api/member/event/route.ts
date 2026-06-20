@@ -31,6 +31,7 @@ export async function POST(req: NextRequest) {
     ...body,
     organizerId: uid,
     organizerName: body.organizerName ?? user?.displayName ?? "メンバー",
+    status: "pending",
   });
 
   return NextResponse.json({ id }, { status: 201 });

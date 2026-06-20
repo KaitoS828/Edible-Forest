@@ -13,9 +13,6 @@ export default async function AdminEnglishSiteSettingsPage() {
         <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
           英語版サイト設定
         </h1>
-        <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-          英語版のナビゲーション・フッター・主要ページ文言をFirestoreで管理します
-        </p>
       </div>
 
       <div className="mb-5 flex flex-wrap gap-2">

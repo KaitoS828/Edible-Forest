@@ -24,9 +24,6 @@ export default async function AdminEnsemblesPage() {
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
             アンサンブル管理
           </h1>
-          <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-            アンサンブル拠点の公開状態と掲載内容を管理します
-          </p>
         </div>
       </div>
 

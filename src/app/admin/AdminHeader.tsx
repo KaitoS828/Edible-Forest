@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { href: "/admin/spots", label: "宿泊施設管理", icon: "⌂" },
   { href: "/admin/reports", label: "活動レポート管理", icon: "▥" },
   { href: "/admin/site-settings", label: "サイト設定", icon: "▨" },
-  { href: "/admin/facilities", label: "施設審査", icon: "□" },
+  { href: "/admin/facilities", label: "イベント審査", icon: "□" },
 ];
 
 function activePath(pathname: string, href: string) {

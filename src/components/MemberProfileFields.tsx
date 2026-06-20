@@ -172,7 +172,7 @@ export function MemberProfileFields({ form, setForm, loginEmail }: Props) {
           <input value={form.country} onChange={(e) => set("country", e.target.value)} placeholder="日本" className={ic} />
         </Field>
         <Field label="住所" required>
-          <input value={form.address} onChange={(e) => set("address", e.target.value)} placeholder="例：北海道広尾町〇〇1-2-3" className={ic} />
+          <input value={form.address} onChange={(e) => set("address", e.target.value)} placeholder="東京都〇〇" className={ic} />
         </Field>
       </FormSection>
 

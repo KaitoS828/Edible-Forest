@@ -24,9 +24,6 @@ export default async function AdminSpotsPage() {
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
             宿泊施設管理
           </h1>
-          <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-            宿泊施設ページの公開状態・掲載情報を管理します
-          </p>
         </div>
       </div>
 

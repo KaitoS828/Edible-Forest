@@ -24,14 +24,14 @@ const RichTextEditor = dynamic(
 
 type TabKey = "navigation" | "home" | "pages" | "concept" | "legal" | "footer" | "advanced";
 
-const TABS: Array<{ key: TabKey; label: string; desc: string }> = [
-  { key: "navigation", label: "ヘッダー", desc: "メニュー、各種リンク、言語切替" },
-  { key: "home", label: "トップ", desc: "スライド、見出し、森タイプ、カード" },
-  { key: "pages", label: "ページ文言", desc: "一覧ページの見出しとCTA" },
-  { key: "concept", label: "コンセプト", desc: "本文、補助カードとCTA" },
-  { key: "legal", label: "規約・会社", desc: "プライバシー、利用規約、運営会社" },
-  { key: "footer", label: "フッター", desc: "リンクとコピーライト" },
-  { key: "advanced", label: "上級設定", desc: "地図データなど" },
+const TABS: Array<{ key: TabKey; label: string }> = [
+  { key: "navigation", label: "ヘッダー" },
+  { key: "home", label: "トップ" },
+  { key: "pages", label: "ページ文言" },
+  { key: "concept", label: "コンセプト" },
+  { key: "legal", label: "規約・会社" },
+  { key: "footer", label: "フッター" },
+  { key: "advanced", label: "上級設定" },
 ];
 
 const PAGE_LABELS: Record<keyof SiteSettings["pages"], string> = {
@@ -247,7 +247,6 @@ export default function SiteSettingsForm({ initialData, locale = "ja" }: { initi
                 }}
               >
                 <span className="block text-sm font-semibold">{tab.label}</span>
-                <span className="mt-1 block text-[11px] leading-snug opacity-75">{tab.desc}</span>
               </button>
             );
           })}

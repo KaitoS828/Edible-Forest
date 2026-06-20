@@ -77,7 +77,6 @@ export default function EventForm({ user, facilities }: Props) {
       image: image || undefined,
       terms: terms || undefined,
       memberOnly,
-      status: "published" as const,
     };
 
     try {
@@ -87,8 +86,7 @@ export default function EventForm({ user, facilities }: Props) {
         body: JSON.stringify(body),
       });
       if (!res.ok) throw new Error();
-      const data = await res.json();
-      window.location.href = `/events/${data.id}`;
+      window.location.href = "/member/dashboard";
     } catch {
       setError("保存に失敗しました。もう一度お試しください。");
       setSaving(false);
@@ -148,10 +146,8 @@ export default function EventForm({ user, facilities }: Props) {
             ))}
           </div>
         </Field>
-        <Field label="会場（審査済みの登録施設）">
-          {facilities.length === 0 ? (
-            <p className="text-sm" style={{ color: "#1A2B1E", opacity: 0.6 }}>審査済みの施設がありません。施設登録・承認後に選択できます。</p>
-          ) : (
+        {facilities.length > 0 && (
+          <Field label="会場">
             <div className="space-y-2">
               {facilities.map((f) => (
                 <Radio
@@ -162,8 +158,8 @@ export default function EventForm({ user, facilities }: Props) {
                 />
               ))}
             </div>
-          )}
-        </Field>
+          </Field>
+        )}
       </Section>
 
       {/* 画像 */}
@@ -205,7 +201,7 @@ export default function EventForm({ user, facilities }: Props) {
           className="flex-1 py-3 rounded-full text-sm font-medium text-white hover:opacity-90 disabled:opacity-60 transition-opacity"
           style={{ backgroundColor: "#3C6B4F" }}
         >
-          {saving ? "保存中..." : "イベントを公開する"}
+          {saving ? "申請中..." : "イベントの開催を申請する"}
         </button>
         <a href="/member/dashboard" className="px-6 py-3 rounded-full text-sm font-medium border hover:opacity-70 transition-opacity" style={{ color: "#1A2B1E", borderColor: "rgba(60,107,79,0.15)" }}>
           キャンセル

@@ -35,7 +35,7 @@ export default async function NewEventPage() {
           <a href="/member/dashboard" className="text-sm hover:opacity-70 transition-opacity" style={{ color: "#1A2B1E" }}>← マイページに戻る</a>
         </div>
         <h1 className="text-2xl font-bold mb-6" style={{ fontFamily: "'Noto Serif JP', serif", color: "#3C6B4F" }}>
-          イベントを登録
+          イベントの開催を申請
         </h1>
         <EventForm
           user={{ displayName: userDoc?.displayName ?? "メンバー", operatingBodyName: userDoc?.operatingBodyName }}

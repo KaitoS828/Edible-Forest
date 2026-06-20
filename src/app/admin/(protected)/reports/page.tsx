@@ -14,9 +14,6 @@ export default async function AdminReportsPage() {
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
             活動レポート管理
           </h1>
-          <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-            microCMSを使わず、Firestore上の記事を作成・編集します
-          </p>
         </div>
         <a href="/admin/reports/new" className="inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-white" style={{ backgroundColor: "#0F172A" }}>
           新規作成

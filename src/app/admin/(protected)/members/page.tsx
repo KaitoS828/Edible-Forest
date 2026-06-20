@@ -45,9 +45,6 @@ export default async function MembersPage() {
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
             会員管理
           </h1>
-          <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-            全会員の一覧・種別管理・CSVエクスポート
-          </p>
         </div>
         <CsvDownloadButton users={users.map((u) => ({
           uid: u.uid,

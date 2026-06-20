@@ -58,9 +58,6 @@ export default async function AdminSpotEditPage({ params, searchParams }: PagePr
             <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
               {initialData.name || "宿泊施設を編集"}
             </h1>
-            <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-              施設ID: {id}
-            </p>
           </div>
           <LanguageTabs baseHref={`/admin/spots/${id}`} locale={locale} />
         </div>

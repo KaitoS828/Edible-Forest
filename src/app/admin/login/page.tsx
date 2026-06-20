@@ -24,9 +24,6 @@ export default async function AdminLoginPage({
             <h1 className="max-w-xl text-4xl font-semibold leading-tight">
               食べられる森 管理画面
             </h1>
-            <p className="mt-4 max-w-md text-sm leading-7" style={{ color: "#CBD5E1" }}>
-              会員管理、施設審査、公開コンテンツの運用を行うための管理者専用エリアです。
-            </p>
           </div>
         </section>
 
@@ -44,9 +41,6 @@ export default async function AdminLoginPage({
                 <h2 className="mt-2 text-xl font-semibold" style={{ color: "#0F172A" }}>
                   管理者ログイン
                 </h2>
-                <p className="mt-2 text-sm leading-6" style={{ color: "#64748B" }}>
-                  admin権限を持つFirebaseアカウントのみログインできます。
-                </p>
               </div>
 
               {noPermission && (

@@ -330,12 +330,12 @@ function EventRow({ title, date, status }: { title: string; date: string; status
         <h3 className="text-base font-bold truncate" style={{ fontFamily: SERIF, color: PRIMARY }}>{title}</h3>
         <p className="text-sm" style={{ color: TEXT, opacity: 0.7 }}>{date}</p>
       </div>
-      {status === "draft" && (
+      {status === "pending" && (
         <span
           className="shrink-0 inline-block text-xs font-medium px-3"
           style={{ height: "20px", lineHeight: "20px", borderRadius: "10px", border: BORDER, color: TEXT, opacity: 0.6 }}
         >
-          下書き
+          審査待ち
         </span>
       )}
     </div>

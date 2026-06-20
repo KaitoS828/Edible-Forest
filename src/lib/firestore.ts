@@ -709,6 +709,7 @@ export async function deleteFacility(id: string) {
 // Events（開催会員以上が登録するイベント）
 // ─────────────────────────────────────────
 export type EventFormat = "onsite" | "online" | "both"; // 現地/オンライン/両方
+export type EventStatus = "pending" | "published" | "rejected";
 
 export type EventDoc = {
   id: string;
@@ -725,7 +726,7 @@ export type EventDoc = {
   image?: string;
   terms?: string;               // イベント規約
   memberOnly: boolean;          // true=会員限定 / false=オープン
-  status: "draft" | "published";
+  status: EventStatus;
   participants?: string[];      // 参加者 uid
   createdAt: FirebaseFirestore.Timestamp;
   updatedAt: FirebaseFirestore.Timestamp;
@@ -755,6 +756,11 @@ export async function getPublishedEvents(): Promise<EventDoc[]> {
   return docs.sort((a, b) => (b.startAt ?? 0) - (a.startAt ?? 0));
 }
 
+export async function getAllEvents(): Promise<EventDoc[]> {
+  const snap = await adminDb.collection("events").orderBy("createdAt", "desc").get();
+  return snap.docs.map((d) => ({ id: d.id, ...d.data() }) as EventDoc);
+}
+
 export async function getOrganizerEvents(organizerId: string): Promise<EventDoc[]> {
   const snap = await adminDb.collection("events").where("organizerId", "==", organizerId).get();
   const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }) as EventDoc);
@@ -770,6 +776,10 @@ export async function updateEvent(id: string, data: Partial<Omit<EventDoc, "id" 
     ...data,
     updatedAt: FieldValue.serverTimestamp(),
   });
+}
+
+export async function updateEventStatus(id: string, status: EventStatus) {
+  await updateEvent(id, { status });
 }
 
 export async function deleteEvent(id: string) {

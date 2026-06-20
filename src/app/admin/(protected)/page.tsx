@@ -24,9 +24,6 @@ export default async function AdminDashboard() {
           <h1 className="text-2xl font-semibold tracking-tight" style={{ color: "#0F172A" }}>
           ダッシュボード
           </h1>
-          <p className="mt-1 text-sm" style={{ color: "#64748B" }}>
-            会員・施設審査・公開コンテンツの状態を確認します
-          </p>
         </div>
         <a
           href="/"
@@ -53,13 +50,13 @@ export default async function AdminDashboard() {
 
       <div className="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
         {[
-          { href: "/admin/members",    title: "会員管理", desc: "会員種別の変更・森の奥の付与" },
-          { href: "/admin/ensembles", title: "アンサンブル管理", desc: "拠点コンテンツの公開・編集" },
-          { href: "/admin/spots", title: "宿泊施設管理", desc: "宿泊施設ページの公開・編集" },
-          { href: "/admin/reports", title: "活動レポート管理", desc: "記事の作成・公開・編集（トップ更新履歴にも反映）" },
-          { href: "/admin/site-settings", title: "サイト設定", desc: "ナビ・フッター・主要ページ文言の編集" },
-          { href: "/admin/facilities", title: "施設審査", desc: "登録施設の承認・却下" },
-        ].map(({ href, title, desc }) => (
+          { href: "/admin/members", title: "会員管理" },
+          { href: "/admin/ensembles", title: "アンサンブル管理" },
+          { href: "/admin/spots", title: "宿泊施設管理" },
+          { href: "/admin/reports", title: "活動レポート管理" },
+          { href: "/admin/site-settings", title: "サイト設定" },
+          { href: "/admin/facilities", title: "イベント審査" },
+        ].map(({ href, title }) => (
           <a
             key={href}
             href={href}
@@ -69,7 +66,6 @@ export default async function AdminDashboard() {
             <p className="mb-1 text-sm font-semibold" style={{ color: "#0F172A" }}>
               {title}
             </p>
-            <p className="text-xs" style={{ color: "#64748B" }}>{desc}</p>
           </a>
         ))}
       </div>
