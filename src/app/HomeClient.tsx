@@ -278,13 +278,6 @@ function ForestTypesSection({ heading }: { heading?: string }) {
               </a>
             ))}
           </div>
-
-          {/* 矢印：デスクトップのみ */}
-          <div className="hidden lg:flex items-center gap-5 shrink-0">
-            <svg width="36" height="22" viewBox="0 0 36 22" fill="none">
-              <path d="M0 11h32M24 2l10 9-10 9" stroke="#1A2B1E" strokeWidth="1.5" strokeOpacity="0.4" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </div>
         </div>
       </div>
     </section>
@@ -293,6 +286,13 @@ function ForestTypesSection({ heading }: { heading?: string }) {
 
 function EnsembleSection({ heading }: { heading?: string }) {
   const { home } = useSiteSettings();
+  const [ensembleListHref, setEnsembleListHref] = useState("/ensembles");
+
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("lang") === "en") {
+      setEnsembleListHref("/ensembles?lang=en");
+    }
+  }, []);
 
   return (
     <section className="py-16 bg-white">
@@ -308,8 +308,8 @@ function EnsembleSection({ heading }: { heading?: string }) {
         {/* 4カテゴリカード */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-5 mb-12">
           {home.ensembleCategories.map((c) => (
-            <div key={c.href}>
-              <a href={c.href} className="group flex flex-col">
+            <div key={c.label}>
+              <a href={ensembleListHref} className="group flex flex-col">
                 <div className="rounded-2xl overflow-hidden mb-3 aspect-square bg-[#f0f0f0]">
                   <img
                     src={c.img}
